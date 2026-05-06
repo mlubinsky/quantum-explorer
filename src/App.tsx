@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { SpinExplorer } from './components/SpinExplorer'
+import { StationaryExplorer } from './components/StationaryExplorer'
 import './App.css'
 
-type Module = 'spin'
+type Module = 'stationary' | 'spin'
 
-const MODULES: { id: Module; label: string; description: string }[] = [
-  { id: 'spin', label: 'Spin-½ / Bloch Sphere', description: 'Larmor precession, exact 2×2 matrix dynamics' },
+const MODULES: { id: Module; label: string }[] = [
+  { id: 'stationary', label: 'Stationary States' },
+  { id: 'spin',       label: 'Spin-½ / Bloch Sphere' },
 ]
 
 export default function App() {
-  const [active, setActive] = useState<Module>('spin')
+  const [active, setActive] = useState<Module>('stationary')
 
   return (
     <div className="app">
@@ -31,7 +33,8 @@ export default function App() {
       </nav>
 
       <main className="app-main">
-        {active === 'spin' && <SpinExplorer />}
+        {active === 'stationary' && <StationaryExplorer />}
+        {active === 'spin'       && <SpinExplorer />}
       </main>
     </div>
   )
