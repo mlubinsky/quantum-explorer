@@ -42,10 +42,10 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] **Sequential measurement visualisation** — step-by-step diagram showing state before
       and after each measurement; highlight how intermediate measurements erase prior
       spin-polarisation; useful companion to the history log already in the Measurement tab
-- [ ] **Bell inequality demo** — two-spin singlet state |ψ⁻⟩ = (|↑↓⟩ − |↓↑⟩)/√2;
-      slider for detector angle θ; show correlation C(θ) = −cos θ (exact QM) vs
-      classical hidden-variable bound |C| ≤ 1 − θ/π; CHSH inequality S ≤ 2 (classical)
-      vs S = 2√2 (quantum); N-shot simulation to see S converge
+- [x] **Bell inequality demo** — two-spin singlet state |ψ⁻⟩ = (|↑↓⟩ − |↓↑⟩)/√2;
+      correlation curve E(θ) = −cos θ vs classical LHV bound; CHSH panel with 4 angle
+      sliders, optimal preset (2√2), live S readout; N-shot simulation with convergence
+      indicator; ? help modals on all three sections
 
 ### Stationary States module — ISW + HO
 - [x] Eigenfunctions plot — all 8 levels simultaneously; selected state highlighted

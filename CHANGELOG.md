@@ -5,6 +5,31 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506f] — 2026-05-06
+
+### Added
+- **Bell inequality demo** — third sub-tab "Bell" under Spin-½ / Bloch Sphere:
+  - **Correlation curve**: E(θ) = −cos θ (quantum, blue) vs classical LHV bound
+    ±(1−2θ/π) (orange dashed); shaded violation zone; interactive θ slider;
+    annotation "Quantum violates classical bound for 0° < θ < 90°"
+  - **CHSH panel**: four angle sliders a, a′, b, b′ (0°–180°); "Optimal (2√2)" preset
+    sets a=0°, a′=90°, b=45°, b′=135°; live readout table E(a,b)…E(a′,b′);
+    S value with gradient progress bar showing classical bound 2 and Tsirelson bound 2√2;
+    green highlight when S > 2
+  - **N-shot simulation** (N=10–5000): estimates E from sampled singlet pairs using
+    exact conditional probabilities; shows same/opposite pair counts, Ê vs exact E,
+    convergence |Ê−E| vs 3σ = 3/√N
+  - **? help modals** on every section (correlation, CHSH, simulation) with KaTeX
+    formulas: singlet state, E(θ)=−cosθ derivation, LHV bound, CHSH formula,
+    Tsirelson bound, sampling probabilities, convergence σ≈1/√N
+- **`src/physics/bell.ts`** — 3 exact functions:
+  `bellCorrelation(theta)`, `chshS(a, aPrime, b, bPrime)`,
+  `simulatePairs(theta, n) → { samePairs, oppositePairs, eEstimate }`
+- **`src/components/BellDemo.tsx`** — full Bell inequality UI
+- **`src/components/BellInfoPanel.tsx`** — topics: correlation, chsh, simulation
+- **`src/test/bell.test.ts`** — 16 tests covering all three physics functions
+- Total: **148 tests passing**
+
 ## [0.2026.0506e] — 2026-05-06
 
 ### Added

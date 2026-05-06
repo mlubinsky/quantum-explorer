@@ -4,6 +4,7 @@ import { ParameterSlider } from './ParameterSlider'
 import { HelpButton, HelpModal } from './HelpModal'
 import { SpinInfoPanel } from './SpinInfoPanel'
 import { SternGerlachPanel } from './SternGerlachPanel'
+import { BellDemo } from './BellDemo'
 import { computeTrajectory, blochVector } from '../utils/spinMath'
 import type { Vec3 } from '../utils/spinMath'
 
@@ -12,7 +13,7 @@ const T_MAX    = 4 * Math.PI
 
 const PI = Math.PI
 
-type SpinTab = 'precession' | 'measurement'
+type SpinTab = 'precession' | 'measurement' | 'bell'
 
 const PRESETS: [string, number, number][] = [
   ['|↑⟩',  0,      0       ],
@@ -55,8 +56,7 @@ export function SpinExplorer() {
 
   function handleTabChange(tab: SpinTab) {
     setActiveTab(tab)
-    if (tab === 'measurement') {
-      // Clear precession trail — cone has no meaning in measurement context
+    if (tab === 'measurement' || tab === 'bell') {
       setTrajectory([])
       setPlaying(false)
     }
@@ -146,7 +146,7 @@ export function SpinExplorer() {
 
           {/* Tab strip */}
           <div style={{ display: 'flex', gap: 0, marginBottom: '1rem', borderBottom: '1px solid #222' }}>
-            {(['precession', 'measurement'] as SpinTab[]).map(tab => (
+            {(['precession', 'measurement', 'bell'] as SpinTab[]).map(tab => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
@@ -157,7 +157,7 @@ export function SpinExplorer() {
                   marginBottom: -1,
                 }}
               >
-                {tab === 'precession' ? 'Precession' : 'Measurement'}
+                {tab === 'precession' ? 'Precession' : tab === 'measurement' ? 'Measurement' : 'Bell'}
               </button>
             ))}
           </div>
@@ -261,6 +261,9 @@ export function SpinExplorer() {
               onCollapse={(t, p) => { setTheta(t); setPhi(p) }}
             />
           )}
+
+          {/* ── Bell tab ── */}
+          {activeTab === 'bell' && <BellDemo />}
         </div>
       </div>
     </>
