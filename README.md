@@ -24,6 +24,28 @@ Textbook-style energy level diagram showing all 8 levels simultaneously.
 - Toggle between ψ and \|ψ\|²
 - Sliders for well width L (ISW) and frequency ω (HO)
 - Exact E_n and σ_x readout for the selected state
+- Energy levels table — n, Eₙ, ΔEₙ, Eₙ/E₁
+- Momentum distribution \|φₙ(k)\|² — exact closed form (ISW sinc²; HO self-duality)
+- Energy levels diagram — V(x) fill + Eₙ lines labelled in a.u. and eV
+- Matrix representation (Heisenberg picture) — H, X, P heatmaps; animated time evolution; Bohr frequency table
+
+### Time Evolution
+Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
+
+**ISW superposition** ψ(x,t) = Σ cₙ ψₙ(x) e^{−iEₙt}
+- 8-coefficient editor with sliders; presets (ground state, equal mix, Gaussian envelope)
+- Animated \|ψ(x,t)\|² with Re(ψ) / Im(ψ) toggle
+- ⟨x(t)⟩ cursor tracking (Ehrenfest theorem)
+- Quantum revival at T_rev = 4L²/π — wavepacket reconstructs exactly
+- Energy decomposition \|cₙ\|² bar chart
+- Expectation values plot: ⟨x(t)⟩, ⟨p(t)⟩, Δx, Δp, Δx·Δp with ħ/2 bound
+- Norm history — flat at 1.000 (exact, no drift)
+
+**HO coherent state** \|α⟩ — displaced ground state
+- Sliders for displacement \|α\|, phase φ_α, frequency ω
+- Animated Gaussian packet oscillating at ω without spreading
+- Exact ⟨x(t)⟩, ⟨p(t)⟩, Δx = 1/√(2ω), Δx·Δp = ħ/2 readout
+- Poisson energy decomposition \|cₙ\|² = e^{−\|α\|²}\|α\|^{2n}/n!
 
 ### Spin-½ / Bloch Sphere
 - Larmor precession under arbitrary magnetic field direction
@@ -34,8 +56,8 @@ Textbook-style energy level diagram showing all 8 levels simultaneously.
 Every module includes a **?** help button with physics formulas (KaTeX).
 
 ### Planned
+- HO squeezed state — breathing wavepacket, Δx·Δp = ħ/2 maintained
 - Free particle — Gaussian wavepacket spreading (exact)
-- ISW / HO time evolution — superposition, quantum revivals, coherent states
 - Hydrogen atom — energy levels, radial wavefunctions, Grotrian diagram
 - Kronig-Penney band structure
 - Two-spin entanglement and Bell states
@@ -60,7 +82,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests |
+| Vitest | Unit tests (67 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

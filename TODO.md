@@ -38,30 +38,38 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ---
 
-## Next — Time evolution (high priority)
+## Done ✓ — Time evolution
 
 ### ISW superposition
-Time-evolving superposition Σ cₙ ψₙ e^{−iEₙt} — exact, no numerics.
-
-- [ ] Coefficient editor: set c₁…c₈, normalise automatically
-- [ ] Animate |ψ(x,t)|² with Play / Pause / Reset / speed selector
-- [ ] Quantum revival at T_rev = 4ML²/π (ISW-specific, exact)
-- [ ] Beating between nearby levels visible at short times
-- [ ] ⟨x(t)⟩ cursor on plot (Ehrenfest: oscillates classically)
-- [ ] ? help modal: revival formula, what beating looks like
+- [x] Coefficient editor: set c₁…c₈, normalise automatically; presets
+- [x] Animate |ψ(x,t)|² with Play / Pause / Reset / speed selector (0.25×–5×)
+- [x] Quantum revival at T_rev = 4L²/π (exact); t/T_rev readout
+- [x] ⟨x(t)⟩ cursor on plot (Ehrenfest)
+- [x] Energy decomposition |cₙ|² bar chart
+- [x] Expectation values plot: ⟨x⟩, ⟨p⟩ and Δx, Δp, Δx·Δp with ħ/2 bound
+- [x] Norm history (exact = 1.000 for all t)
+- [x] ? help modals on every plot
 
 ### HO coherent state
-Displaced ground state α|α⟩ — Gaussian that oscillates without spreading.
+- [x] Slider for |α|, φ_α, ω
+- [x] Animate |ψ(x,t)|² — exact Gaussian packet oscillating at ω
+- [x] Show ⟨x(t)⟩, ⟨p(t)⟩, Δx = 1/√(2ω), Δx·Δp = ħ/2
+- [x] Energy decomposition — Poisson distribution
+- [x] ? help modal: coherent state definition, Poisson, uncertainty
 
-- [ ] Slider for displacement amplitude α (complex: |α|, arg α)
-- [ ] Animate |ψ(x,t)|² — Gaussian packet oscillates at ω, shape invariant
-- [ ] Show ⟨x(t)⟩ = |α|√(2/ω) cos(ωt + φ) and ⟨p(t)⟩ exactly
-- [ ] Overlay classical trajectory
-- [ ] ? help modal: coherent state definition, displacement operator
+## Next — Time evolution enhancements
+
+### ISW improvements
+- [ ] Re(ψ)/Im(ψ) overlay on same axes as |ψ|² (currently separate toggle)
+- [ ] Quantum revival highlight: flash or annotation at t = T_rev
 
 ### HO squeezed state (natural extension of coherent state)
 - [ ] Squeeze parameter r — Δx shrinks, Δp grows, Δx·Δp = ħ/2 maintained
 - [ ] Breathing wavepacket animation
+
+### Momentum-space animation |φ(k,t)|²
+- [ ] ISW: |φ(k,t)|² = |Σ cₙ(t) φₙ(k)|² — exact from time-evolved coefficients
+- [ ] HO coherent: Gaussian in k too
 
 ---
 

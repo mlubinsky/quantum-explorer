@@ -5,6 +5,32 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0507] — 2026-05-07
+
+### Added
+- **Time Evolution module** — new "Time Evolution" tab, exact analytical (no numerics):
+  - **ISW superposition**: ψ(x,t) = Σ cₙ ψₙ(x) e^{−iEₙt} with 8-coefficient editor,
+    presets (ground state, 1+2 mix, Gaussian envelope), live Σ|cₙ|² normalisation readout
+  - **HO coherent state**: exact Gaussian packet |ψ_α|² = √(ω/π) exp(−ω(x−⟨x⟩)²);
+    sliders for |α|, φ_α, ω; Δx·Δp = ħ/2 shown exactly
+  - **Main plot**: |ψ(x,t)|² animated; toggle Re(ψ)/Im(ψ); ⟨x(t)⟩ dashed marker;
+    Play/Pause/Reset; speed (0.25×–5×); loop toggle; t display with T_rev fraction
+  - **Energy decomposition |cₙ|²** bar chart (time-independent; Poisson for HO)
+  - **Expectation values** two-row plot: ⟨x⟩, ⟨p⟩ (top) and Δx, Δp, Δx·Δp with
+    ħ/2 = 0.5 a.u. bound (bottom)
+  - **Norm history** (collapsible): flat line at 1.000 — confirms exact normalisation
+  - **? help modals** on every plot: superposition, revival, Ehrenfest, Heisenberg,
+    coherent state definition, Poisson distribution
+- **`src/physics/timeEvolution.ts`** — exact ISW and HO coherent physics:
+  `iswPsi`, `iswProb`, `iswExpectX`, `iswExpectP`, `iswExpectX2`, `iswExpectP2`,
+  `iswRevivalPeriod`, `hoCoherentProb`, `hoCoherentExpectX`, `hoCoherentExpectP`,
+  `hoCoherentDeltaX`, `hoCoherentDeltaP`
+- **`specs/time-evolution.md`** — full feature spec written before implementation
+
+### Tests
+- 15 new tests in `src/test/timeEvolution.test.ts`
+- Total: **67 tests passing** across 6 test files
+
 ## [0.2026.0506b] — 2026-05-06
 
 ### Added

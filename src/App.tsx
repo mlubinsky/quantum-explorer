@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { SpinExplorer } from './components/SpinExplorer'
 import { StationaryExplorer } from './components/StationaryExplorer'
+import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
 import './App.css'
 
-type Module = 'stationary' | 'spin'
+type Module = 'stationary' | 'time-evolution' | 'spin'
 
 const MODULES: { id: Module; label: string }[] = [
-  { id: 'stationary', label: 'Stationary States' },
-  { id: 'spin',       label: 'Spin-½ / Bloch Sphere' },
+  { id: 'stationary',     label: 'Stationary States' },
+  { id: 'time-evolution', label: 'Time Evolution' },
+  { id: 'spin',           label: 'Spin-½ / Bloch Sphere' },
 ]
 
 export default function App() {
@@ -33,8 +35,9 @@ export default function App() {
       </nav>
 
       <main className="app-main">
-        {active === 'stationary' && <StationaryExplorer />}
-        {active === 'spin'       && <SpinExplorer />}
+        {active === 'stationary'     && <StationaryExplorer />}
+        {active === 'time-evolution' && <TimeEvolutionExplorer />}
+        {active === 'spin'           && <SpinExplorer />}
       </main>
     </div>
   )
