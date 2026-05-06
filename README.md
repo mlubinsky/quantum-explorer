@@ -9,7 +9,7 @@ computed in closed form.
 
 ## Live demo
 
-<!-- Add GitHub Pages URL here once deployed -->
+**[https://mlubinsky.github.io/quantum-explorer/](https://mlubinsky.github.io/quantum-explorer/)**
 
 ## Features
 
