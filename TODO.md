@@ -23,6 +23,20 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] Play / Pause / Reset animation
 - [x] ? help modal with KaTeX formulas
 
+### Spin-½ enhancements — next up
+- [ ] **State presets** — one-click buttons |↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩
+- [ ] **Ket display** — live |ψ⟩ = α|↑⟩ + β|↓⟩ with formatted complex β
+- [ ] **Robertson uncertainty** — Δσ_x·Δσ_y ≥ |⟨σ_z⟩| with live ✓/✗ indicator
+- [ ] **Component input mode** — toggle between angles (θ,φ) and direct (α,β) entry
+- [ ] **B̂ presets** — +x/+y/+z/custom button group replacing raw θ_B/φ_B sliders
+- [ ] **Stern-Gerlach / Measurement tab** — second tab alongside Precession:
+      - Measurement axis selector (x/y/z/custom)
+      - Exact Born-rule probability bar P(+½) = (1 + n̂·r̂)/2
+      - "Measure once" — Bernoulli sample, collapse Bloch vector, measurement history
+      - History with context notes on non-commutativity and the spin-filter paradox
+      - "Run N shots" — histogram vs exact probability (pure JS, no backend)
+      - "Lock |ψ⟩ as prep state" — demonstrate randomness from identical preparation
+
 ### Stationary States module — ISW + HO
 - [x] Eigenfunctions plot — all 8 levels simultaneously; selected state highlighted
 - [x] Toggle ψ / |ψ|²
