@@ -1,0 +1,36 @@
+import styles from './ParameterSlider.module.css'
+
+interface Props {
+  label: string
+  value: number
+  min: number
+  max: number
+  step: number
+  unit?: string
+  description?: string
+  onChange: (value: number) => void
+}
+
+export function ParameterSlider({ label, value, min, max, step, unit, description, onChange }: Props) {
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.labelRow}>
+        <span>{label}</span>
+        <span className={styles.value}>
+          {value.toFixed(2)}{unit ? ` ${unit}` : ''}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        className={styles.slider}
+        aria-label={label}
+        onChange={e => onChange(Number(e.target.value))}
+      />
+      {description && <div className={styles.hint}>{description}</div>}
+    </div>
+  )
+}

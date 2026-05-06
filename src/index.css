@@ -1,0 +1,21 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #e0e0e0;
+}
+
+h3 {
+  color: #ccc;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  padding: 0.2rem 0.5rem 0.2rem 0;
+}
