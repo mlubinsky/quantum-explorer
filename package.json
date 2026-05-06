@@ -1,7 +1,7 @@
 {
   "name": "quantum-explorer",
   "private": true,
-  "version": "0.2026.0506i",
+  "version": "0.2026.0506j",
   "type": "module",
   "scripts": {
     "dev": "vite",

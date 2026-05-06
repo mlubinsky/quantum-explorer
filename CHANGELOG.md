@@ -5,6 +5,40 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506j] — 2026-05-06
+
+### Added / Changed — Hydrogen Atom enhancements
+- **Schrödinger equation + Coulomb potential** displayed as a formula row below the readout:
+  Ĥψ = Eψ · Ĥ = −½∇² + V(r) · V(r) = −Z/r (Coulomb)
+- **Grotrian diagram** — comprehensive redesign matching QM project feature set:
+  - **Clickable levels**: click any energy level to select that (n,l) state in the explorer
+  - **n= labels on right axis** for n = 1..5
+  - **Series filter buttons**: Lyman (→n=1), Balmer (→n=2), Paschen (→n=3), Brackett (→n=4)
+    — clicking a series button dims all other transitions
+  - **Wavelength-accurate arrow colours**: UV violet/dashed, visible solid coloured by λ,
+    IR dark-red/dashed (from `wavelengthToColor` mapping)
+  - **Opacity system**: clicking a level dims unreachable levels and highlights
+    allowed decay channels in the focused-level colour; click again to clear focus
+  - **Forbidden transitions toggle** (Δℓ ≠ ±1) — gray dashed, with hover tooltip explaining rule
+  - **λ labels toggle** — shows wavelength in nm alongside each arrow
+  - **Metastable 2s marker** — orange dot with hover tooltip (Δℓ = 0 forbidden, two-photon lifetime)
+  - **Hover tooltip** (fixed position) — shows level energy, or for arrows: series name, λ (nm),
+    ΔE (eV), colour swatch indicating visible/UV/IR
+  - **Bottom legend** — Levels (current/reachable/dimmed/metastable) and Arrows (solid visible /
+    UV dashed / IR dashed / gray forbidden) sections
+- **Angular shape |Y_l^m(θ)|² polar plot** — new section side-by-side with 2D orbital heatmap:
+  - Closed polar curve normalised to max=1; computed from `angularShape()` in hydrogen.ts
+  - Fill shading with Plotly scatter fill='toself'; square axes; ? help modal
+- **2D orbital heatmap**: colorbar (vertical legend bar 0–1 = |ψ|²/max) added via `showscale: true`
+- **3D isosurface |ψ|²** — new collapsible section using Plotly isosurface trace:
+  - Uniform 3D grid (N≤32 per axis, adaptive by n); 10% of peak isosurface
+  - Real spherical harmonics with φ-dependence (cos/sin factors for m≠0)
+  - Dark scene background; drag to rotate, scroll to zoom; ? help modal
+  - Only computed/mounted when section is expanded (lazy rendering)
+- **Two new physics functions** in `src/physics/hydrogen.ts`:
+  `angularShape(l, m)` — closed xz polar-plot curve
+  `orbitalDensity3D(n, l, m, x, y, z, Z)` — full 3D density with real spherical harmonics
+
 ## [0.2026.0506i] — 2026-05-06
 
 ### Added

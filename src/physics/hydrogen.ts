@@ -109,6 +109,45 @@ export function rMax(n: number, Z: number): number {
   return 2 * n * n * (n + 3) / Z
 }
 
+/**
+ * Polar-plot data for angular shape |Y_l^m(θ)|² in xz-plane.
+ * Returns closed (x,z) curve normalised to max radius = 1.
+ * Right half (x≥0) traces θ: 0→π, left half mirrors it.
+ */
+export function angularShape(l: number, m: number, nPoints = 200): { x: number[]; z: number[] } {
+  const thetas = Array.from({ length: nPoints + 1 }, (_, i) => (i * Math.PI) / nPoints)
+  const rs = thetas.map(t => angularDensity(l, m, t))
+  const maxR = Math.max(...rs, 1e-30)
+  const norm = rs.map(r => r / maxR)
+  const xR = thetas.map((t, i) => norm[i] * Math.sin(t))
+  const zR = thetas.map((t, i) => norm[i] * Math.cos(t))
+  return {
+    x: [...xR, ...[...xR].reverse().map(x => -x)],
+    z: [...zR, ...[...zR].reverse()],
+  }
+}
+
+/**
+ * Full 3D volumetric density |ψ_nlm(x,y,z)|² using real spherical harmonics.
+ * Real form: Y_l^m_real has φ-factor cos(|m|φ) for m>0, sin(|m|φ) for m<0.
+ */
+export function orbitalDensity3D(n: number, l: number, m: number, x: number, y: number, z: number, Z: number): number {
+  const r = Math.sqrt(x * x + y * y + z * z)
+  if (r < 1e-12) {
+    if (l > 0) return 0
+    const R0 = radialWavefunction(n, 0, 0, Z)
+    return R0 * R0 / (4 * Math.PI)
+  }
+  const theta = Math.atan2(Math.sqrt(x * x + y * y), z)
+  const phi = Math.atan2(y, x)
+  const R = radialWavefunction(n, l, r, Z)
+  const absm = Math.abs(m)
+  const P = assocLegendre(l, absm, Math.cos(theta))
+  const N2 = ((2 * l + 1) / (4 * Math.PI)) * factRatio(l - absm, l + absm)
+  const phiFactor = absm === 0 ? 1 : (m > 0 ? 2 * Math.cos(absm * phi) ** 2 : 2 * Math.sin(absm * phi) ** 2)
+  return R * R * N2 * P * P * phiFactor
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function factorial(n: number): number {
