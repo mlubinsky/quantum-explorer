@@ -101,8 +101,9 @@ function GrotrianDiagram({
   }, [selN, selL])
 
   const energy = (nv: number) => -(Z * Z) / (2 * nv * nv)
-  const eMin = energy(N_MAX)
-  const yFromE = (e: number) => PAD_T + plotH * (1 - (e - eMin) / (0 - eMin))
+  const eMin = energy(1)   // ground state — most negative, maps to BOTTOM
+  const eMax = 0            // ionisation limit — maps to TOP
+  const yFromE = (e: number) => PAD_T + plotH * (1 - (e - eMin) / (eMax - eMin))
   const colX = (lv: number) => PAD_L + ((lv + 0.5) / N_MAX) * plotW
   const colHalfW = (plotW / N_MAX) * 0.35
 
