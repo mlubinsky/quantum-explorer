@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506d] — 2026-05-06
+
+### Added
+- **Spin-½ state presets** — six one-click buttons (|↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩)
+  below the φ slider; clicking a preset sets (θ, φ) and resets the animation
+- **Ket display** — live `|ψ⟩ = α|↑⟩ + (β)|↓⟩` readout with formatted complex β
+  (pure real / pure imaginary / general cases)
+- **Robertson uncertainty** — `Δσ_x·Δσ_y ≥ |⟨σ_z⟩|` row with live values and
+  green ✓ / red ✗ indicator; updates during animation from the current Bloch vector
+- **Robertson section in SpinInfoPanel** — KaTeX formula, derivation sketch from
+  `[σ_x,σ_y]=2iσ_z`, and three key cases to try
+
 ## [0.2026.0506c] — 2026-05-06
 
 ### Fixed

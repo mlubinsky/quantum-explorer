@@ -24,9 +24,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] ? help modal with KaTeX formulas
 
 ### Spin-½ enhancements — next up
-- [ ] **State presets** — one-click buttons |↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩
-- [ ] **Ket display** — live |ψ⟩ = α|↑⟩ + β|↓⟩ with formatted complex β
-- [ ] **Robertson uncertainty** — Δσ_x·Δσ_y ≥ |⟨σ_z⟩| with live ✓/✗ indicator
+- [x] **State presets** — one-click buttons |↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩
+- [x] **Ket display** — live |ψ⟩ = α|↑⟩ + β|↓⟩ with formatted complex β
+- [x] **Robertson uncertainty** — Δσ_x·Δσ_y ≥ |⟨σ_z⟩| with live ✓/✗ indicator
 - [ ] **Component input mode** — toggle between angles (θ,φ) and direct (α,β) entry
 - [ ] **B̂ presets** — +x/+y/+z/custom button group replacing raw θ_B/φ_B sliders
 - [ ] **Stern-Gerlach / Measurement tab** — second tab alongside Precession:

@@ -33,6 +33,28 @@ export function SpinInfoPanel() {
       </section>
 
       <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Robertson uncertainty</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          Robertson's relation for observables A, B states{' '}
+          <InlineMath math="\Delta A\cdot\Delta B \ge \tfrac{1}{2}|\langle[A,B]\rangle|" />.
+          Since <InlineMath math="[\sigma_x,\sigma_y]=2i\sigma_z" /> this gives:
+        </p>
+        <BlockMath math="\Delta\sigma_x\cdot\Delta\sigma_y \;\ge\; |\langle\sigma_z\rangle|" />
+        <p style={{ margin: '4px 0 6px' }}>
+          For a pure state on the Bloch sphere,{' '}
+          <InlineMath math="\Delta\sigma_i = \sqrt{1 - \langle\sigma_i\rangle^2}" />,
+          so all quantities come directly from the Bloch vector.
+          The inequality is always satisfied (shown in green ✓); equality holds only at the
+          six cardinal states ±x, ±y, ±z.
+        </p>
+        <p style={{ margin: '4px 0 0', fontSize: '0.85em', color: '#aaa' }}>
+          Try: <strong>|↑⟩</strong> → LHS = 1, RHS = 1 (saturates). &nbsp;
+          <strong>|+x⟩</strong> → RHS = 0 (trivially satisfied — σ_x eigenstate). &nbsp;
+          Drag θ to π/4 for an intermediate case.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
         <h4 style={{ margin: '0 0 6px' }}>Larmor precession</h4>
         <p style={{ margin: '0 0 6px' }}>
           A spin in a magnetic field <InlineMath math="\mathbf{B} = \omega_0 \hat{B}" /> evolves under:
