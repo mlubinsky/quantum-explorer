@@ -135,13 +135,19 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ---
 
-## Phase 2 — Hydrogen atom
+## Done ✓ — Hydrogen atom
 
-- [ ] **Energy level diagram** — Eₙ = −1/(2n²), interactive Grotrian diagram
-- [ ] **Radial probability** P(r) = r²|R_nl|² — exact, 1D plot
+- [x] **Energy level diagram (Grotrian)** — n=1..5, l=0..4, Δl=±1 transitions coloured by series;
+      hover tooltip with ΔE and λ; selected state highlighted
+- [x] **Radial probability** P(r) = r²|R_nl|² — exact, with ⟨r⟩ marker
+- [x] **Radial wavefunction** R_nl(r) — exact associated Laguerre polynomial recurrence
+- [x] **2D orbital cross-section** — |ψ_nlm(x,z)|² heatmap via real spherical harmonics
+- [x] **Hydrogenic ions** — Z slider (1–10), exact scaling
+
+## Phase 2 — Hydrogen atom (remaining)
+
 - [ ] **Emission spectra** — Lyman / Balmer / Paschen; click transition → wavefunctions
 - [ ] **Zeeman effect** — level splitting with B-field slider, exact
-- [ ] **Hydrogenic ions** — Z slider, scaling r → r/Z, E → Z²E
 
 ---
 

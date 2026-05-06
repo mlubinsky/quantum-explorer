@@ -5,6 +5,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506i] — 2026-05-06
+
+### Added
+- **Hydrogen Atom module** — new top-level tab "Hydrogen Atom":
+  - **Quantum number controls**: dropdowns for n (1–5), l (0..n−1), m (−l..l),
+    integer Z slider (1–10); all quantum numbers constrained to valid range
+  - **Readout**: state label (e.g. 3d), E_n in Hartree and eV, ⟨r⟩ in a₀,
+    radial node count, angular node count
+  - **Radial probability density P(r)** — exact `r² |R_nl(r)|²` with
+    ⟨r⟩ dashed marker; Plotly dark-theme plot
+  - **Radial wavefunction R_nl(r)** — collapsible; exact closed-form
+    using associated Laguerre polynomials via three-term recurrence
+  - **2D orbital cross-section** — collapsible heatmap of |ψ_nlm(x,z)|² in the
+    xz-plane; 140×140 grid; Viridis colour scale; real spherical harmonics via
+    associated Legendre polynomials
+  - **Grotrian energy level diagram** — SVG; n = 1..5, l = 0..4 (s/p/d/f/g);
+    electric-dipole transition arrows (Δl = ±1) coloured by series:
+    Lyman (violet, UV), Balmer (cyan, visible), Paschen (orange, IR), Brackett+ (red);
+    hover tooltip shows transition label, ΔE, λ; selected state highlighted
+  - **? help modals** on all four sections with KaTeX formulas:
+    radial density, R_nl normalisation, 2D cross-section factorisation,
+    Grotrian selection rules and Rydberg formula
+- **`src/physics/hydrogen.ts`** — exact functions:
+  `hydrogenEnergy`, `meanRadius`, `radialNodes`, `assocLaguerre`,
+  `radialWavefunction`, `radialDensity`, `angularDensity`, `orbitalDensity2D`, `rMax`
+- **`src/test/hydrogen.test.ts`** — 31 tests (218 total passing)
+- **`src/components/HydrogenExplorer.tsx`** — full hydrogen atom UI
+- **`src/components/HydrogenInfoPanel.tsx`** — KaTeX help for all sections
+
 ## [0.2026.0506h] — 2026-05-06
 
 ### Added
