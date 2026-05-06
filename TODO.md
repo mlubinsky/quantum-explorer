@@ -29,7 +29,7 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] **Robertson uncertainty** — Δσ_x·Δσ_y ≥ |⟨σ_z⟩| with live ✓/✗ indicator
 - [ ] **Component input mode** — toggle between angles (θ,φ) and direct (α,β) entry
 - [ ] **B̂ presets** — +x/+y/+z/custom button group replacing raw θ_B/φ_B sliders
-- [ ] **Stern-Gerlach / Measurement tab** — second tab alongside Precession:
+- [x] **Stern-Gerlach / Measurement tab** — second tab alongside Precession:
       - Measurement axis selector (x/y/z/custom)
       - Exact Born-rule probability bar P(+½) = (1 + n̂·r̂)/2
       - "Measure once" — Bernoulli sample, collapse Bloch vector, measurement history

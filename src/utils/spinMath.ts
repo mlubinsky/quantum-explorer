@@ -65,6 +65,12 @@ export function computeTrajectory(
   return trajectory
 }
 
+/** P(+½) = (1 + n̂ · r̂) / 2 — exact Born rule for spin-½ */
+export function bornP(axis: Vec3, bloch: Vec3): number {
+  const dot = axis[0]*bloch[0] + axis[1]*bloch[1] + axis[2]*bloch[2]
+  return Math.max(0, Math.min(1, (1 + dot) / 2))
+}
+
 /**
  * Return (θ, φ) of the post-measurement eigenstate after a Stern-Gerlach
  * measurement along unit axis n̂.

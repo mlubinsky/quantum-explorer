@@ -70,6 +70,31 @@ export function SpinInfoPanel() {
         </p>
       </section>
 
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Stern-Gerlach measurement</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          Measuring spin along axis <InlineMath math="\hat{n}" /> gives outcome{' '}
+          <InlineMath math="+\tfrac{1}{2}" /> with probability (Born rule):
+        </p>
+        <BlockMath math="P(+\tfrac{1}{2}) = \frac{1 + \hat{n}\cdot\mathbf{r}}{2}" />
+        <p style={{ margin: '4px 0 6px' }}>
+          After the measurement the state <strong>collapses</strong> — the Bloch vector
+          snaps to <InlineMath math="+\hat{n}" /> (outcome <InlineMath math="+\tfrac{1}{2}" />) or{' '}
+          <InlineMath math="-\hat{n}" /> (outcome <InlineMath math="-\tfrac{1}{2}" />),
+          erasing all prior information about the spin direction.
+        </p>
+        <p style={{ margin: '4px 0 6px', fontSize: '0.85em', color: '#aaa' }}>
+          <strong>Non-commutativity:</strong> measure along z (+½), then along x (random ±½),
+          then along z again — the second z outcome is 50/50, even though the first was
+          definite. The intermediate x measurement destroyed the z-polarisation.
+        </p>
+        <p style={{ margin: '4px 0 0', fontSize: '0.85em', color: '#aaa' }}>
+          <strong>Irreducible randomness:</strong> identical preparation, same axis, yet
+          individual outcomes differ. No hidden variable predetermines the result —
+          this is a theorem (Bell, 1964), not a modelling choice.
+        </p>
+      </section>
+
       <section>
         <h4 style={{ margin: '0 0 6px' }}>What to explore</h4>
         <ul style={{ margin: 0, paddingLeft: '1.2em' }}>

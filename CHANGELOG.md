@@ -5,6 +5,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506e] — 2026-05-06
+
+### Added
+- **Stern-Gerlach / Measurement tab** — second sub-tab on the Spin-½ page:
+  - Axis selector: x / y / z / custom (θ_n, φ_n sliders)
+  - Live Born-rule probability bars: P(+½) = (1 + n̂·r̂)/2, updates as state animates
+  - **Measure once**: Bernoulli sample, Bloch vector snaps to collapsed eigenstate
+  - Measurement history (last ~8 shown) with automatic context notes:
+    non-commutativity explanation when axis changes; spin-filter paradox note after
+    ≥3 measurements with matching first/last axis
+  - **Run N shots** (N=1…5000): histogram vs exact probability, "irreducible randomness" note
+  - **Lock |ψ⟩ as prep state** + run N shots from frozen preparation
+  - Switching to Measurement tab clears precession trajectory and stops animation
+- **`bornP(axis, bloch)`** added to `src/utils/spinMath.ts`
+- **`src/test/sternGerlach.test.ts`** — 16 tests (Born rule, collapse, N-shot simulation)
+- **Stern-Gerlach section** in `SpinInfoPanel` help modal: Born rule formula, collapse,
+  non-commutativity, irreducible randomness / Bell's theorem note
+- Total: **132 tests passing**
+
 ## [0.2026.0506d] — 2026-05-06
 
 ### Added
