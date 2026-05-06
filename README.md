@@ -13,20 +13,35 @@ computed in closed form.
 
 ## Features
 
-### Available now
-- **Spin-½ / Bloch Sphere** — Larmor precession under arbitrary magnetic field,
-  exact Rodrigues rotation, real-time ⟨σ_x/y/z⟩ expectation values
+### Stationary States
+Textbook-style energy level diagram showing all 8 levels simultaneously.
+
+| Potential | What is exact |
+|---|---|
+| Infinite square well | E_n = n²π²/2L², eigenfunctions, σ_x, ⟨x²⟩ |
+| Harmonic oscillator | E_n = ω(n+½), Hermite polynomials, σ_x, classical turning points |
+
+- Toggle between ψ and \|ψ\|²
+- Sliders for well width L (ISW) and frequency ω (HO)
+- Exact E_n and σ_x readout for the selected state
+
+### Spin-½ / Bloch Sphere
+- Larmor precession under arbitrary magnetic field direction
+- Exact Rodrigues rotation — no numerical ODE
+- Real-time ⟨σ_x⟩, ⟨σ_y⟩, ⟨σ_z⟩ expectation values
+- Sliders for initial state (θ, φ), frequency ω₀, B-field direction
+
+Every module includes a **?** help button with physics formulas (KaTeX).
 
 ### Planned
-- Infinite square well — superposition, quantum revivals
-- Harmonic oscillator — coherent states, squeezed states
-- Hydrogen atom — energy levels, radial wavefunctions, orbital cross-sections
+- Free particle — Gaussian wavepacket spreading (exact)
+- ISW / HO time evolution — superposition, quantum revivals, coherent states
+- Hydrogen atom — energy levels, radial wavefunctions, Grotrian diagram
 - Kronig-Penney band structure
 - Two-spin entanglement and Bell states
 - Single-qubit gates on Bloch sphere
-- NMR / spin echo
 
-See [TODO.md](TODO.md) for the full roadmap.
+See [TODO.md](TODO.md) for the full roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Running locally
 
@@ -39,11 +54,13 @@ Then open `http://localhost:5173`.
 
 ## Tech stack
 
-- React 19 + TypeScript + Vite 8
-- Three.js (Bloch sphere, 3D orbitals)
-- Plotly.js (2D plots)
-- KaTeX (physics notation in help panels)
-- Vitest (tests)
+| Library | Purpose |
+|---|---|
+| React 19 + TypeScript + Vite 8 | Framework |
+| Three.js | Bloch sphere (3D WebGL) |
+| Plotly.js | 2D wavefunction plots |
+| KaTeX | Physics formulas in help panels |
+| Vitest | Unit tests |
 
 No Python, no server, no dependencies beyond npm.
 
