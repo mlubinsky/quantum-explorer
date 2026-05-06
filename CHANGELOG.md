@@ -5,7 +5,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-## [0.2026.0506] — 2026-05-06
+## [0.2026.0506c] — 2026-05-06
+
+### Fixed
+- **Expectation Values plot blank after collapse/expand** — replaced `<details>/<summary>`
+  with state-controlled conditional rendering for all four collapsible plot sections
+  (Energy decomposition, Expectation values, Momentum-space, Norm history). Plotly
+  rendered with zero width inside `display:none` and never resized on re-open; remounting
+  on show fixes this. Adds ▾/▸ triangles matching Free Particle style.
+- **No disclosure triangle on Time Evolution collapsible plots** — `display:flex` on
+  `<summary>` suppresses the browser `::marker` pseudo-element. Removed the flex
+  properties; added `stopPropagation` on ? button spans to prevent accidental
+  collapse when clicking help.
+
+## [0.2026.0506b] — 2026-05-06
+
+### Added
+- **Sub-mode ? help button** — dedicated modal on the ISW / HO Coherent / HO Squeezed
+  selector buttons in Time Evolution, comparing all three sub-modes with formulas for
+  superposition, coherent state, and squeezed state.
+
+## [0.2026.0506a] — 2026-05-06
 
 ### Added
 - **Free Particle tab** — exact Gaussian wavepacket spreading under V = 0:
@@ -19,7 +39,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - **`src/physics/freeParticle.ts`** — 8 exact closed-form functions:
   `fpSigma`, `fpSpreadingTime`, `fpProb`, `fpExpectX`, `fpExpectP`,
   `fpDeltaX`, `fpDeltaP`, `fpMomentumDist`
-- **`src/test/freeParticle.test.ts`** — 21 tests, all passing
+- **`src/test/freeParticle.test.ts`** — 21 new tests; total **116 passing**
 - **`specs/free-particle.md`** — full physics and implementation spec
 
 ## [0.2026.0507b] — 2026-05-07
@@ -47,7 +67,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Tests
 - 28 new tests in `momentumSpaceTE.test.ts` and `hoSqueezedState.test.ts`
-- Total: **95 tests passing** across 8 test files
+- Total at this release: **95 tests passing** across 8 test files
 
 ## [0.2026.0507] — 2026-05-07
 

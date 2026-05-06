@@ -62,6 +62,8 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] Momentum-space |φ(k,t)|² — ISW (exact complex amplitudes), HO coherent + squeezed (Gaussian)
 - [x] HO squeezed state — breathing Gaussian, Δx·Δp oscillating, breathing period T_sq = π/ω
 - [x] ? help modals for all new plots
+- [x] Sub-mode ? help — modal on ISW / HO Coherent / HO Squeezed selector, comparing all three with formulas
+- [x] Collapsible plots use state-controlled rendering (not `<details>`) so Plotly resizes correctly on expand
 
 ## Next — Further enhancements
 
