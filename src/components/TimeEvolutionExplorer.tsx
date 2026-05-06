@@ -375,7 +375,7 @@ export function TimeEvolutionExplorer() {
           <details style={detailsStyle} open>
             <summary style={summaryStyle}>
               Energy decomposition |cₙ|²
-              <span style={{ marginLeft: 8 }}><HelpButton onClick={() => setShowHelpDecomp(true)} /></span>
+              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpDecomp(true)} /></span>
             </summary>
             <EnergyDecompPlot labels={decompData.labels} weights={decompData.weights} />
           </details>
@@ -384,7 +384,7 @@ export function TimeEvolutionExplorer() {
           <details style={detailsStyle} open>
             <summary style={summaryStyle}>
               Expectation values ⟨x(t)⟩, ⟨p(t)⟩
-              <span style={{ marginLeft: 8 }}><HelpButton onClick={() => setShowHelpExpect(true)} /></span>
+              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpExpect(true)} /></span>
             </summary>
             <ExpectationValuesPlot hist={hist} />
           </details>
@@ -393,7 +393,7 @@ export function TimeEvolutionExplorer() {
           <details style={detailsStyle}>
             <summary style={summaryStyle}>
               Momentum-space |φ(k,t)|²
-              <span style={{ marginLeft: 8 }}><HelpButton onClick={() => setShowHelpMomentum(true)} /></span>
+              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpMomentum(true)} /></span>
             </summary>
             <MomentumTEPlot kGrid={momData.kGrid} yMom={momData.yMom} />
           </details>
@@ -402,7 +402,7 @@ export function TimeEvolutionExplorer() {
           <details style={detailsStyle}>
             <summary style={summaryStyle}>
               Norm history
-              <span style={{ marginLeft: 8 }}><HelpButton onClick={() => setShowHelpNorm(true)} /></span>
+              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpNorm(true)} /></span>
             </summary>
             <NormPlot hist={hist} />
           </details>
@@ -648,7 +648,6 @@ const detailsStyle: React.CSSProperties = { borderTop: '1px solid #222', padding
 const summaryStyle: React.CSSProperties = {
   cursor: 'pointer', userSelect: 'none',
   fontSize: '0.9rem', fontWeight: 600, color: '#aaa', marginBottom: '0.75rem',
-  display: 'flex', alignItems: 'center',
 }
 const btnStyle: React.CSSProperties = {
   padding: '0.3rem 0.5rem', border: '1px solid #333', borderRadius: 4,
