@@ -4,6 +4,8 @@ import { ParameterSlider } from './ParameterSlider'
 import { HelpButton, HelpModal } from './HelpModal'
 import { StationaryInfoPanel } from './StationaryInfoPanel'
 import { EnergyLevelsTable } from './EnergyLevelsTable'
+import { EnergyLevelsDiagram } from './EnergyLevelsDiagram'
+import { MomentumPlot } from './MomentumPlot'
 import { MatrixPanel } from './MatrixPanel'
 import { iswEnergy, iswSigmaX, iswEigenstate } from '../physics/isw'
 import { hoEnergy, hoSigmaX, hoTurningPoint, hoEigenstate } from '../physics/harmonic'
@@ -174,14 +176,18 @@ export function StationaryExplorer() {
             nLevels={N_LEVELS}
           />
 
-          <details style={{ borderTop: '1px solid #222', paddingTop: '0.75rem' }}>
-            <summary style={{
-              cursor: 'pointer', userSelect: 'none',
-              fontSize: '0.9rem', fontWeight: 600, color: '#aaa',
-              marginBottom: '0.75rem',
-            }}>
-              Matrix representation (Heisenberg picture)
-            </summary>
+          <details style={detailsStyle}>
+            <summary style={summaryStyle}>Momentum distribution |φₙ(k)|²</summary>
+            <MomentumPlot potential={potential} n={n} L={L} omega={omega} />
+          </details>
+
+          <details style={detailsStyle}>
+            <summary style={summaryStyle}>Energy levels diagram</summary>
+            <EnergyLevelsDiagram potential={potential} n={n} L={L} omega={omega} />
+          </details>
+
+          <details style={detailsStyle}>
+            <summary style={summaryStyle}>Matrix representation (Heisenberg picture)</summary>
             <MatrixPanel
               energies={energies}
               wavefunctions={wavefunctions}
@@ -194,6 +200,12 @@ export function StationaryExplorer() {
       </div>
     </>
   )
+}
+
+const detailsStyle: React.CSSProperties = { borderTop: '1px solid #222', paddingTop: '0.75rem' }
+const summaryStyle: React.CSSProperties = {
+  cursor: 'pointer', userSelect: 'none',
+  fontSize: '0.9rem', fontWeight: 600, color: '#aaa', marginBottom: '0.75rem',
 }
 
 const potBtnStyle: React.CSSProperties = {
