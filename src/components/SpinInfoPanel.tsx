@@ -1,0 +1,67 @@
+import 'katex/dist/katex.min.css'
+import { BlockMath, InlineMath } from 'react-katex'
+
+export function SpinInfoPanel() {
+  return (
+    <div style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>State space</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          A spin-½ particle lives in a 2-dimensional complex Hilbert space.
+          The general (normalised) state is:
+        </p>
+        <BlockMath math="|\psi\rangle = \alpha|\!\uparrow\rangle + \beta|\!\downarrow\rangle, \quad |\alpha|^2 + |\beta|^2 = 1" />
+        <p style={{ margin: '4px 0 6px' }}>
+          Fixing the global phase gives the Bloch parameterisation:
+        </p>
+        <BlockMath math="|\psi\rangle = \cos\!\tfrac{\theta}{2}|\!\uparrow\rangle + e^{i\varphi}\sin\!\tfrac{\theta}{2}|\!\downarrow\rangle" />
+        <p style={{ margin: '4px 0 0' }}>
+          The <strong>Bloch vector</strong> <InlineMath math="\mathbf{r} = (\sin\theta\cos\varphi,\;\sin\theta\sin\varphi,\;\cos\theta)" /> has
+          unit length and uniquely identifies every pure state.
+          North pole (<InlineMath math="\theta=0" />) = <InlineMath math="|\!\uparrow\rangle" />;
+          south pole (<InlineMath math="\theta=\pi" />) = <InlineMath math="|\!\downarrow\rangle" />.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Pauli matrices</h4>
+        <BlockMath math="\sigma_x = \begin{pmatrix}0&1\\1&0\end{pmatrix},\quad \sigma_y = \begin{pmatrix}0&-i\\i&0\end{pmatrix},\quad \sigma_z = \begin{pmatrix}1&0\\0&-1\end{pmatrix}" />
+        <p style={{ margin: '4px 0 0' }}>
+          Each has eigenvalues ±1. Expectation values read directly from the Bloch vector:
+        </p>
+        <BlockMath math="\langle\sigma_x\rangle = r_x,\quad \langle\sigma_y\rangle = r_y,\quad \langle\sigma_z\rangle = r_z" />
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Larmor precession</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          A spin in a magnetic field <InlineMath math="\mathbf{B} = \omega_0 \hat{B}" /> evolves under:
+        </p>
+        <BlockMath math="H = \tfrac{\omega_0}{2}\,(\hat{B}\cdot\boldsymbol{\sigma})" />
+        <p style={{ margin: '4px 0 6px' }}>
+          The Bloch vector rotates rigidly around <InlineMath math="\hat{B}" /> at angular
+          frequency <InlineMath math="\omega_0" /> (Rodrigues' formula — exact, no numerical ODE):
+        </p>
+        <BlockMath math="\mathbf{r}(t) = \mathbf{r}\cos(\omega_0 t) + (\hat{B}\times\mathbf{r})\sin(\omega_0 t) + \hat{B}(\hat{B}\cdot\mathbf{r})(1-\cos(\omega_0 t))" />
+        <p style={{ margin: '4px 0 0' }}>
+          Period <InlineMath math="T = 2\pi/\omega_0" />. All times in atomic units (1 a.u. = 24.19 as).
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>What to explore</h4>
+        <ul style={{ margin: 0, paddingLeft: '1.2em' }}>
+          <li>Set <InlineMath math="\theta = \pi/2" /> (equator), <InlineMath math="\hat{B} = \hat{z}" />,
+            press Play — the arrow circles the equator at rate <InlineMath math="\omega_0" />.</li>
+          <li>Double <InlineMath math="\omega_0" /> and observe the period halves.</li>
+          <li>Tilt <InlineMath math="\hat{B}" /> away from <InlineMath math="\hat{z}" /> — the
+            cone of precession tilts with it.</li>
+          <li>Set <InlineMath math="\theta = 0" /> (north pole) and any <InlineMath math="\hat{B}" /> —
+            the state is an eigenstate and does not precess.</li>
+        </ul>
+      </section>
+
+    </div>
+  )
+}

@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { BlochSphere } from './BlochSphere'
 import { ParameterSlider } from './ParameterSlider'
+import { HelpButton, HelpModal } from './HelpModal'
+import { SpinInfoPanel } from './SpinInfoPanel'
 import { computeTrajectory, blochVector } from '../utils/spinMath'
 import type { Vec3 } from '../utils/spinMath'
 
@@ -13,6 +15,7 @@ export function SpinExplorer() {
   const [omega,  setOmega]  = useState(1.0)
   const [bTheta, setBTheta] = useState(0)         // B-field polar angle (0 = z-axis)
   const [bPhi,   setBPhi]   = useState(0)         // B-field azimuthal angle
+  const [showHelp, setShowHelp] = useState(false)
 
   const [playing,   setPlaying]   = useState(false)
   const [frame,     setFrame]     = useState(0)
@@ -58,6 +61,12 @@ export function SpinExplorer() {
   const sigmaZ = sz.toFixed(3)
 
   return (
+    <>
+      {showHelp && (
+        <HelpModal title="Spin ½ — Physics Reference" onClose={() => setShowHelp(false)}>
+          <SpinInfoPanel />
+        </HelpModal>
+      )}
     <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
       <div style={{ flex: '0 0 420px' }}>
         <BlochSphere
@@ -77,7 +86,11 @@ export function SpinExplorer() {
       </div>
 
       <div style={{ flex: '1 1 260px', minWidth: 220 }}>
-        <h3 style={{ marginTop: 0, marginBottom: '1rem', fontSize: '1rem' }}>Initial state</h3>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem' }}>Spin ½ / Bloch Sphere</h3>
+          <HelpButton onClick={() => setShowHelp(true)} />
+        </div>
+        <h3 style={{ marginTop: 0, marginBottom: '1rem', fontSize: '0.9rem', color: '#aaa', fontWeight: 500 }}>Initial state</h3>
         <ParameterSlider
           label="θ (polar angle)"
           value={theta} min={0} max={Math.PI} step={0.01} unit="rad"
@@ -120,6 +133,7 @@ export function SpinExplorer() {
         </table>
       </div>
     </div>
+    </>
   )
 }
 
