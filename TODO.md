@@ -36,6 +36,16 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
       - History with context notes on non-commutativity and the spin-filter paradox
       - "Run N shots" — histogram vs exact probability (pure JS, no backend)
       - "Lock |ψ⟩ as prep state" — demonstrate randomness from identical preparation
+- [ ] **Per-tab ? help** (low priority polish) — small ? inline in each tab label showing
+      only precession or only measurement content; defer until Measurement tab grows large
+      enough to justify it (e.g. after Bell demo or sequential measurement visualisation)
+- [ ] **Sequential measurement visualisation** — step-by-step diagram showing state before
+      and after each measurement; highlight how intermediate measurements erase prior
+      spin-polarisation; useful companion to the history log already in the Measurement tab
+- [ ] **Bell inequality demo** — two-spin singlet state |ψ⁻⟩ = (|↑↓⟩ − |↓↑⟩)/√2;
+      slider for detector angle θ; show correlation C(θ) = −cos θ (exact QM) vs
+      classical hidden-variable bound |C| ≤ 1 − θ/π; CHSH inequality S ≤ 2 (classical)
+      vs S = 2√2 (quantum); N-shot simulation to see S converge
 
 ### Stationary States module — ISW + HO
 - [x] Eigenfunctions plot — all 8 levels simultaneously; selected state highlighted
