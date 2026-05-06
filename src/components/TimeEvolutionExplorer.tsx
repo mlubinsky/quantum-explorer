@@ -111,6 +111,12 @@ export function TimeEvolutionExplorer() {
   const [loop, setLoop] = useState(true)
   const [displayMode, setDisplayMode] = useState<DisplayMode>('prob')
 
+  // Collapsible sections
+  const [showDecomp, setShowDecomp] = useState(true)
+  const [showExpect, setShowExpect] = useState(true)
+  const [showMom,    setShowMom]    = useState(false)
+  const [showNorm,   setShowNorm]   = useState(false)
+
   // Help modals
   const [showHelpModes,    setShowHelpModes]    = useState(false)
   const [showHelpMain,     setShowHelpMain]     = useState(false)
@@ -372,40 +378,48 @@ export function TimeEvolutionExplorer() {
           </div>
 
           {/* Energy decomposition */}
-          <details style={detailsStyle} open>
-            <summary style={summaryStyle}>
-              Energy decomposition |cₙ|²
-              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpDecomp(true)} /></span>
-            </summary>
-            <EnergyDecompPlot labels={decompData.labels} weights={decompData.weights} />
-          </details>
+          <div style={detailsStyle}>
+            <div style={sectionHeaderStyle}>
+              <button style={sectionToggleStyle} onClick={() => setShowDecomp(p => !p)}>
+                {showDecomp ? '▾' : '▸'} Energy decomposition |cₙ|²
+              </button>
+              <HelpButton onClick={() => setShowHelpDecomp(true)} />
+            </div>
+            {showDecomp && <EnergyDecompPlot labels={decompData.labels} weights={decompData.weights} />}
+          </div>
 
           {/* Expectation values */}
-          <details style={detailsStyle} open>
-            <summary style={summaryStyle}>
-              Expectation values ⟨x(t)⟩, ⟨p(t)⟩
-              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpExpect(true)} /></span>
-            </summary>
-            <ExpectationValuesPlot hist={hist} />
-          </details>
+          <div style={detailsStyle}>
+            <div style={sectionHeaderStyle}>
+              <button style={sectionToggleStyle} onClick={() => setShowExpect(p => !p)}>
+                {showExpect ? '▾' : '▸'} Expectation values ⟨x(t)⟩, ⟨p(t)⟩
+              </button>
+              <HelpButton onClick={() => setShowHelpExpect(true)} />
+            </div>
+            {showExpect && <ExpectationValuesPlot hist={hist} />}
+          </div>
 
           {/* Momentum-space */}
-          <details style={detailsStyle}>
-            <summary style={summaryStyle}>
-              Momentum-space |φ(k,t)|²
-              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpMomentum(true)} /></span>
-            </summary>
-            <MomentumTEPlot kGrid={momData.kGrid} yMom={momData.yMom} />
-          </details>
+          <div style={detailsStyle}>
+            <div style={sectionHeaderStyle}>
+              <button style={sectionToggleStyle} onClick={() => setShowMom(p => !p)}>
+                {showMom ? '▾' : '▸'} Momentum-space |φ(k,t)|²
+              </button>
+              <HelpButton onClick={() => setShowHelpMomentum(true)} />
+            </div>
+            {showMom && <MomentumTEPlot kGrid={momData.kGrid} yMom={momData.yMom} />}
+          </div>
 
           {/* Norm history */}
-          <details style={detailsStyle}>
-            <summary style={summaryStyle}>
-              Norm history
-              <span style={{ marginLeft: 8 }} onClick={e => e.stopPropagation()}><HelpButton onClick={() => setShowHelpNorm(true)} /></span>
-            </summary>
-            <NormPlot hist={hist} />
-          </details>
+          <div style={detailsStyle}>
+            <div style={sectionHeaderStyle}>
+              <button style={sectionToggleStyle} onClick={() => setShowNorm(p => !p)}>
+                {showNorm ? '▾' : '▸'} Norm history
+              </button>
+              <HelpButton onClick={() => setShowHelpNorm(true)} />
+            </div>
+            {showNorm && <NormPlot hist={hist} />}
+          </div>
 
         </div>
       </div>
@@ -645,9 +659,12 @@ function NormPlot({ hist }: { hist: { t: number }[] }) {
 // ── Styles ────────────────────────────────────────────────────────────────────
 
 const detailsStyle: React.CSSProperties = { borderTop: '1px solid #222', paddingTop: '0.75rem' }
-const summaryStyle: React.CSSProperties = {
-  cursor: 'pointer', userSelect: 'none',
-  fontSize: '0.9rem', fontWeight: 600, color: '#aaa', marginBottom: '0.75rem',
+const sectionHeaderStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem',
+}
+const sectionToggleStyle: React.CSSProperties = {
+  background: 'none', border: 'none', cursor: 'pointer', userSelect: 'none',
+  fontSize: '0.9rem', fontWeight: 600, color: '#aaa', padding: 0, textAlign: 'left',
 }
 const btnStyle: React.CSSProperties = {
   padding: '0.3rem 0.5rem', border: '1px solid #333', borderRadius: 4,
