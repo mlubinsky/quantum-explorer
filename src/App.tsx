@@ -3,14 +3,16 @@ import { SpinExplorer } from './components/SpinExplorer'
 import { StationaryExplorer } from './components/StationaryExplorer'
 import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
 import { FreeParticleExplorer } from './components/FreeParticleExplorer'
+import { TunnellingExplorer } from './components/TunnellingExplorer'
 import './App.css'
 
-type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'spin'
+type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin'
 
 const MODULES: { id: Module; label: string }[] = [
   { id: 'stationary',     label: 'Stationary States' },
   { id: 'time-evolution', label: 'Time Evolution' },
   { id: 'free-particle',  label: 'Free Particle' },
+  { id: 'tunnelling',     label: 'Tunnelling' },
   { id: 'spin',           label: 'Spin-½ / Bloch Sphere' },
 ]
 
@@ -40,6 +42,7 @@ export default function App() {
         {active === 'stationary'     && <StationaryExplorer />}
         {active === 'time-evolution' && <TimeEvolutionExplorer />}
         {active === 'free-particle'  && <FreeParticleExplorer />}
+        {active === 'tunnelling'     && <TunnellingExplorer />}
         {active === 'spin'           && <SpinExplorer />}
       </main>
     </div>

@@ -108,8 +108,13 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ---
 
-## Phase 2 — 1D potentials
-- [ ] **Rectangular barrier tunnelling** — exact T and R via transfer matrix
+## Done ✓ — Tunnelling
+
+- [x] **Rectangular barrier tunnelling** — exact T and R via transfer matrix;
+      T/R vs E plot, WKB comparison, scattering wavefunction |ψ(x)|², potential diagram;
+      resonance markers, ? help modals on all sections
+
+## Phase 2 — 1D potentials (remaining)
 - [ ] **Step potential** — exact T and R, total internal reflection at E < V₀
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes
 - [ ] **Particle on a ring + Aharonov-Bohm** — exact with magnetic flux slider

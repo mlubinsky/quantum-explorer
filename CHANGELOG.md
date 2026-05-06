@@ -5,6 +5,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506g] — 2026-05-06
+
+### Added
+- **Tunnelling module** — new "Tunnelling" top-level tab (rectangular barrier / well):
+  - Three parameter sliders: V₀ (−5 to +10 a.u.), L (0.5–10 a.u.), E (0.05–15 a.u.)
+  - **T(E) and R(E) plot**: exact transmission (blue) and reflection (red) curves;
+    WKB approximation T_WKB = exp(−2κ̃L) (orange dashed, tunnelling region only);
+    vertical marker at current E; V₀ line; resonance markers n=1,2,… labelled
+  - **Live readout**: E, T, R, T+R (green when = 1.000000), T_WKB, regime label
+  - **Scattering wavefunction |ψ(x)|²** (collapsible, default open): standing-wave
+    pattern left of barrier, evanescent decay through barrier, flat transmitted
+    amplitude T on right; barrier region shaded; edge dashed lines; annotations
+  - **Barrier potential V(x)** (collapsible, default open): rectangular step with
+    fill (grey for barrier, green for well), energy line E, zero line
+  - **? help modals** on every section with KaTeX formulas:
+    T formula for above/below barrier, resonance condition κL=nπ, WKB derivation,
+    piecewise wavefunction, classical vs quantum comparison table
+- **`src/physics/tunnelling.ts`** — 5 exact functions:
+  `transmissionT`, `reflectionR`, `wkbT`, `resonanceEnergies`, `scatteringPsiSq`
+- **`src/components/TunnellingExplorer.tsx`** — full tunnelling UI
+- **`src/components/TunnellingInfoPanel.tsx`** — topics: tvsE, wavefunction, potential
+- **`src/test/tunnelling.test.ts`** — 22 tests (170 total passing)
+- **`specs/barrier-tunnelling.md`** — full physics and implementation spec
+
 ## [0.2026.0506f] — 2026-05-06
 
 ### Added
