@@ -32,9 +32,11 @@ export function StationaryInfoPanel() {
         </p>
         <BlockMath math="H_0=1,\quad H_1=2x,\quad H_{n+1} = 2x\,H_n - 2n\,H_{n-1}" />
         <p style={{ margin: '4px 0 0' }}>
-          Classical turning points (yellow dashes): <InlineMath math="x_c = \pm\sqrt{(2n+1)/\omega}" />.
-          Beyond <InlineMath math="x_c" /> the wavefunction decays exponentially — quantum tunnelling into
-          the classically forbidden region.
+          In the eigenfunctions plot, yellow dashed vertical lines mark the
+          classical turning points <InlineMath math="x_c = \pm\sqrt{(2n+1)/\omega}" /> — the
+          positions where <InlineMath math="V(x_c) = E_n" />.
+          Beyond <InlineMath math="x_c" /> the wavefunction decays exponentially into
+          the classically forbidden region (quantum tunnelling).
         </p>
       </section>
 

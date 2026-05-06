@@ -23,6 +23,7 @@ export function StationaryExplorer() {
   const [omega, setOmega] = useState(1.0)
   const [showPsi2, setShowPsi2] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
+  const [showHelpEigen, setShowHelpEigen] = useState(false)
 
   const n = potential === 'isw' ? nISW : nHO
 
@@ -54,13 +55,17 @@ export function StationaryExplorer() {
           <StationaryInfoPanel />
         </HelpModal>
       )}
+      {showHelpEigen && (
+        <HelpModal title="Eigenfunctions — Physics Reference" onClose={() => setShowHelpEigen(false)}>
+          <StationaryInfoPanel />
+        </HelpModal>
+      )}
 
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
         {/* Controls */}
         <div style={{ flex: '0 0 240px', minWidth: 200 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
             <h3 style={{ margin: 0, fontSize: '1rem' }}>Stationary States</h3>
-            <HelpButton onClick={() => setShowHelp(true)} />
           </div>
 
           {/* Potential selector */}
@@ -160,6 +165,10 @@ export function StationaryExplorer() {
 
         {/* Plot + energy table + matrix (stacked) */}
         <div style={{ flex: '1 1 400px', minWidth: 320, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
+            <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>Eigenfunctions</span>
+            <HelpButton onClick={() => setShowHelpEigen(true)} />
+          </div>
           <WavefunctionPlot
             potential={potential}
             n={n}
