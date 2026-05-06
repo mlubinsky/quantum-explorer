@@ -5,6 +5,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506] — 2026-05-06
+
+### Added
+- **Free Particle tab** — exact Gaussian wavepacket spreading under V = 0:
+  - Sliders: x₀ (initial centre), k₀ (wave vector / group velocity), σ₀ (initial width)
+  - Animated |ψ(x,t)|² with Re(ψ) / Im(ψ) toggle; orange dashed ⟨x(t)⟩ cursor
+  - Live readout: t₀, v_g, v_ph, σ(t), Δx·Δp (green at minimum, yellow growing)
+  - Momentum distribution |φ(k)|² — static Gaussian, labelled "Time-independent"
+  - Expectation values plot: ⟨x(t)⟩ (linear), ⟨p⟩ (flat), Δx(t) (growing), Δx·Δp with ħ/2 bound
+  - Norm history — exact flat 1.000 (analytical guarantee)
+  - ? help modals on all 4 plots
+- **`src/physics/freeParticle.ts`** — 8 exact closed-form functions:
+  `fpSigma`, `fpSpreadingTime`, `fpProb`, `fpExpectX`, `fpExpectP`,
+  `fpDeltaX`, `fpDeltaP`, `fpMomentumDist`
+- **`src/test/freeParticle.test.ts`** — 21 tests, all passing
+- **`specs/free-particle.md`** — full physics and implementation spec
+
 ## [0.2026.0507b] — 2026-05-07
 
 ### Added

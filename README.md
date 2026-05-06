@@ -57,6 +57,17 @@ Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
 - HO coherent: moving Gaussian with constant width Δp = √(ω/2)
 - HO squeezed: breathing Gaussian with σ_p(t) oscillating out of phase with σ(t)
 
+### Free Particle
+Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state that never stops spreading.
+
+- Sliders for x₀ (initial centre), k₀ (wave vector), σ₀ (initial width)
+- Animated |ψ(x,t)|² — watch the Gaussian spread and translate; toggle Re(ψ) / Im(ψ) to see the carrier wave
+- Orange dashed cursor tracks ⟨x(t)⟩ = x₀ + k₀t at group velocity v_g = k₀
+- Momentum distribution |φ(k)|² — static Gaussian, width σ_p = 1/(2σ₀); labels "Time-independent"
+- Live readout: spreading time t₀ = 2σ₀², group velocity v_g, phase velocity v_ph = k₀/2, σ(t), Δx·Δp
+- Expectation values: ⟨x⟩ grows linearly, ⟨p⟩ constant, Δx grows as σ₀√(1+(t/t₀)²), Δx·Δp starts at ħ/2 and increases
+- Norm history — exact flat 1.000 (no PDE solver, no drift)
+
 ### Spin-½ / Bloch Sphere
 - Larmor precession under arbitrary magnetic field direction
 - Exact Rodrigues rotation — no numerical ODE
@@ -66,7 +77,6 @@ Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
 Every module includes a **?** help button with physics formulas (KaTeX).
 
 ### Planned
-- Free particle — Gaussian wavepacket spreading (exact)
 - Hydrogen atom — energy levels, radial wavefunctions, Grotrian diagram
 - Kronig-Penney band structure
 - Two-spin entanglement and Bell states
@@ -91,7 +101,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (95 passing) |
+| Vitest | Unit tests (116 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

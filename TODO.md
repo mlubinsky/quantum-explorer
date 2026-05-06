@@ -71,9 +71,18 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ---
 
-## Phase 2 — 1D potentials
+## Done ✓ — Free Particle
 
-- [ ] **Free particle Gaussian wavepacket** — exact spreading, σ(t) = σ₀√(1+(t/t₀)²)
+- [x] Gaussian wavepacket spreading — exact, σ(t) = σ₀√(1+(t/t₀)²)
+- [x] Animated |ψ(x,t)|² with Re(ψ)/Im(ψ) toggle and ⟨x(t)⟩ cursor
+- [x] Static momentum distribution |φ(k)|² — time-independent annotation
+- [x] Expectation values: ⟨x⟩ linear, Δx growing, Δx·Δp with ħ/2 bound
+- [x] Norm history — exact flat 1.000
+- [x] ? help modals on all 4 plots
+
+---
+
+## Phase 2 — 1D potentials
 - [ ] **Rectangular barrier tunnelling** — exact T and R via transfer matrix
 - [ ] **Step potential** — exact T and R, total internal reflection at E < V₀
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes
