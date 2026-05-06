@@ -47,6 +47,16 @@ Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
 - Exact ⟨x(t)⟩, ⟨p(t)⟩, Δx = 1/√(2ω), Δx·Δp = ħ/2 readout
 - Poisson energy decomposition \|cₙ\|² = e^{−\|α\|²}\|α\|^{2n}/n!
 
+**HO squeezed state** S(r)\|α⟩ — breathing wavepacket
+- Squeeze parameter r slider (0–2); breathing period T_sq = π/ω
+- Width oscillates: σ(t) = √[(cosh(2r)−sinh(2r)cos(2ωt))/ω]
+- Δx·Δp oscillates between ħ/2 (min-uncertainty) and cosh(2r)/2
+
+**Momentum-space \|φ(k,t)\|²** — animated for all three sub-modes
+- ISW: exact complex FT amplitudes; Bragg peaks at k=±nπ/L shift and interfere
+- HO coherent: moving Gaussian with constant width Δp = √(ω/2)
+- HO squeezed: breathing Gaussian with σ_p(t) oscillating out of phase with σ(t)
+
 ### Spin-½ / Bloch Sphere
 - Larmor precession under arbitrary magnetic field direction
 - Exact Rodrigues rotation — no numerical ODE
@@ -56,7 +66,6 @@ Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
 Every module includes a **?** help button with physics formulas (KaTeX).
 
 ### Planned
-- HO squeezed state — breathing wavepacket, Δx·Δp = ħ/2 maintained
 - Free particle — Gaussian wavepacket spreading (exact)
 - Hydrogen atom — energy levels, radial wavefunctions, Grotrian diagram
 - Kronig-Penney band structure
@@ -82,7 +91,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (67 passing) |
+| Vitest | Unit tests (95 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

@@ -57,19 +57,17 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] Energy decomposition — Poisson distribution
 - [x] ? help modal: coherent state definition, Poisson, uncertainty
 
-## Next — Time evolution enhancements
+## Done ✓ — Time evolution enhancements
 
-### ISW improvements
+- [x] Momentum-space |φ(k,t)|² — ISW (exact complex amplitudes), HO coherent + squeezed (Gaussian)
+- [x] HO squeezed state — breathing Gaussian, Δx·Δp oscillating, breathing period T_sq = π/ω
+- [x] ? help modals for all new plots
+
+## Next — Further enhancements
+
+### ISW
+- [ ] Quantum revival annotation: highlight t = T_rev on time axis
 - [ ] Re(ψ)/Im(ψ) overlay on same axes as |ψ|² (currently separate toggle)
-- [ ] Quantum revival highlight: flash or annotation at t = T_rev
-
-### HO squeezed state (natural extension of coherent state)
-- [ ] Squeeze parameter r — Δx shrinks, Δp grows, Δx·Δp = ħ/2 maintained
-- [ ] Breathing wavepacket animation
-
-### Momentum-space animation |φ(k,t)|²
-- [ ] ISW: |φ(k,t)|² = |Σ cₙ(t) φₙ(k)|² — exact from time-evolved coefficients
-- [ ] HO coherent: Gaussian in k too
 
 ---
 

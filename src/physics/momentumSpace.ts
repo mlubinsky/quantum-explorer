@@ -6,6 +6,8 @@
  */
 
 import { hoWavefunction } from './harmonic'
+import { iswEnergy } from './isw'
+import { hoSqueezedSigmaP, hoCoherentExpectP } from './timeEvolution'
 
 /**
  * ISW momentum distribution |φₙ(k)|² — exact closed form.
@@ -73,4 +75,95 @@ export function hoMomentumGrid(
   const k = Array.from({ length: nPoints }, (_, i) => -kMax + (2 * kMax * i) / (nPoints - 1))
   const phi2 = k.map(ki => hoMomentumDist(n, omega, ki))
   return { k, phi2 }
+}
+
+// ── Time-evolved momentum distributions ─────────────────────────────────────
+
+/**
+ * Complex FT amplitude φₙ(k) for ISW eigenstate n.
+ *
+ * φₙ(k) = 1/√(πL) · (1 − (−1)ⁿ e^{−ikL}) · nπ/L / ((nπ/L)² − k²)
+ *
+ * At the pole k = ±nπ/L: φₙ(kₙ) = −i(−1)ⁿ · √(L/(4π)) [resolved limit].
+ * Satisfies |φₙ(k)|² = iswMomentumDist(n, L, k).
+ */
+export function iswMomentumAmplitude(n: number, L: number, k: number): { re: number; im: number } {
+  const kn = n * Math.PI / L
+  const denom = kn * kn - k * k
+  const scale = 1 / Math.sqrt(Math.PI * L)
+
+  if (Math.abs(denom) < 1e-9 * kn * kn) {
+    // Resolved limit at k = ±kₙ: amplitude is purely imaginary with mag √(L/(4π))
+    const sign = (n % 2 === 0) ? 1 : -1
+    const mag = Math.sqrt(L / (4 * Math.PI))
+    // φₙ(kₙ) = −i·(−1)ⁿ · √(L/(4π)) — but sign depends on which branch; use +i for simplicity
+    return { re: 0, im: sign * mag }
+  }
+
+  // numerator: (1 − (−1)ⁿ e^{−ikL}) = (1 − (−1)ⁿ cos(kL)) + i·(−1)ⁿ sin(kL)
+  const sgn = (n % 2 === 0) ? 1 : -1  // (−1)ⁿ
+  const numRe = 1 - sgn * Math.cos(k * L)
+  const numIm = sgn * Math.sin(k * L)
+
+  // multiply by (nπ/L) / denom and scale
+  const factor = (kn / denom) * scale
+  return { re: numRe * factor, im: numIm * factor }
+}
+
+/**
+ * |φ(k,t)|² for ISW time-evolving superposition.
+ * φ(k,t) = Σₙ cₙ e^{−iEₙt} φₙ(k)
+ * coeffs[i] = cᵢ₊₁, real, normalised.
+ */
+export function iswMomentumProbTE(
+  k: number, t: number, coeffs: number[], L: number
+): number {
+  let re = 0
+  let im = 0
+  for (let i = 0; i < coeffs.length; i++) {
+    const c = coeffs[i]
+    if (c === 0) continue
+    const n = i + 1
+    const E = iswEnergy(n, L)
+    const phi = iswMomentumAmplitude(n, L, k)
+    const cosEt = Math.cos(E * t)
+    const sinEt = Math.sin(E * t)
+    // c * e^{−iEt} * φₙ(k) = c * (cosEt − i sinEt) * (phi.re + i phi.im)
+    re += c * (phi.re * cosEt + phi.im * sinEt)
+    im += c * (phi.im * cosEt - phi.re * sinEt)
+  }
+  return re * re + im * im
+}
+
+/**
+ * |φ_α(k,t)|² for HO coherent state — exact Gaussian in momentum space.
+ *
+ * |φ_α(k,t)|² = (1/√(πω)) · exp(−(k − ⟨p(t)⟩)² / ω)
+ *
+ * Width Δp = √(ω/2) = constant (dual of Δx = 1/√(2ω) in position space).
+ * Peak slides with ⟨p(t)⟩ = −|α|√(2ω) sin(ωt + φ_α).
+ */
+export function hoCoherentMomentumProb(
+  k: number, t: number, alpha: number, phiAlpha: number, omega: number
+): number {
+  const pMean = -alpha * Math.sqrt(2 * omega) * Math.sin(omega * t + phiAlpha)
+  const dk = k - pMean
+  return Math.sqrt(1 / (Math.PI * omega)) * Math.exp(-dk * dk / omega)
+}
+
+/**
+ * |φ_sq(k,t)|² for HO squeezed coherent state — exact Gaussian in momentum space.
+ *
+ * |φ_sq(k,t)|² = (1/(√π · σ_p(t))) · exp(−(k − ⟨p(t)⟩)² / σ_p²(t))
+ *
+ * σ_p(t) = √[ω · (cosh(2r) + sinh(2r)·cos(2ωt))]
+ * At t=0: σ_p = e^r/√ω (anti-squeezed in p, dual of squeezed x).
+ */
+export function hoSqueezedMomentumProb(
+  k: number, t: number, alpha: number, phiAlpha: number, omega: number, r: number
+): number {
+  const pMean = hoCoherentExpectP(t, alpha, phiAlpha, omega)
+  const sigmaP = hoSqueezedSigmaP(t, omega, r)
+  const dk = k - pMean
+  return Math.exp(-dk * dk / (sigmaP * sigmaP)) / (Math.sqrt(Math.PI) * sigmaP)
 }

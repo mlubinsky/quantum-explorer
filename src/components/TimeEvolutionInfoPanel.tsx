@@ -1,19 +1,33 @@
 import { BlockMath, InlineMath } from './KatexMath'
 
-type Topic = 'main' | 'decomp' | 'expect' | 'norm'
-type SubMode = 'isw' | 'ho'
+type Topic = 'main' | 'decomp' | 'expect' | 'norm' | 'momentum'
+type SubMode = 'isw' | 'ho' | 'ho-sq'
 
 export function TimeEvolutionInfoPanel({ topic, subMode }: { topic: Topic; subMode: SubMode }) {
-  if (topic === 'main') return <MainInfo subMode={subMode} />
-  if (topic === 'decomp') return <DecompInfo subMode={subMode} />
-  if (topic === 'expect') return <ExpectInfo />
+  if (topic === 'main')     return <MainInfo subMode={subMode} />
+  if (topic === 'decomp')   return <DecompInfo subMode={subMode} />
+  if (topic === 'expect')   return <ExpectInfo subMode={subMode} />
+  if (topic === 'momentum') return <MomentumInfo subMode={subMode} />
   return <NormInfo />
 }
 
 function MainInfo({ subMode }: { subMode: SubMode }) {
   return (
     <div style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
-      {subMode === 'isw' ? (
+      {subMode === 'ho-sq' ? (
+        <>
+          <section style={{ marginBottom: '1.2rem' }}>
+            <h4 style={{ margin: '0 0 6px' }}>HO squeezed coherent state</h4>
+            <p style={{ margin: '0 0 6px' }}>The squeeze operator <InlineMath math="S(r) = \exp(r(a^2 - a^{\dagger 2})/2)" /> compresses one quadrature while stretching the other. Under HO time evolution the squeezing angle rotates at 2ω, producing a "breathing" Gaussian:</p>
+            <BlockMath math="|\psi_\text{sq}(x,t)|^2 = \frac{1}{\sqrt{\pi}\,\sigma(t)}\exp\!\left(-\frac{(x-\langle x(t)\rangle)^2}{\sigma^2(t)}\right)" />
+            <BlockMath math="\sigma(t) = \sqrt{\frac{\cosh(2r) - \sinh(2r)\cos(2\omega t)}{\omega}}" />
+          </section>
+          <section>
+            <h4 style={{ margin: '0 0 6px' }}>Breathing period = π/ω</h4>
+            <p style={{ margin: 0 }}>Width oscillates between <InlineMath math="e^{-r}/\sqrt{\omega}" /> (squeezed, narrowest) and <InlineMath math="e^r/\sqrt{\omega}" /> (anti-squeezed, widest). The product <InlineMath math="\Delta x \cdot \Delta p" /> reaches its minimum ħ/2 twice per breath (when the squeeze axis aligns with x or p), and its maximum <InlineMath math="\cosh(2r)/2" /> at the 45° angle.</p>
+          </section>
+        </>
+      ) : subMode === 'isw' ? (
         <>
           <section style={{ marginBottom: '1.2rem' }}>
             <h4 style={{ margin: '0 0 6px' }}>ISW superposition</h4>
@@ -96,7 +110,41 @@ function DecompInfo({ subMode }: { subMode: SubMode }) {
   )
 }
 
-function ExpectInfo() {
+function MomentumInfo({ subMode }: { subMode: SubMode }) {
+  return (
+    <div style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
+      {subMode === 'isw' ? (
+        <section style={{ marginBottom: '1.2rem' }}>
+          <h4 style={{ margin: '0 0 6px' }}>ISW time-evolved momentum distribution</h4>
+          <p style={{ margin: '0 0 6px' }}>The momentum amplitude is the sum of time-evolved eigenstate amplitudes:</p>
+          <BlockMath math="\phi(k,t) = \sum_n c_n e^{-iE_n t}\,\phi_n(k)" />
+          <p style={{ margin: '4px 0 6px' }}>where <InlineMath math="\phi_n(k)" /> is the exact Fourier transform of <InlineMath math="\psi_n(x)" />. The de Broglie wavenumbers <InlineMath math="k = \pm n\pi/L" /> appear as Bragg peaks. Interference between levels causes the distribution to shift and reshape as the phases rotate.</p>
+        </section>
+      ) : subMode === 'ho' ? (
+        <section style={{ marginBottom: '1.2rem' }}>
+          <h4 style={{ margin: '0 0 6px' }}>HO coherent state in momentum space</h4>
+          <p style={{ margin: '0 0 6px' }}>Coherent states are Gaussian in both position and momentum:</p>
+          <BlockMath math="|\phi_\alpha(k,t)|^2 = \frac{1}{\sqrt{\pi\omega}}\exp\!\left(-\frac{(k - \langle p(t)\rangle)^2}{\omega}\right)" />
+          <p style={{ margin: '4px 0 0' }}>Width <InlineMath math="\Delta p = \sqrt{\omega/2}" /> is constant. The peak tracks <InlineMath math="\langle p(t)\rangle = -|\alpha|\sqrt{2\omega}\sin(\omega t + \varphi_\alpha)" /> — in quadrature with the position oscillation.</p>
+        </section>
+      ) : (
+        <section style={{ marginBottom: '1.2rem' }}>
+          <h4 style={{ margin: '0 0 6px' }}>Squeezed state in momentum space</h4>
+          <p style={{ margin: '0 0 6px' }}>The momentum distribution also breathes, but out of phase with position:</p>
+          <BlockMath math="|\phi_\text{sq}(k,t)|^2 = \frac{1}{\sqrt{\pi}\,\sigma_p(t)}\exp\!\left(-\frac{(k-\langle p(t)\rangle)^2}{\sigma_p^2(t)}\right)" />
+          <BlockMath math="\sigma_p(t) = \sqrt{\omega\left(\cosh(2r) + \sinh(2r)\cos(2\omega t)\right)}" />
+          <p style={{ margin: '4px 0 0' }}>When x is squeezed (narrow position peak), p is anti-squeezed (wide momentum peak), and vice versa. The position and momentum widths breathe at 2ω, exactly out of phase.</p>
+        </section>
+      )}
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Heisenberg duality</h4>
+        <p style={{ margin: 0 }}>Position and momentum peaks are always in quadrature: when <InlineMath math="\langle x\rangle" /> is maximum, <InlineMath math="\langle p\rangle = 0" />, and vice versa. This is the Fourier uncertainty principle made visual.</p>
+      </section>
+    </div>
+  )
+}
+
+function ExpectInfo({ subMode }: { subMode: SubMode }) {
   return (
     <div style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
       <section style={{ marginBottom: '1.2rem' }}>
@@ -105,15 +153,16 @@ function ExpectInfo() {
         <BlockMath math="\frac{d\langle x\rangle}{dt} = \frac{\langle p\rangle}{m}, \quad \frac{d\langle p\rangle}{dt} = -\left\langle\frac{dV}{dx}\right\rangle" />
         <p style={{ margin: '4px 0 0' }}>
           For ISW, <InlineMath math="\langle x(t)\rangle" /> oscillates with the beat frequency <InlineMath math="\Delta E_{12}" />;
-          for HO coherent state it is exactly sinusoidal.
+          for HO coherent/squeezed states it is exactly sinusoidal.
         </p>
       </section>
       <section>
         <h4 style={{ margin: '0 0 6px' }}>Heisenberg uncertainty</h4>
         <BlockMath math="\Delta x \cdot \Delta p \geq \frac{\hbar}{2} = 0.5 \text{ a.u.}" />
         <p style={{ margin: '4px 0 0' }}>
-          The dashed red line at 0.5 marks the uncertainty bound. Coherent states saturate it at all times
-          (green line exactly touches red); ISW superpositions generally lie above it.
+          {subMode === 'ho-sq'
+            ? 'For a squeezed state, Δx·Δp oscillates between ħ/2 (minimum uncertainty, twice per breath) and cosh(2r)/2 (maximum, when the squeeze axis is at 45°). Watch the green line dip to the red bound twice per π/ω cycle.'
+            : 'The dashed red line at 0.5 marks the uncertainty bound. Coherent states saturate it at all times (green exactly on red); ISW superpositions generally lie above it.'}
         </p>
       </section>
     </div>

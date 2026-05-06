@@ -188,3 +188,52 @@ export function hoCoherentDeltaX(omega: number): number {
 export function hoCoherentDeltaP(omega: number): number {
   return Math.sqrt(omega / 2)
 }
+
+// ── HO squeezed coherent state ────────────────────────────────────────────────
+
+/**
+ * σ(t) — position Gaussian width for squeezed state.
+ * σ²(t) = (1/ω) · (cosh(2r) − sinh(2r)·cos(2ωt))
+ * At t=0: σ = e^{−r}/√ω (squeezed);  at t=π/ω: σ = e^r/√ω (anti-squeezed).
+ */
+export function hoSqueezedSigmaX(t: number, omega: number, r: number): number {
+  return Math.sqrt((1 / omega) * (Math.cosh(2 * r) - Math.sinh(2 * r) * Math.cos(2 * omega * t)))
+}
+
+/** σ_p(t) — momentum Gaussian width for squeezed state.
+ *  σ_p²(t) = ω · (cosh(2r) + sinh(2r)·cos(2ωt))
+ */
+export function hoSqueezedSigmaP(t: number, omega: number, r: number): number {
+  return Math.sqrt(omega * (Math.cosh(2 * r) + Math.sinh(2 * r) * Math.cos(2 * omega * t)))
+}
+
+/** Δx(t) = σ(t)/√2 */
+export function hoSqueezedDeltaX(t: number, omega: number, r: number): number {
+  return hoSqueezedSigmaX(t, omega, r) / Math.SQRT2
+}
+
+/** Δp(t) = σ_p(t)/√2 */
+export function hoSqueezedDeltaP(t: number, omega: number, r: number): number {
+  return hoSqueezedSigmaP(t, omega, r) / Math.SQRT2
+}
+
+/**
+ * |ψ_sq(x,t)|² for HO squeezed coherent state — exact Gaussian.
+ *
+ * |ψ_sq(x,t)|² = (1/(√π·σ(t))) · exp(−(x − ⟨x(t)⟩)² / σ²(t))
+ *
+ * Centre oscillates at ω (same as coherent); width breathes at 2ω.
+ */
+export function hoSqueezedProb(
+  x: number,
+  t: number,
+  alpha: number,
+  phiAlpha: number,
+  omega: number,
+  r: number,
+): number {
+  const xMean = hoCoherentExpectX(t, alpha, phiAlpha, omega)
+  const sigma = hoSqueezedSigmaX(t, omega, r)
+  const dx = x - xMean
+  return Math.exp(-dx * dx / (sigma * sigma)) / (Math.sqrt(Math.PI) * sigma)
+}

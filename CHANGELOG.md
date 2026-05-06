@@ -5,6 +5,33 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0507b] — 2026-05-07
+
+### Added
+- **Momentum-space animation |φ(k,t)|²** — collapsible plot in Time Evolution tab:
+  - ISW: exact complex amplitudes φₙ(k) via FT formula; |φ(k,t)|² = |Σ cₙ(t) φₙ(k)|²
+  - HO coherent: exact moving Gaussian |φ_α(k,t)|² = (1/√(πω)) exp(−(k−⟨p⟩)²/ω)
+  - HO squeezed: breathing Gaussian with σ_p(t) = √[ω(cosh(2r)+sinh(2r)cos(2ωt))]
+  - ? help modal with ISW Bragg peaks, HO duality, Heisenberg duality explanation
+- **HO squeezed coherent state** — new sub-mode "HO Squeezed" in Time Evolution:
+  - Squeeze parameter r slider (0–2); Δx range e^{−r}–e^r × 1/√(2ω)
+  - Animated breathing Gaussian: σ(t) = √[(cosh(2r)−sinh(2r)cos(2ωt))/ω]
+  - Δx(t), Δp(t) oscillate at 2ω; Δx·Δp shown green (=ħ/2) or yellow (>ħ/2)
+  - Breathing period T_sq = π/ω readout
+  - Expectation values plot shows oscillating Δx·Δp touching ħ/2 bound twice per breath
+  - ? help modal: squeezing definition, σ(t) formula, minimum-uncertainty timing
+- **`src/physics/timeEvolution.ts`** additions:
+  `hoSqueezedProb`, `hoSqueezedDeltaX`, `hoSqueezedDeltaP`,
+  `hoSqueezedSigmaX`, `hoSqueezedSigmaP`
+- **`src/physics/momentumSpace.ts`** additions:
+  `iswMomentumAmplitude`, `iswMomentumProbTE`, `hoCoherentMomentumProb`,
+  `hoSqueezedMomentumProb`
+- **`specs/momentum-space-animation.md`** and **`specs/ho-squeezed-state.md`**
+
+### Tests
+- 28 new tests in `momentumSpaceTE.test.ts` and `hoSqueezedState.test.ts`
+- Total: **95 tests passing** across 8 test files
+
 ## [0.2026.0507] — 2026-05-07
 
 ### Added
