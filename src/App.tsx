@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import pkg from '../package.json'
 import { SpinExplorer } from './components/SpinExplorer'
 import { StationaryExplorer } from './components/StationaryExplorer'
 import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
@@ -45,6 +46,10 @@ export default function App() {
         {active === 'tunnelling'     && <TunnellingExplorer />}
         {active === 'spin'           && <SpinExplorer />}
       </main>
+
+      <footer className="app-footer">
+        Michael Lubinsky &nbsp;·&nbsp; v{pkg.version}
+      </footer>
     </div>
   )
 }
