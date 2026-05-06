@@ -1,14 +1,71 @@
 import { BlockMath, InlineMath } from './KatexMath'
 
-type Topic = 'main' | 'decomp' | 'expect' | 'norm' | 'momentum'
+type Topic = 'modes' | 'main' | 'decomp' | 'expect' | 'norm' | 'momentum'
 type SubMode = 'isw' | 'ho' | 'ho-sq'
 
 export function TimeEvolutionInfoPanel({ topic, subMode }: { topic: Topic; subMode: SubMode }) {
+  if (topic === 'modes')    return <ModesInfo />
   if (topic === 'main')     return <MainInfo subMode={subMode} />
   if (topic === 'decomp')   return <DecompInfo subMode={subMode} />
   if (topic === 'expect')   return <ExpectInfo subMode={subMode} />
   if (topic === 'momentum') return <MomentumInfo subMode={subMode} />
   return <NormInfo />
+}
+
+function ModesInfo() {
+  return (
+    <div style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>
+      <section style={{ marginBottom: '1.4rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>ISW Superposition</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          A particle in an infinite square well (V = 0 on [0, L], V = ∞ outside)
+          can be placed in any superposition of energy eigenstates:
+        </p>
+        <BlockMath math="\psi(x,t) = \sum_{n=1}^{8} c_n\,\psi_n(x)\,e^{-iE_n t}, \quad E_n = \frac{n^2\pi^2}{2L^2}" />
+        <p style={{ margin: '4px 0 0' }}>
+          Because all <InlineMath math="E_n" /> are integer multiples of <InlineMath math="E_1" />,
+          the wavepacket exactly reconstructs itself at the <strong>revival time</strong>{' '}
+          <InlineMath math="T_\text{rev} = 4L^2/\pi" />.
+          At short times you see beating between nearby levels; at longer times fractional revivals
+          produce interference fringes.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1.4rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>HO Coherent State</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          A coherent state <InlineMath math="|\alpha\rangle" /> is the most "classical-like"
+          quantum state of the harmonic oscillator — a displaced ground state whose
+          probability density stays Gaussian forever:
+        </p>
+        <BlockMath math="|\psi_\alpha(x,t)|^2 = \sqrt{\frac{\omega}{\pi}}\exp\!\left(-\omega(x - \langle x(t)\rangle)^2\right)" />
+        <p style={{ margin: '4px 0 0' }}>
+          The centre <InlineMath math="\langle x(t)\rangle = |\alpha|\sqrt{2/\omega}\cos(\omega t + \varphi_\alpha)" /> oscillates
+          exactly like a classical particle. The width <InlineMath math="\Delta x = 1/\sqrt{2\omega}" /> is
+          constant. <InlineMath math="\Delta x \cdot \Delta p = \hbar/2" /> at all times — the minimum allowed by
+          the uncertainty principle.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>HO Squeezed State</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          Applying the squeeze operator <InlineMath math="S(r) = e^{r(a^2 - a^{\dagger 2})/2}" /> to a
+          coherent state compresses one quadrature at the cost of expanding the other.
+          Under HO time evolution the squeezing angle rotates at 2ω, so the width
+          <em>breathes</em>:
+        </p>
+        <BlockMath math="\sigma(t) = \sqrt{\frac{\cosh(2r) - \sinh(2r)\cos(2\omega t)}{\omega}}" />
+        <p style={{ margin: '4px 0 0' }}>
+          Width oscillates between <InlineMath math="e^{-r}/\sqrt{\omega}" /> (narrowest, squeezed) and{' '}
+          <InlineMath math="e^{r}/\sqrt{\omega}" /> (widest, anti-squeezed) with period <InlineMath math="\pi/\omega" />.
+          The product <InlineMath math="\Delta x \cdot \Delta p" /> touches <InlineMath math="\hbar/2" /> twice per breath
+          (when the squeeze axis aligns with x or p) and reaches a maximum of <InlineMath math="\cosh(2r)/2" />
+          at the 45° angle.
+        </p>
+      </section>
+    </div>
+  )
 }
 
 function MainInfo({ subMode }: { subMode: SubMode }) {

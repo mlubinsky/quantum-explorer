@@ -112,6 +112,7 @@ export function TimeEvolutionExplorer() {
   const [displayMode, setDisplayMode] = useState<DisplayMode>('prob')
 
   // Help modals
+  const [showHelpModes,    setShowHelpModes]    = useState(false)
   const [showHelpMain,     setShowHelpMain]     = useState(false)
   const [showHelpDecomp,   setShowHelpDecomp]   = useState(false)
   const [showHelpExpect,   setShowHelpExpect]   = useState(false)
@@ -257,6 +258,7 @@ export function TimeEvolutionExplorer() {
 
   return (
     <>
+      {showHelpModes    && <HelpModal title="Time Evolution — Sub-modes"   onClose={() => setShowHelpModes(false)}>    <TimeEvolutionInfoPanel topic="modes"    subMode={subMode} /></HelpModal>}
       {showHelpMain     && <HelpModal title="Time Evolution — Physics"    onClose={() => setShowHelpMain(false)}>    <TimeEvolutionInfoPanel topic="main"     subMode={subMode} /></HelpModal>}
       {showHelpDecomp   && <HelpModal title="Energy Decomposition"        onClose={() => setShowHelpDecomp(false)}>  <TimeEvolutionInfoPanel topic="decomp"   subMode={subMode} /></HelpModal>}
       {showHelpExpect   && <HelpModal title="Expectation Values"          onClose={() => setShowHelpExpect(false)}>  <TimeEvolutionInfoPanel topic="expect"   subMode={subMode} /></HelpModal>}
@@ -267,10 +269,13 @@ export function TimeEvolutionExplorer() {
 
         {/* ── Controls ── */}
         <div style={{ flex: '0 0 240px', minWidth: 200 }}>
-          <h3 style={{ margin: '0 0 0.8rem', fontSize: '1rem' }}>Time Evolution</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.8rem' }}>
+            <h3 style={{ margin: 0, fontSize: '1rem' }}>Time Evolution</h3>
+            <HelpButton onClick={() => setShowHelpModes(true)} />
+          </div>
 
-          {/* Sub-mode buttons — 3 in a row */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '1rem' }}>
+          {/* Sub-mode buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.5rem' }}>
             {([
               ['isw',   'ISW Superposition'],
               ['ho',    'HO Coherent'],
@@ -283,6 +288,13 @@ export function TimeEvolutionExplorer() {
                 borderColor: subMode === m ? '#4361ee' : '#333',
               }}>{label}</button>
             ))}
+          </div>
+
+          {/* One-line description for selected mode */}
+          <div style={{ fontSize: '0.72rem', color: '#666', marginBottom: '0.8rem', lineHeight: 1.4 }}>
+            {subMode === 'isw' && 'Superposition Σ cₙ ψₙ e⁻ⁱEₙᵗ — beating, revivals at T_rev = 4L²/π'}
+            {subMode === 'ho'  && 'Coherent state |α⟩ — Gaussian oscillates at ω, shape invariant, Δx·Δp = ħ/2'}
+            {subMode === 'ho-sq' && 'Squeezed state S(r)|α⟩ — Gaussian breathes at 2ω, width oscillates ±e^r'}
           </div>
 
           {subMode === 'isw' && (
