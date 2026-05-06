@@ -5,6 +5,36 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506h] — 2026-05-06
+
+### Added
+- **Step potential** — new sub-tab "Step" under the (renamed) Scattering module:
+  - T(E) / R(E) plot: sharp transition at E = V₀ (total reflection for E < V₀,
+    monotone rise to 1 for E > V₀); V₀ marker; "Total reflection" annotation
+  - Scattering wavefunction |ψ(x)|²: standing-wave pattern left of step,
+    evanescent exponential decay right for E < V₀, constant flat amplitude for E > V₀;
+    penetration depth δ = 1/κ annotated
+  - Step potential diagram V(x) with energy line, fill (grey up-step, green down-step)
+  - Live readout: T, R, T+R, δ, regime label
+  - **? help modals** on all three sections with KaTeX formulas:
+    r = (k₁−k₂)/(k₁+k₂), T = 4k₁k₂/(k₁+k₂)², total reflection proof,
+    standing-wave fringe visibility, evanescent penetration depth
+- **`src/physics/step.ts`** — 4 exact functions:
+  `stepT`, `stepR`, `stepPsiSq`, `stepPenetrationDepth`
+- **`src/test/step.test.ts`** — 17 tests (187 total passing)
+- **`src/components/StepExplorer.tsx`** — full step potential UI
+- **`src/components/ScatteringInfoPanel.tsx`** — unified help panel for both
+  Barrier and Step topics (6 topics total)
+
+### Changed
+- **"Tunnelling" tab renamed to "Scattering"** — more accurate name for a module
+  that covers both tunnelling (E < V₀) and above-barrier transmission
+- **`TunnellingExplorer.tsx` refactored**:
+  - Barrier content extracted to `BarrierExplorer.tsx` (imports `ScatteringInfoPanel`)
+  - New `ScatteringExplorer.tsx` wraps Barrier + Step with a sub-tab strip
+  - `TunnellingInfoPanel.tsx` superseded by `ScatteringInfoPanel.tsx`
+- **`specs/step-potential.md`** — full physics and implementation spec
+
 ## [0.2026.0506g] — 2026-05-06
 
 ### Added

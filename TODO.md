@@ -108,14 +108,16 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ---
 
-## Done ✓ — Tunnelling
+## Done ✓ — Scattering module (formerly Tunnelling)
 
-- [x] **Rectangular barrier tunnelling** — exact T and R via transfer matrix;
-      T/R vs E plot, WKB comparison, scattering wavefunction |ψ(x)|², potential diagram;
+- [x] **Rectangular barrier** — exact T and R via transfer matrix; T/R vs E plot,
+      WKB comparison, scattering wavefunction |ψ(x)|², potential diagram;
       resonance markers, ? help modals on all sections
+- [x] **Step potential** — exact T and R (one interface); total reflection for E < V₀;
+      standing-wave pattern + evanescent decay wavefunction; penetration depth δ;
+      sub-tab "Step" under renamed "Scattering" module
 
 ## Phase 2 — 1D potentials (remaining)
-- [ ] **Step potential** — exact T and R, total internal reflection at E < V₀
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes
 - [ ] **Particle on a ring + Aharonov-Bohm** — exact with magnetic flux slider
 - [ ] **Kronig-Penney model** — exact band structure and band gaps
