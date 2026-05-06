@@ -5,6 +5,48 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0506b] — 2026-05-06
+
+### Added
+- **Node count in legend** — selected wavefunction trace now labelled
+  `ψₙ (k nodes)` using `countNodes()` sign-change counter (margin = 5 pts)
+- **Energy levels table** — compact n / Eₙ / ΔEₙ / Eₙ·E₁ table below the
+  eigenfunctions plot; selected row highlighted; uniform HO spacing vs
+  quadratic ISW growth immediately visible
+- **Matrix representation panel** (collapsible, Heisenberg picture):
+  - H / X / P heatmaps in dark theme (blue–dark–red diverging scale)
+  - Static structure view and animated Heisenberg time-evolution view
+  - Play / Pause / Reset controls, speed selector (0.25×–5×), t in a.u.
+  - Bohr frequency table ωₘₙ = Eₘ − Eₙ in nested collapsible
+- **Momentum distribution |φₙ(k)|²** (collapsible):
+  - ISW: exact closed-form sinc² formula; yellow dashed Bragg lines at k = ±nπ/L
+  - HO: self-duality — |φₙ(k; ω)|² = |ψₙ(k; 1/ω)|²; at ω ≈ 1 annotated
+    "self-dual"; for ω ≠ 1 the ω = 1 reference curve is overlaid
+  - σ_p, σ_x, σ_x·σ_p readout with Heisenberg-bound indicator
+  - ? help modal with Fourier transform formula, ISW result, HO self-duality,
+    and Heisenberg uncertainty table
+- **Energy levels diagram** (collapsible):
+  - ISW: infinite-wall rectangles + horizontal Eₙ lines labelled in a.u. and eV
+  - HO: filled parabola + levels between classical turning points; eV labels
+  - ? help modal with ISW/HO energy formulas and a.u.→eV conversion
+- **Eigenfunctions plot header** — "Eigenfunctions" title + inline ? button
+  added to the wavefunction chart (consistent with all other plots)
+- **KaTeX fix** — replaced `react-katex` (incompatible with React 19) with
+  `KatexMath.tsx`, a direct wrapper around `katex.renderToString`
+
+### Changed
+- `StationaryInfoPanel`: clarified "Classical turning points" sentence to
+  read "In the eigenfunctions plot, yellow dashed vertical lines mark x_c …"
+- Removed redundant global ? button from "Stationary States" heading
+  (the eigenfunctions plot now has its own inline ? covering the same content)
+- Dev server pinned to port **5174** (`strictPort: true`) to avoid conflict
+  with the QM project on 5173
+
+### Tests
+- 52 unit tests passing across 5 test files
+- New: `countNodes`, `energyLevelsTable`, `matrixElements`, `energyLevelsDiagram`,
+  `momentumSpace`
+
 ## [0.2026.0506] — 2026-05-06
 
 ### Added
