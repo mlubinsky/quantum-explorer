@@ -5,6 +5,7 @@ const Plot = (_Plot as any).default ?? _Plot
 
 import { iswEnergy, iswEigenstate } from '../physics/isw'
 import { hoEnergy, hoEigenstate, hoTurningPoint, hoPotential } from '../physics/harmonic'
+import { countNodes } from '../utils/countNodes'
 
 const N_LEVELS = 8
 const N_POINTS = 400
@@ -68,7 +69,8 @@ function baseLayout(xTitle: string, xRange: [number, number], yRange: [number, n
     annotations,
     margin: { l: 65, r: 55, t: 20, b: 50 },
     height: 520,
-    showlegend: false,
+    showlegend: true,
+    legend: { x: 0.02, y: 0.98, bgcolor: 'rgba(0,0,0,0)', font: { color: '#8899ff', size: 11 } },
   }
 }
 
@@ -114,12 +116,14 @@ function buildISW(n: number, L: number, showPsi2: boolean) {
     const data = iswEigenstate(ni, L, N_POINTS)
     const raw = showPsi2 ? data.psi2 : data.psi
     const scale = amp / peakAbs(raw)
+    const nodes = sel ? countNodes(raw) : 0
     traces.push({
       x: data.x,
       y: raw.map(v => E + scale * v),
       mode: 'lines',
+      name: sel ? `ψ${ni} (${nodes} node${nodes !== 1 ? 's' : ''})` : undefined,
       line: { color: sel ? DARK.accent : DARK.dim, width: sel ? 2.5 : 1 },
-      hoverinfo: 'skip', showlegend: false,
+      hoverinfo: 'skip', showlegend: sel,
     })
   }
 
@@ -177,12 +181,14 @@ function buildHO(n: number, omega: number, showPsi2: boolean) {
     const data = hoEigenstate(i, omega, N_POINTS)
     const raw = showPsi2 ? data.psi2 : data.psi
     const scale = amp / peakAbs(raw)
+    const nodes = sel ? countNodes(raw) : 0
     traces.push({
       x: data.x,
       y: raw.map(v => E + scale * v),
       mode: 'lines',
+      name: sel ? `ψ${i} (${nodes} node${nodes !== 1 ? 's' : ''})` : undefined,
       line: { color: sel ? DARK.accent : DARK.dim, width: sel ? 2.5 : 1 },
-      hoverinfo: 'skip', showlegend: false,
+      hoverinfo: 'skip', showlegend: sel,
     })
   }
 

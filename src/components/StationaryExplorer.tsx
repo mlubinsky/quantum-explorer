@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { WavefunctionPlot } from './WavefunctionPlot'
 import { ParameterSlider } from './ParameterSlider'
 import { HelpButton, HelpModal } from './HelpModal'
 import { StationaryInfoPanel } from './StationaryInfoPanel'
-import { iswEnergy, iswSigmaX } from '../physics/isw'
-import { hoEnergy, hoSigmaX, hoTurningPoint } from '../physics/harmonic'
+import { EnergyLevelsTable } from './EnergyLevelsTable'
+import { MatrixPanel } from './MatrixPanel'
+import { iswEnergy, iswSigmaX, iswEigenstate } from '../physics/isw'
+import { hoEnergy, hoSigmaX, hoTurningPoint, hoEigenstate } from '../physics/harmonic'
 
 type Potential = 'isw' | 'ho'
 
-const N_MAX_ISW = 8
-const N_MAX_HO  = 7   // 0-indexed, so n = 0..7
+const N_LEVELS = 8
+const N_POINTS = 400
 
 export function StationaryExplorer() {
   const [potential, setPotential] = useState<Potential>('isw')
@@ -22,10 +24,26 @@ export function StationaryExplorer() {
 
   const n = potential === 'isw' ? nISW : nHO
 
-  // Exact observables for selected state
-  const energy   = potential === 'isw' ? iswEnergy(nISW, L) : hoEnergy(nHO, omega)
-  const sigmaX   = potential === 'isw' ? iswSigmaX(nISW, L) : hoSigmaX(nHO, omega)
-  const xTurn    = potential === 'ho' ? hoTurningPoint(nHO, omega) : null
+  const energy = potential === 'isw' ? iswEnergy(nISW, L)     : hoEnergy(nHO, omega)
+  const sigmaX = potential === 'isw' ? iswSigmaX(nISW, L)     : hoSigmaX(nHO, omega)
+  const xTurn  = potential === 'ho'  ? hoTurningPoint(nHO, omega) : null
+
+  // Precompute eigenbasis for matrix panel (memoised, recomputes only when L/ω changes)
+  const { energies, wavefunctions, gridX, dx, labels } = useMemo(() => {
+    const dx = L / (N_POINTS - 1)
+    const gridX = Array.from({ length: N_POINTS }, (_, i) => i * dx)
+    if (potential === 'isw') {
+      const energies = Array.from({ length: N_LEVELS }, (_, i) => iswEnergy(i + 1, L))
+      const wavefunctions = Array.from({ length: N_LEVELS }, (_, i) => iswEigenstate(i + 1, L, N_POINTS).psi)
+      const labels = energies.map((_, i) => `ψ${i + 1}`)
+      return { energies, wavefunctions, gridX, dx, labels }
+    } else {
+      const energies = Array.from({ length: N_LEVELS }, (_, i) => hoEnergy(i, omega))
+      const wavefunctions = Array.from({ length: N_LEVELS }, (_, i) => hoEigenstate(i, omega, N_POINTS).psi)
+      const labels = energies.map((_, i) => `ψ${i}`)
+      return { energies, wavefunctions, gridX, dx, labels }
+    }
+  }, [potential, L, omega])
 
   return (
     <>
@@ -51,8 +69,8 @@ export function StationaryExplorer() {
                 onClick={() => setPotential(p)}
                 style={{
                   ...potBtnStyle,
-                  background: potential === p ? '#4361ee' : '#1a1a1a',
-                  color:      potential === p ? '#fff'    : '#aaa',
+                  background:  potential === p ? '#4361ee' : '#1a1a1a',
+                  color:       potential === p ? '#fff'    : '#aaa',
                   borderColor: potential === p ? '#4361ee' : '#333',
                 }}
               >
@@ -65,14 +83,14 @@ export function StationaryExplorer() {
           {potential === 'isw' ? (
             <ParameterSlider
               label="Quantum number n"
-              value={nISW} min={1} max={N_MAX_ISW} step={1}
+              value={nISW} min={1} max={N_LEVELS} step={1}
               description="n = 1 is the ground state"
               onChange={v => setNISW(Math.round(v))}
             />
           ) : (
             <ParameterSlider
               label="Quantum number n"
-              value={nHO} min={0} max={N_MAX_HO} step={1}
+              value={nHO} min={0} max={N_LEVELS - 1} step={1}
               description="n = 0 is the ground state"
               onChange={v => setNHO(Math.round(v))}
             />
@@ -104,9 +122,9 @@ export function StationaryExplorer() {
                 onClick={() => setShowPsi2(p2)}
                 style={{
                   ...potBtnStyle,
-                  background: showPsi2 === p2 ? '#2a2a2a' : '#1a1a1a',
-                  color:      showPsi2 === p2 ? '#fff'    : '#888',
-                  borderColor: showPsi2 === p2 ? '#555'   : '#333',
+                  background:  showPsi2 === p2 ? '#2a2a2a' : '#1a1a1a',
+                  color:       showPsi2 === p2 ? '#fff'    : '#888',
+                  borderColor: showPsi2 === p2 ? '#555'    : '#333',
                 }}
               >
                 {p2 ? '|ψ|²' : 'ψ'}
@@ -138,8 +156,8 @@ export function StationaryExplorer() {
           </table>
         </div>
 
-        {/* Plot */}
-        <div style={{ flex: '1 1 400px', minWidth: 320 }}>
+        {/* Plot + energy table + matrix (stacked) */}
+        <div style={{ flex: '1 1 400px', minWidth: 320, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <WavefunctionPlot
             potential={potential}
             n={n}
@@ -147,6 +165,31 @@ export function StationaryExplorer() {
             omega={omega}
             showPsi2={showPsi2}
           />
+
+          <EnergyLevelsTable
+            potential={potential}
+            selectedN={n}
+            L={L}
+            omega={omega}
+            nLevels={N_LEVELS}
+          />
+
+          <details style={{ borderTop: '1px solid #222', paddingTop: '0.75rem' }}>
+            <summary style={{
+              cursor: 'pointer', userSelect: 'none',
+              fontSize: '0.9rem', fontWeight: 600, color: '#aaa',
+              marginBottom: '0.75rem',
+            }}>
+              Matrix representation (Heisenberg picture)
+            </summary>
+            <MatrixPanel
+              energies={energies}
+              wavefunctions={wavefunctions}
+              gridX={gridX}
+              dx={dx}
+              labels={labels}
+            />
+          </details>
         </div>
       </div>
     </>
