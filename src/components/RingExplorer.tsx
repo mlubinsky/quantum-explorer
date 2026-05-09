@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import _Plot from 'react-plotly.js'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Plot = (_Plot as any).default ?? _Plot
@@ -300,8 +300,8 @@ function WavepacketAnimation({ phi, R }: { phi: number; R: number }) {
 
   const Trev = revivalTime(R)
   const n0 = groundStateN(phi)
-  const coeffs = ringPacketCoeffs(n0, 1.5, 5)
-  const thetas = makeThetaArray()
+  const coeffs = useMemo(() => ringPacketCoeffs(n0, 1.5, 5), [n0])
+  const thetas = useMemo(() => makeThetaArray(), [])
 
   const getFrame = useCallback((t: number) => {
     const psi = thetas.map(th => ringPacket(th, t, coeffs, phi, R))
