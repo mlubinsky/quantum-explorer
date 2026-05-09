@@ -135,3 +135,30 @@ export function heisenbergRe(
     )
   )
 }
+
+/**
+ * Heisenberg time evolution for a purely imaginary operator stored as Im[O].
+ *
+ * If O_mn(0) = i · S_mn (purely imaginary, S real), then:
+ *   O_mn(t) = i · S_mn · exp(i · ω_mn · t)
+ *   Re[O_mn(t)] = −S_mn · sin((E_m − E_n) · t)
+ *
+ * Use this for the momentum operator P, where buildP returns Im[P_mn].
+ *
+ * @param imO      N×N matrix of Im[O_mn] (e.g. from buildP)
+ * @param energies Array of eigenvalues length N
+ * @param t        Time in atomic units
+ * @returns        N×N matrix of Re[O_mn(t)]
+ */
+export function heisenbergReFromIm(
+  imO: number[][],
+  energies: number[],
+  t: number,
+): number[][] {
+  const N = imO.length
+  return Array.from({ length: N }, (_, m) =>
+    Array.from({ length: N }, (_, n) =>
+      -imO[m][n] * Math.sin((energies[m] - energies[n]) * t)
+    )
+  )
+}

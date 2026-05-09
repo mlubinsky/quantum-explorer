@@ -28,7 +28,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1>Quantum Explorer</h1>
-        <p className="subtitle">Exact analytical quantum mechanics — no backend, no approximations</p>
+        <p className="subtitle">Exact analytical quantum mechanics — no backend, no numerical eigensolvers</p>
       </header>
 
       <nav className="module-nav">

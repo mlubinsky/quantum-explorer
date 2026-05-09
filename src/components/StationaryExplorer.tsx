@@ -8,7 +8,7 @@ import { EnergyLevelsDiagram } from './EnergyLevelsDiagram'
 import { MomentumPlot } from './MomentumPlot'
 import { MatrixPanel } from './MatrixPanel'
 import { iswEnergy, iswSigmaX, iswEigenstate } from '../physics/isw'
-import { hoEnergy, hoSigmaX, hoTurningPoint, hoEigenstate } from '../physics/harmonic'
+import { hoEnergy, hoSigmaX, hoTurningPoint, hoEigenstate, hoWavefunction } from '../physics/harmonic'
 
 type Potential = 'isw' | 'ho'
 
@@ -41,10 +41,15 @@ export function StationaryExplorer() {
       const labels = energies.map((_, i) => `ψ${i + 1}`)
       return { energies, wavefunctions, gridX, dx, labels }
     } else {
+      // HO states live on [-xMax, xMax]. Use the widest state (n = N_LEVELS-1) as the
+      // common grid so all eigenfunctions share the same x coordinates and dx.
+      const xMax = hoTurningPoint(N_LEVELS - 1, omega) * 1.8 + 1.5
+      const hoGridX = Array.from({ length: N_POINTS }, (_, i) => -xMax + (2 * xMax * i) / (N_POINTS - 1))
+      const hoDx = hoGridX[1] - hoGridX[0]
       const energies = Array.from({ length: N_LEVELS }, (_, i) => hoEnergy(i, omega))
-      const wavefunctions = Array.from({ length: N_LEVELS }, (_, i) => hoEigenstate(i, omega, N_POINTS).psi)
+      const wavefunctions = Array.from({ length: N_LEVELS }, (_, i) => hoGridX.map(x => hoWavefunction(i, x, omega)))
       const labels = energies.map((_, i) => `ψ${i}`)
-      return { energies, wavefunctions, gridX, dx, labels }
+      return { energies, wavefunctions, gridX: hoGridX, dx: hoDx, labels }
     }
   }, [potential, L, omega])
 

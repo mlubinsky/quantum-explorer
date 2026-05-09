@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { buildH, buildX, buildP, heisenbergRe } from '../utils/matrixElements'
+import { buildH, buildX, buildP, heisenbergRe, heisenbergReFromIm } from '../utils/matrixElements'
 import { MatrixHeatmap } from './MatrixHeatmap'
 
 type Operator = 'H' | 'X' | 'P'
@@ -66,7 +66,11 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels }: Prop
   )
 
   const base = operator === 'H' ? H_mat : operator === 'X' ? X_mat : P_mat
-  const matrix = view === 'animated' ? heisenbergRe(base, energies, t) : base
+  const matrix = view === 'animated'
+    ? (operator === 'P'
+        ? heisenbergReFromIm(P_mat, energies, t)
+        : heisenbergRe(base, energies, t))
+    : base
 
   const heatmapTitle: Record<Operator, string> = {
     H: '⟨ψₘ|Ĥ|ψₙ⟩ — diagonal in its own eigenbasis',

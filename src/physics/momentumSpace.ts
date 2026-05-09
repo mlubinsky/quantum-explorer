@@ -93,11 +93,9 @@ export function iswMomentumAmplitude(n: number, L: number, k: number): { re: num
   const scale = 1 / Math.sqrt(Math.PI * L)
 
   if (Math.abs(denom) < 1e-9 * kn * kn) {
-    // Resolved limit at k = ±kₙ: amplitude is purely imaginary with mag √(L/(4π))
-    const sign = (n % 2 === 0) ? 1 : -1
-    const mag = Math.sqrt(L / (4 * Math.PI))
-    // φₙ(kₙ) = −i·(−1)ⁿ · √(L/(4π)) — but sign depends on which branch; use +i for simplicity
-    return { re: 0, im: sign * mag }
+    // Resolved limit at k = ±kₙ: lim_{k→kₙ} φₙ(k) = −i · √(L/(4π)) for all n
+    // (verified by L'Hôpital; sign is −√(L/4π) in Im part, independent of n)
+    return { re: 0, im: -Math.sqrt(L / (4 * Math.PI)) }
   }
 
   // numerator: (1 − (−1)ⁿ e^{−ikL}) = (1 − (−1)ⁿ cos(kL)) + i·(−1)ⁿ sin(kL)
