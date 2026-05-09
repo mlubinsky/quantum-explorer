@@ -131,9 +131,8 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 
 ## Known physics issues (from physicist review — to fix)
 
-- [ ] **`iswExpectX2` is numerical** — uses a 400-point trapezoid grid; exact off-diagonal
-      `⟨ψₘ|x²|ψₙ⟩` elements are computable analytically via the same Fourier integrals as
-      `⟨x⟩`. Impacts Δx accuracy in the Heisenberg uncertainty indicator.
+- [x] **`iswExpectX2` is numerical** — replaced 400-point trapezoid grid with exact formula:
+      diagonal `L²/3 − L²/(2n²π²)`, off-diagonal `2L²(−1)^{m+n}/π²·[1/(m−n)²−1/(m+n)²]`.
 - [x] **HO Re(ψ)/Im(ψ) not implemented** — `hoCoherentProb` and `hoSqueezedProb` return `|ψ|²`
       only; the Re/Im toggle in the UI has nothing to display. Add exact complex ψ for the
       coherent state: `ψ_α(x,t) = (ω/π)^{1/4} exp(−ω(x−⟨x⟩)²/2 + i⟨p⟩x − i·phase)`.

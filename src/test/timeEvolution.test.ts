@@ -4,6 +4,8 @@ import {
   iswProb,
   iswExpectX,
   iswExpectP,
+  iswExpectX2,
+  iswExpectP2,
   iswRevivalPeriod,
   hoCoherentProb,
   hoCoherentExpectX,
@@ -89,6 +91,57 @@ describe('ISW superposition', () => {
     const coeffs = [1, 0, 0, 0, 0, 0, 0, 0]
     expect(iswExpectP(0, coeffs, L)).toBeCloseTo(0, 8)
     expect(iswExpectP(2.5, coeffs, L)).toBeCloseTo(0, 8)
+  })
+})
+
+describe('iswExpectX2 — exact analytical formula', () => {
+  it('ground state n=1: ⟨x²⟩ = L²/3 − L²/(2π²) (time-independent)', () => {
+    const coeffs = [1, 0, 0, 0, 0, 0, 0, 0]
+    const expected = L * L / 3 - L * L / (2 * Math.PI * Math.PI)
+    expect(iswExpectX2(0, coeffs, L)).toBeCloseTo(expected, 8)
+    expect(iswExpectX2(1.5, coeffs, L)).toBeCloseTo(expected, 8)
+  })
+
+  it('n=2: ⟨x²⟩ = L²/3 − L²/(8π²) (time-independent)', () => {
+    const coeffs = [0, 1, 0, 0, 0, 0, 0, 0]
+    const expected = L * L / 3 - L * L / (8 * Math.PI * Math.PI)
+    expect(iswExpectX2(0, coeffs, L)).toBeCloseTo(expected, 8)
+  })
+
+  it('matches quadrature for ground state at t=0', () => {
+    const coeffs = [1, 0, 0, 0, 0, 0, 0, 0]
+    const N = 2000; const dx = L / N
+    let quad = 0
+    for (let k = 0; k <= N; k++) {
+      const x = k * dx
+      const w = (k === 0 || k === N) ? 0.5 : 1
+      quad += w * x * x * iswProb(x, 0, coeffs, L) * dx
+    }
+    expect(iswExpectX2(0, coeffs, L)).toBeCloseTo(quad, 4)
+  })
+
+  it('matches quadrature for 1+2 mix at t=T_rev/4', () => {
+    const c = 1 / Math.sqrt(2)
+    const coeffs = [c, c, 0, 0, 0, 0, 0, 0]
+    const t = iswRevivalPeriod(L) / 4
+    const N = 2000; const dx = L / N
+    let quad = 0
+    for (let k = 0; k <= N; k++) {
+      const x = k * dx
+      const w = (k === 0 || k === N) ? 0.5 : 1
+      quad += w * x * x * iswProb(x, t, coeffs, L) * dx
+    }
+    expect(iswExpectX2(t, coeffs, L)).toBeCloseTo(quad, 4)
+  })
+
+  it('satisfies Δx ≥ 0 for a generic mix', () => {
+    const c = 1 / Math.sqrt(2)
+    const coeffs = [c, c, 0, 0, 0, 0, 0, 0]
+    const t = 0.7
+    const x2 = iswExpectX2(t, coeffs, L)
+    const x1 = iswExpectX(t, coeffs, L)
+    const deltaX = Math.sqrt(Math.max(0, x2 - x1 * x1))
+    expect(deltaX).toBeGreaterThan(0)
   })
 })
 

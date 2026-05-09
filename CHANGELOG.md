@@ -5,6 +5,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509c] — 2026-05-09
+
+### Fixed
+- **`iswExpectX2` replaced 400-point quadrature with exact analytical formula** —
+  previously ⟨x²(t)⟩ was computed by summing `x²|ψ(x,t)|²` on a 400-point grid,
+  which had O(10⁻⁴) error and was O(N_grid × N_coeffs²) in cost. It is now
+  computed as the exact double sum `Σ_{m,n} c_m c_n cos((E_m−E_n)t) X2_{mn}`
+  where the matrix elements are:
+  - diagonal: `X2_{nn} = L²/3 − L²/(2n²π²)`
+  - off-diagonal: `X2_{mn} = 2L²(−1)^{m+n}/π² · [1/(m−n)² − 1/(m+n)²]`
+  derived by integrating `x² sin(mπx/L) sin(nπx/L)` in closed form. The result
+  matches quadrature to 4 decimal places and is exact to machine precision.
+  5 new unit tests: diagonal values, time-independence of eigenstates, agreement
+  with quadrature for ground state and 1+2 mix at T_rev/4.
+
 ## [0.2026.0509b] — 2026-05-09
 
 ### Added

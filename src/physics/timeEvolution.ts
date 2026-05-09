@@ -21,6 +21,21 @@ function iswXmn(m: number, n: number, L: number): number {
   return (2 * L / (Math.PI * Math.PI)) * (1 / (a * a) - 1 / (b * b))
 }
 
+/** Position-squared matrix element X2_{mn} = ⟨ψₘ|x²|ψₙ⟩ for ISW (exact).
+ *  Diagonal:      L²/3 − L²/(2n²π²)
+ *  Off-diagonal:  2L²(−1)^{m+n}/π² · [1/(m−n)² − 1/(m+n)²]
+ *  Unlike ⟨x⟩, this is nonzero for ALL m ≠ n (no parity selection rule).
+ */
+function iswX2mn(m: number, n: number, L: number): number {
+  const L2 = L * L
+  const pi2 = Math.PI * Math.PI
+  if (m === n) return L2 / 3 - L2 / (2 * n * n * pi2)
+  const sign = ((m + n) % 2 === 0) ? 1 : -1
+  const a = m - n
+  const b = m + n
+  return (2 * L2 / pi2) * sign * (1 / (a * a) - 1 / (b * b))
+}
+
 /** Momentum matrix element P_{mn} = ⟨ψₘ|p|ψₙ⟩ for ISW (purely imaginary).
  *  Returns the coefficient A such that P_{mn} = −i·A.
  *  Non-zero only when m+n is odd:
@@ -111,14 +126,15 @@ export function iswExpectP(t: number, coeffs: number[], L: number): number {
  * This is only used for Δx = √(⟨x²⟩ − ⟨x⟩²).
  */
 export function iswExpectX2(t: number, coeffs: number[], L: number): number {
-  const N = 400
-  const dx = L / N
   let sum = 0
-  for (let k = 0; k <= N; k++) {
-    const x = k * dx
-    const w = (k === 0 || k === N) ? 0.5 : 1
-    const prob = iswProb(x, t, coeffs, L)
-    sum += w * x * x * prob * dx
+  for (let mi = 0; mi < coeffs.length; mi++) {
+    if (coeffs[mi] === 0) continue
+    for (let ni = 0; ni < coeffs.length; ni++) {
+      if (coeffs[ni] === 0) continue
+      const m = mi + 1, n = ni + 1
+      const phase = (iswEnergy(n, L) - iswEnergy(m, L)) * t
+      sum += coeffs[mi] * coeffs[ni] * iswX2mn(m, n, L) * Math.cos(phase)
+    }
   }
   return sum
 }
