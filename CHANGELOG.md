@@ -5,6 +5,30 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508b] — 2026-05-08
+
+### Fixed
+- **HO matrix elements wrong grid (severe)** — `StationaryExplorer` was passing
+  `gridX = [0, L]` (ISW grid) to `MatrixPanel` for the harmonic oscillator, but HO
+  wavefunctions live on `[−xMax, xMax]`. All HO X and P matrix elements were computed
+  against incorrect x-coordinates. Fix: build a common symmetric grid from the widest
+  eigenstate (n = N_LEVELS−1) and evaluate all HO wavefunctions via `hoWavefunction`.
+- **P matrix Heisenberg animation wrong trig function** — `Re[P_mn(t)] = −Im[P_mn]·sin(ωmn·t)`,
+  not `Im[P_mn]·cos(ωmn·t)`. Added `heisenbergReFromIm()` to `matrixElements.ts`;
+  `MatrixPanel` now uses it for the P operator in animated view.
+- **ISW momentum amplitude pole sign wrong for even n** — limit of φₙ(k→kₙ) is
+  `−i·√(L/4π)` for all n; was returning `+i·√(L/4π)` for even n. Negligible visual
+  impact (grid rarely hits exact pole), but now analytically correct.
+- **Evanescent inside-barrier wavefunction discontinuity** — `insideCoeffsEvanescent`
+  used `√T` as a real proxy for the complex transmission amplitude `t`, discarding its
+  phase. Caused `|ψ_inside(L/2)|² = T·cos²(kL/2)` instead of `T`. Fixed by deriving
+  complex A, B from the full complex `t`.
+- **ParameterSlider integer values showed `.00`** — added `digits` prop (default 2);
+  quantum number n, Z, and degree-angle sliders now pass `digits={0}`.
+- **App subtitle** — changed "no approximations" to "no numerical eigensolvers" to
+  accurately reflect that finite-difference derivatives and quadrature are used for
+  visualization, but eigenvalues are always closed-form.
+
 ## [0.2026.0508a] — 2026-05-08
 
 ### Added — Ring & Aharonov-Bohm Effect module
