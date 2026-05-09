@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import Plot from 'react-plotly.js'
+import _Plot from 'react-plotly.js'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Plot = (_Plot as any).default ?? _Plot
 import { HelpButton, HelpModal } from './HelpModal'
 import { RingInfoPanel } from './RingInfoPanel'
 import {
