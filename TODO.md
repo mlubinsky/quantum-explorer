@@ -143,10 +143,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] **`groundStateN` silent branch at half-integer φ** — added `isDegenerateGS` and
       `degenerateGSPair`; energy diagram highlights both bands and shows a callout;
       readout shows `k, k+1 (degenerate)` in amber.
-- [ ] **`angularShape` shows φ-integrated density, not xz-section** — for `m < 0` real
-      orbitals the xz-plane density is identically zero (lobes live in yz-plane), but the
-      plot looks the same as `m > 0`. Label the plot explicitly as "|Y_lm(θ)|² integrated
-      over φ" and note that m < 0 orbitals are not visible in this cross-section.
+- [x] **`angularShape` shows φ-integrated density, not xz-section** — title now says
+      "∫|Y_lm|²dφ — φ-integrated θ-profile"; amber warning shown for m<0; help modal
+      explains cos vs sin φ-factor and which plane the lobes inhabit.
 
 ## Phase 2 — 1D potentials (remaining)
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes

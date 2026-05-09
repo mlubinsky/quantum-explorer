@@ -5,6 +5,22 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509e] — 2026-05-09
+
+### Fixed
+- **`angularShape` m<0 mislabelled as xz cross-section** — the polar plot showed
+  `∫|Y_lm|²dφ/(2π)`, the φ-integrated θ-profile, which is identical for m and −m.
+  The old annotation "θ-profile only — φ-orientation not shown" did not warn that
+  for m<0 real spherical harmonics (sin(|m|φ) factor) the xz-plane density is
+  identically zero — the lobes live in the yz-plane. Fixed:
+  - Plot title changed to `∫|Y_lm|²dφ — φ-integrated θ-profile`.
+  - Persistent note: "Same shape for m and −m; φ-factor (cos vs sin) not shown."
+  - When m<0: amber warning annotation "m<0 (sin(|m|φ) factor): xz-plane density
+    is zero — lobes live in yz-plane."
+  - Help modal rewrote `AngularShapeSection` to explain the φ-factor, why m and −m
+    look identical in this plot, and which plane each orbital's lobes inhabit.
+  - `angularShape` docstring updated to state the φ-integration explicitly.
+
 ## [0.2026.0509d] — 2026-05-09
 
 ### Fixed

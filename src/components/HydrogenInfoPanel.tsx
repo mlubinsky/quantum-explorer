@@ -55,13 +55,19 @@ function Orbital2DSection() {
 function AngularShapeSection() {
   return (
     <div>
-      <p>Polar plot of the angular part of the wavefunction, showing which directions in space the electron prefers:</p>
-      <BlockMath math="r(\theta) = |Y_l^m(\theta)|^2 = \frac{2l+1}{2}\cdot\frac{(l-|m|)!}{(l+|m|)!}\cdot|P_l^{|m|}(\cos\theta)|^2" />
-      <p>Normalised to unit maximum radius. The curve is the cross-section of the 3D angular shape through the xz-plane — rotating it around the z-axis gives the full 3D angular distribution.</p>
+      <p>Polar plot of the <strong>φ-integrated</strong> angular density, showing the θ-profile of the electron's angular distribution:</p>
+      <BlockMath math="r(\theta) = \int_0^{2\pi}|Y_l^m(\theta,\phi)|^2\,\frac{d\phi}{2\pi} = \frac{2l+1}{2}\cdot\frac{(l-|m|)!}{(l+|m|)!}\cdot|P_l^{|m|}(\cos\theta)|^2" />
+      <p>This θ-profile is <strong>identical for m and −m</strong>. The difference between m and −m lies in the φ-factor of the real spherical harmonic:</p>
       <ul>
-        <li><InlineMath math="l=0" /> (s): sphere (circle)</li>
+        <li><InlineMath math="m > 0" />: <InlineMath math="\cos(|m|\phi)" /> factor → lobes in the <strong>xz-plane</strong> (visible in the 2D cross-section at y=0)</li>
+        <li><InlineMath math="m < 0" />: <InlineMath math="\sin(|m|\phi)" /> factor → lobes in the <strong>yz-plane</strong> (<InlineMath math="\sin(|m|\phi)|_{\phi=0}=0" />, so the xz cross-section is identically zero)</li>
+        <li><InlineMath math="m = 0" />: no φ dependence → cylindrical symmetry around z</li>
+      </ul>
+      <p>Examples of the θ-profile shape:</p>
+      <ul>
+        <li><InlineMath math="l=0" /> (s): sphere (circle in polar plot)</li>
         <li><InlineMath math="l=1, m=0" /> (p<sub>z</sub>): two lobes along z</li>
-        <li><InlineMath math="l=1, m=\pm 1" /> (p<sub>x</sub>): two lobes along x</li>
+        <li><InlineMath math="l=1, |m|=1" /> (p<sub>x</sub> or p<sub>y</sub>): two lobes along x — same shape, different plane</li>
         <li><InlineMath math="l=2, m=0" /> (d<sub>z²</sub>): double lobe + ring</li>
       </ul>
     </div>

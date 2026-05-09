@@ -100,9 +100,11 @@ export function rMax(n: number, Z: number): number {
 }
 
 /**
- * Polar-plot data for angular shape |Y_l^m(θ)|² in xz-plane.
+ * Polar-plot data for the φ-integrated angular density ∫|Y_lm|²dφ/(2π).
  * Returns closed (x,z) curve normalised to max radius = 1.
- * Right half (x≥0) traces θ: 0→π, left half mirrors it.
+ * This is identical for m and −m (depends only on |m|).
+ * NOTE: for m<0 real spherical harmonics (sin(|m|φ) factor) the actual
+ * density in the xz cross-section (y=0) is zero — lobes live in the yz-plane.
  */
 export function angularShape(l: number, m: number, nPoints = 200): { x: number[]; z: number[] } {
   const thetas = Array.from({ length: nPoints + 1 }, (_, i) => (i * Math.PI) / nPoints)

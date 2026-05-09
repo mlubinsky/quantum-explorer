@@ -726,14 +726,21 @@ export function HydrogenExplorer() {
                     showgrid: false,
                   },
                   title: {
-                    text: `|Y<sub>${l}</sub><sup>${m}</sup>(θ)|² — angular shape`,
+                    text: `∫|Y<sub>${l}</sub><sup>${m}</sup>|² dφ — φ-integrated θ-profile`,
                     font: { size: 12, color: '#ccc' },
                   },
-                  annotations: [{
-                    text: 'θ-profile only — φ-orientation not shown for m ≠ 0',
-                    x: 0.5, y: -0.15, xref: 'paper', yref: 'paper',
-                    showarrow: false, font: { size: 9, color: '#666' },
-                  }],
+                  annotations: [
+                    {
+                      text: 'Same shape for m and −m; φ-factor (cos vs sin) not shown.',
+                      x: 0.5, y: -0.14, xref: 'paper', yref: 'paper',
+                      showarrow: false, font: { size: 9, color: '#666' },
+                    },
+                    ...(m < 0 ? [{
+                      text: `m < 0 (sin(${Math.abs(m)}φ) factor): xz-plane density is zero — lobes live in yz-plane`,
+                      x: 0.5, y: -0.22, xref: 'paper', yref: 'paper',
+                      showarrow: false, font: { size: 9, color: '#f4a261' },
+                    }] : []),
+                  ],
                 } as never}
                   config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
               </div>
