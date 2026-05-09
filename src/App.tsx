@@ -6,9 +6,10 @@ import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
 import { FreeParticleExplorer } from './components/FreeParticleExplorer'
 import { ScatteringExplorer } from './components/ScatteringExplorer'
 import { HydrogenExplorer } from './components/HydrogenExplorer'
+import { RingExplorer } from './components/RingExplorer'
 import './App.css'
 
-type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen'
+type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring'
 
 const MODULES: { id: Module; label: string }[] = [
   { id: 'stationary',     label: 'Stationary States' },
@@ -17,6 +18,7 @@ const MODULES: { id: Module; label: string }[] = [
   { id: 'tunnelling',     label: 'Scattering' },
   { id: 'spin',           label: 'Spin-½ / Bloch Sphere' },
   { id: 'hydrogen',       label: 'Hydrogen Atom' },
+  { id: 'ring',           label: 'Ring & A-B' },
 ]
 
 export default function App() {
@@ -48,6 +50,7 @@ export default function App() {
         {active === 'tunnelling'     && <ScatteringExplorer />}
         {active === 'spin'           && <SpinExplorer />}
         {active === 'hydrogen'       && <HydrogenExplorer />}
+        {active === 'ring'           && <RingExplorer />}
       </main>
 
       <footer className="app-footer">

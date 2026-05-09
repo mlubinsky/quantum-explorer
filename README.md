@@ -63,23 +63,75 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Sliders for x₀ (initial centre), k₀ (wave vector), σ₀ (initial width)
 - Animated |ψ(x,t)|² — watch the Gaussian spread and translate; toggle Re(ψ) / Im(ψ) to see the carrier wave
 - Orange dashed cursor tracks ⟨x(t)⟩ = x₀ + k₀t at group velocity v_g = k₀
-- Momentum distribution |φ(k)|² — static Gaussian, width σ_p = 1/(2σ₀); labels "Time-independent"
+- Momentum distribution |φ(k)|² — static Gaussian, width σ_p = 1/(2σ₀)
 - Live readout: spreading time t₀ = 2σ₀², group velocity v_g, phase velocity v_ph = k₀/2, σ(t), Δx·Δp
-- Expectation values: ⟨x⟩ grows linearly, ⟨p⟩ constant, Δx grows as σ₀√(1+(t/t₀)²), Δx·Δp starts at ħ/2 and increases
+- Expectation values: ⟨x⟩ grows linearly, ⟨p⟩ constant, Δx grows as σ₀√(1+(t/t₀)²), Δx·Δp ≥ ħ/2
 - Norm history — exact flat 1.000 (no PDE solver, no drift)
 
+### Scattering
+Two sub-tabs covering both above- and below-barrier regimes.
+
+**Rectangular barrier** (T & R via exact transfer matrix)
+- T(E) and R(E) vs E; WKB comparison; resonance markers at E = V₀ + n²π²/2a²
+- Scattering wavefunction |ψ(x)|² with incident, reflected, and transmitted regions
+- Potential diagram with energy slider
+
+**Step potential** (single interface, exact)
+- Total reflection for E < V₀ (T = 0 exactly); T rises monotonically for E > V₀
+- Wavefunction: standing-wave pattern left of step, evanescent decay right for E < V₀
+- Penetration depth δ = 1/κ annotated; live readout T, R, T+R, δ
+
 ### Spin-½ / Bloch Sphere
-- Larmor precession under arbitrary magnetic field direction
+Three sub-tabs.
+
+**Precession** — Larmor precession under arbitrary B-field direction
 - Exact Rodrigues rotation — no numerical ODE
-- Real-time ⟨σ_x⟩, ⟨σ_y⟩, ⟨σ_z⟩ expectation values
-- Sliders for initial state (θ, φ), frequency ω₀, B-field direction
+- Sliders for initial state (θ, φ), frequency ω₀, B-field direction (θ_B, φ_B)
+- State presets: |↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩
+- Real-time ⟨σ_x⟩, ⟨σ_y⟩, ⟨σ_z⟩; Robertson uncertainty Δσ_x·Δσ_y ≥ |⟨σ_z⟩|
+- Live ket display |ψ⟩ = α|↑⟩ + β|↓⟩
+
+**Stern-Gerlach / Measurement**
+- Measurement axis selector (x / y / z / custom)
+- Exact Born-rule probability P(+½) = (1 + n̂·r̂)/2
+- "Measure once" — Bernoulli sample, state collapse, measurement history
+- "Run N shots" — histogram vs exact probability
+- "Lock |ψ⟩ as prep state" — demonstrate randomness from identical preparation
+
+**Bell inequality demo** — two-spin singlet |ψ⁻⟩ = (|↑↓⟩ − |↓↑⟩)/√2
+- Correlation curve E(θ) = −cos θ vs classical LHV bound |E| ≤ 1
+- CHSH panel with 4 angle sliders; optimal preset (S = 2√2 ≈ 2.828)
+- N-shot simulation with convergence indicator
+
+### Hydrogen Atom
+Exact hydrogenic solutions for n = 1–5, l = 0–4, m = −l…l, Z = 1–10.
+
+- Quantum number dropdowns (n, l, m) with validity enforcement; Z slider
+- Readout: state label (e.g. 3d), E_n in Hartree and eV, ⟨r⟩ in a₀, node counts
+- **Radial probability** P(r) = r²\|R_nl(r)\|² — exact associated Laguerre polynomial recurrence; ⟨r⟩ marker
+- **Radial wavefunction** R_nl(r) — collapsible; closed-form exact
+- **2D orbital cross-section** — \|ψ_nlm(x,z)\|² heatmap (140×140); real spherical harmonics; Viridis colour scale with colorbar
+- **Angular shape** \|Y_l^m(θ)\|² — polar plot side-by-side with the 2D heatmap
+- **3D isosurface** — lazy-rendered Plotly isosurface at 10% of peak density; drag to rotate
+- **Grotrian diagram** — n=1..5, Δl=±1 arrows coloured by series (Lyman/Balmer/Paschen/Brackett); clickable levels; series filter buttons; wavelength-accurate arrow colours; λ labels toggle; forbidden transitions toggle; metastable 2s marker; hover tooltips
+
+### Ring & Aharonov-Bohm Effect
+Exact solutions for a spinless particle on a 1D ring threaded by magnetic flux Φ.
+
+- Dimensionless flux φ = Φ/Φ₀ slider (−1 to 3); ring radius R slider; quantum number n selector
+- Live readout: E_n(φ), I_n(φ), n*(φ), ground-state energy, AB phase 2πφ, T_rev
+- **Energy level diagram** — E_n(φ) = (n−φ)²/(2R²) parabolic bands for n = −4…4; click to set φ; crossing points marked at half-integer φ; ground-state band highlighted
+- **Wavefunction on ring** — polar deformation plot Re(ψ_n(θ)); 2|n| lobes for n ≠ 0
+- **Persistent current** — sawtooth I_gs(φ) (amplitude ±1/2R²) and selected-n straight line; discontinuities at level crossings
+- **Wavepacket animation** — Gaussian superposition |ψ(θ,t)|² animated on ring; Play/Pause/Reset; speed slider; t/T_rev readout; T_rev = 4πR²
 
 Every module includes a **?** help button with physics formulas (KaTeX).
 
-### Planned
-- Hydrogen atom — energy levels, radial wavefunctions, Grotrian diagram
-- Kronig-Penney band structure
-- Two-spin entanglement and Bell states
+### Planned (Phase 2)
+- Delta function potential — one bound state, exact scattering
+- Kronig-Penney model — exact band structure and band gaps
+- Morse potential — finite bound states, diatomic vibration
+- Hydrogen emission spectra / Zeeman effect
 - Single-qubit gates on Bloch sphere
 
 See [TODO.md](TODO.md) for the full roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
@@ -99,9 +151,9 @@ Then open `http://localhost:5174`.
 |---|---|
 | React 19 + TypeScript + Vite 8 | Framework |
 | Three.js | Bloch sphere (3D WebGL) |
-| Plotly.js | 2D wavefunction plots |
+| Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (116 passing) |
+| Vitest | Unit tests (250 passing) |
 
 No Python, no server, no dependencies beyond npm.
 
