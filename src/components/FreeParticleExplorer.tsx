@@ -9,6 +9,7 @@ import { FreeParticleInfoPanel } from './FreeParticleInfoPanel'
 import { BlockMath, InlineMath } from './KatexMath'
 import {
   fpSigma, fpSpreadingTime, fpProb, fpExpectX, fpDeltaX, fpDeltaP, fpMomentumDist,
+  fpRePsi, fpImPsi,
 } from '../physics/freeParticle'
 
 type DisplayMode = 'prob' | 're' | 'im'
@@ -44,8 +45,10 @@ function makeProbGrid(x0: number, k0: number, sigma0: number): number[] {
   const t0 = fpSpreadingTime(sigma0)
   const tMax = 4 * t0
   const sigmaFinal = fpSigma(tMax, sigma0)
-  const xLeft  = x0 - 4 * sigma0
-  const xRight = x0 + Math.max(Math.abs(k0) * tMax, 1) + 4 * sigmaFinal
+  const c0 = x0
+  const c1 = x0 + k0 * tMax
+  const xLeft  = Math.min(c0, c1) - 4 * sigmaFinal
+  const xRight = Math.max(c0, c1) + 4 * sigmaFinal
   return Array.from({ length: N_POINTS }, (_, i) => xLeft + (xRight - xLeft) * i / (N_POINTS - 1))
 }
 
@@ -53,25 +56,6 @@ function makeMomGrid(k0: number, sigma0: number): number[] {
   const sigmaP = fpDeltaP(sigma0)
   const kHalf = Math.abs(k0) + 5 * sigmaP
   return Array.from({ length: N_MOM }, (_, i) => (k0 - kHalf) + 2 * kHalf * i / (N_MOM - 1))
-}
-
-// Re(ψ) = |ψ| · cos(k₀(x-x₀) - k₀²t/2) (approximate carrier; exact for free particle up to const phase)
-function fpRePsi(x: number, t: number, x0: number, k0: number, sigma0: number): number {
-  const sigma = fpSigma(t, sigma0)
-  const center = x0 + k0 * t
-  const dx = x - center
-  const envelope = Math.pow(2 * Math.PI * sigma * sigma, -0.25) * Math.exp(-dx * dx / (4 * sigma * sigma))
-  const phase = k0 * (x - x0) - k0 * k0 * t / 2
-  return envelope * Math.cos(phase)
-}
-
-function fpImPsi(x: number, t: number, x0: number, k0: number, sigma0: number): number {
-  const sigma = fpSigma(t, sigma0)
-  const center = x0 + k0 * t
-  const dx = x - center
-  const envelope = Math.pow(2 * Math.PI * sigma * sigma, -0.25) * Math.exp(-dx * dx / (4 * sigma * sigma))
-  const phase = k0 * (x - x0) - k0 * k0 * t / 2
-  return envelope * Math.sin(phase)
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -106,12 +90,12 @@ export function FreeParticleExplorer() {
   const tMax = 4 * t0
   const tScale = SPEEDS[speedIdx] * 0.1
 
-  // Reset when sigma0 changes
+  // Reset when any physical parameter changes
   useEffect(() => {
     setT(0)
     setPlaying(false)
     histRef.current = []
-  }, [sigma0])
+  }, [x0, k0, sigma0])
 
   const tick = useCallback((ts: number) => {
     const dt = (ts - (lastTsRef.current ?? ts)) / 1000
@@ -145,7 +129,7 @@ export function FreeParticleExplorer() {
   useEffect(() => {
     histRef.current.push({ t, expectX, deltaX, deltaXdP: uxp })
     if (histRef.current.length > 2000) histRef.current.splice(0, 200)
-  })
+  }, [t, expectX, deltaX, uxp])
 
   // Grids
   const xGrid = useMemo(() => makeProbGrid(x0, k0, sigma0), [x0, k0, sigma0])
@@ -435,7 +419,7 @@ export function FreeParticleExplorer() {
               onClick={() => setShowNorm(p => !p)}
               style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}
             >
-              {showNorm ? '▾' : '▸'} Norm history
+              {showNorm ? '▾' : '▸'} Analytic norm = 1
             </button>
             <HelpButton onClick={() => setShowHelpNorm(true)} />
           </div>

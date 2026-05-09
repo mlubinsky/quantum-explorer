@@ -51,3 +51,32 @@ export function fpMomentumDist(k: number, k0: number, sigma0: number): number {
   const dk = k - k0;
   return (1 / (sigmaP * Math.sqrt(2 * Math.PI))) * Math.exp(-(dk * dk) / (2 * sigmaP * sigmaP));
 }
+
+/**
+ * Exact Re(ψ(x,t)) for the free-particle Gaussian wavepacket.
+ * Phase includes the quadratic chirp ξ²t/(8σ₀²σ(t)²) and Gouy phase −arctan(t/t₀)/2.
+ */
+export function fpRePsi(x: number, t: number, x0: number, k0: number, sigma0: number): number {
+  const sigma = fpSigma(t, sigma0);
+  const xi    = x - x0 - k0 * t;
+  const t0    = 2 * sigma0 * sigma0;
+  const envelope = Math.pow(2 * Math.PI * sigma * sigma, -0.25) * Math.exp(-xi * xi / (4 * sigma * sigma));
+  const chirp = (xi * xi * t) / (8 * sigma0 * sigma0 * sigma * sigma);
+  const gouy  = -Math.atan(t / t0) / 2;
+  const phase = k0 * (x - x0) - k0 * k0 * t / 2 + chirp + gouy;
+  return envelope * Math.cos(phase);
+}
+
+/**
+ * Exact Im(ψ(x,t)) for the free-particle Gaussian wavepacket.
+ */
+export function fpImPsi(x: number, t: number, x0: number, k0: number, sigma0: number): number {
+  const sigma = fpSigma(t, sigma0);
+  const xi    = x - x0 - k0 * t;
+  const t0    = 2 * sigma0 * sigma0;
+  const envelope = Math.pow(2 * Math.PI * sigma * sigma, -0.25) * Math.exp(-xi * xi / (4 * sigma * sigma));
+  const chirp = (xi * xi * t) / (8 * sigma0 * sigma0 * sigma * sigma);
+  const gouy  = -Math.atan(t / t0) / 2;
+  const phase = k0 * (x - x0) - k0 * k0 * t / 2 + chirp + gouy;
+  return envelope * Math.sin(phase);
+}

@@ -5,6 +5,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508g] — 2026-05-08
+
+### Fixed
+- **Re(ψ)/Im(ψ) used approximate phase (bug)** — `fpRePsi`/`fpImPsi` omitted the
+  quadratic chirp term ξ²t/(8σ₀²σ(t)²) and the Gouy phase −arctan(t/t₀)/2 that arise
+  as the packet spreads. Both functions are now exact. The chirp makes the oscillation
+  pattern tighter on the leading edge and wider on the trailing edge at large t; ignoring
+  it gave visually wrong fringes for t ≳ t₀. Functions moved to `freeParticle.ts` and
+  exported so they can be unit-tested.
+- **x-grid too narrow for negative k₀ (bug)** — `makeProbGrid` only extended the grid
+  to the right regardless of the sign of k₀. For k₀ < 0 the packet moved off the left
+  edge. Fixed by computing both endpoints c₀ = x₀ and c₁ = x₀+k₀·t_max and spanning
+  min(c₀,c₁)−4σ_f … max(c₀,c₁)+4σ_f.
+- **Changing x₀ or k₀ did not reset time/history (bug)** — the reset `useEffect`
+  depended only on `sigma0`; changing x₀ or k₀ while playing left stale history in the
+  expectation-value plots. Added x₀ and k₀ to the dependency array.
+- **History appended on every render (bug)** — the history push `useEffect` had no
+  dependency array, so it fired on every re-render (opening help modal, toggling a
+  section, etc.), duplicating points. Added `[t, expectX, deltaX, uxp]` as dependencies.
+
+### Improved
+- **"Norm history" section renamed to "Analytic norm = 1"** — the chart always shows
+  the flat line 1.0 because this is an analytic guarantee, not a computed quantity. The
+  old label "Norm history" implied a numerical check was being performed.
+
+### Added
+- 5 new tests for `fpRePsi`/`fpImPsi`: Re²+Im²=|ψ|² identity at t=0 and t>>0, correct
+  phase at t=0, chirp is detectable at t=t₀, norm integral via Re/Im. Tests 277–281.
+
 ## [0.2026.0508f] — 2026-05-08
 
 ### Fixed

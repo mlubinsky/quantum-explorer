@@ -8,6 +8,8 @@ import {
   fpDeltaX,
   fpDeltaP,
   fpMomentumDist,
+  fpRePsi,
+  fpImPsi,
 } from '../physics/freeParticle';
 
 describe('fpSigma / fpSpreadingTime', () => {
@@ -188,5 +190,68 @@ describe('fpMomentumDist', () => {
     const k0 = 1.0, sigma0 = 1.0;
     const val = fpMomentumDist(k0, k0, sigma0);
     expect(val).toBeGreaterThan(0);
+  });
+});
+
+describe('fpRePsi / fpImPsi — exact phase', () => {
+  it('Re²+Im² = |ψ|² = fpProb·(normalisation) at t=0', () => {
+    const x0 = 0, k0 = 1.5, sigma0 = 1.0, t = 0;
+    for (const x of [-2, -1, 0, 1, 2]) {
+      const reSq = fpRePsi(x, t, x0, k0, sigma0) ** 2;
+      const imSq = fpImPsi(x, t, x0, k0, sigma0) ** 2;
+      expect(reSq + imSq).toBeCloseTo(fpProb(x, t, x0, k0, sigma0), 10);
+    }
+  });
+
+  it('Re²+Im² = fpProb at arbitrary t (chirp phase does not affect modulus)', () => {
+    const x0 = 1, k0 = 2, sigma0 = 1.0;
+    const t0 = 2 * sigma0 * sigma0;
+    for (const t of [0, t0 / 2, t0, 3 * t0]) {
+      for (const x of [-3, 0, 3, 6]) {
+        const reSq = fpRePsi(x, t, x0, k0, sigma0) ** 2;
+        const imSq = fpImPsi(x, t, x0, k0, sigma0) ** 2;
+        expect(reSq + imSq).toBeCloseTo(fpProb(x, t, x0, k0, sigma0), 10);
+      }
+    }
+  });
+
+  it('at t=0, Gouy=0 and chirp=0 — phase is exactly k₀(x−x₀)', () => {
+    const x0 = 0, k0 = 2.0, sigma0 = 1.0, t = 0;
+    const x = 1.5;
+    const dx = x - x0;
+    const env = Math.pow(2 * Math.PI * sigma0 * sigma0, -0.25) * Math.exp(-dx * dx / (4 * sigma0 * sigma0));
+    expect(fpRePsi(x, t, x0, k0, sigma0)).toBeCloseTo(env * Math.cos(k0 * (x - x0)), 10);
+    expect(fpImPsi(x, t, x0, k0, sigma0)).toBeCloseTo(env * Math.sin(k0 * (x - x0)), 10);
+  });
+
+  it('chirp: Re/Im at t=t₀ differ from the carrier-only approximation', () => {
+    const x0 = 0, k0 = 1.0, sigma0 = 1.0;
+    const t0 = 2 * sigma0 * sigma0;
+    const x = 3.0;
+    const sigma = fpSigma(t0, sigma0);
+    const xi = x - x0 - k0 * t0;
+    const env = Math.pow(2 * Math.PI * sigma * sigma, -0.25) * Math.exp(-xi * xi / (4 * sigma * sigma));
+    // Carrier-only (approximate) phase — no chirp, no Gouy
+    const approxPhase = k0 * (x - x0) - k0 * k0 * t0 / 2;
+    const approxRe = env * Math.cos(approxPhase);
+    const exactRe  = fpRePsi(x, t0, x0, k0, sigma0);
+    // They differ because chirp = ξ²t/(8σ₀²σ²) ≠ 0 and Gouy ≠ 0 at t=t₀
+    expect(Math.abs(exactRe - approxRe)).toBeGreaterThan(1e-3);
+  });
+
+  it('norm ∫|ψ|²dx = 1 at large t (spread packet) — via Re/Im', () => {
+    const x0 = 0, k0 = 0.5, sigma0 = 1.0;
+    const t0 = 2 * sigma0 * sigma0;
+    const t = 3 * t0;
+    const sigma = fpSigma(t, sigma0);
+    const center = x0 + k0 * t;
+    const dx = 0.05;
+    let norm = 0;
+    for (let x = center - 10 * sigma; x <= center + 10 * sigma; x += dx) {
+      const re = fpRePsi(x, t, x0, k0, sigma0);
+      const im = fpImPsi(x, t, x0, k0, sigma0);
+      norm += (re * re + im * im) * dx;
+    }
+    expect(norm).toBeCloseTo(1.0, 2);
   });
 });
