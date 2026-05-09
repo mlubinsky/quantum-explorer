@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   transmissionT, reflectionR, wkbT, resonanceEnergies, scatteringPsiSq,
+  _testScatteringAmplitudes,
 } from '../physics/tunnelling'
 
 const PI = Math.PI
@@ -179,5 +180,67 @@ describe('scatteringPsiSq', () => {
     const psiLeft  = scatteringPsiSq(-L / 2 - eps, E, V0, L)
     const psiInside = scatteringPsiSq(-L / 2 + eps, E, V0, L)
     expect(psiInside).toBeCloseTo(psiLeft, 4)
+  })
+
+  it('oscillatory: |ψ|² is continuous at left barrier boundary', () => {
+    const E = 8, V0 = 3, L = 2
+    const eps = 1e-6
+    const psiLeft   = scatteringPsiSq(-L / 2 - eps, E, V0, L)
+    const psiInside = scatteringPsiSq(-L / 2 + eps, E, V0, L)
+    expect(psiInside).toBeCloseTo(psiLeft, 4)
+  })
+
+  it('oscillatory: |ψ|² is continuous at right barrier boundary', () => {
+    const E = 8, V0 = 3, L = 2
+    const T = transmissionT(E, V0, L)
+    const eps = 1e-6
+    const psiInsideRight = scatteringPsiSq(L / 2 - eps, E, V0, L)
+    expect(psiInsideRight).toBeCloseTo(T, 4)
+  })
+})
+
+describe('scatteringAmplitudes (internal)', () => {
+  it('oscillatory: |r|² + |t|² = 1 exactly', () => {
+    for (const [E, V0, L] of [[8, 3, 2], [5, 2, 1.5], [10, 4, 3]] as [number, number, number][]) {
+      const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+      const sum = rRe*rRe + rIm*rIm + tRe*tRe + tIm*tIm
+      expect(sum).toBeCloseTo(1, 10)
+    }
+  })
+
+  it('evanescent: |r|² + |t|² = 1 exactly', () => {
+    for (const [E, V0, L] of [[1, 5, 2], [2, 8, 1], [0.5, 3, 3]] as [number, number, number][]) {
+      const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+      const sum = rRe*rRe + rIm*rIm + tRe*tRe + tIm*tIm
+      expect(sum).toBeCloseTo(1, 10)
+    }
+  })
+
+  it('|t|² matches transmissionT for oscillatory case', () => {
+    const E = 8, V0 = 3, L = 2
+    const { tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+    expect(tRe*tRe + tIm*tIm).toBeCloseTo(transmissionT(E, V0, L), 10)
+  })
+
+  it('|t|² matches transmissionT for evanescent case', () => {
+    const E = 1, V0 = 5, L = 2
+    const { tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+    expect(tRe*tRe + tIm*tIm).toBeCloseTo(transmissionT(E, V0, L), 10)
+  })
+
+  it('V0=0: r = 0, t = e^{−ikL}', () => {
+    const E = 3, V0 = 0, L = 2
+    const k = Math.sqrt(2 * E)
+    const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+    expect(rRe).toBeCloseTo(0, 10)
+    expect(rIm).toBeCloseTo(0, 10)
+    expect(tRe*tRe + tIm*tIm).toBeCloseTo(1, 10)
+  })
+
+  it('resonance: r = 0 when κL = nπ (above barrier)', () => {
+    const V0 = 3, L = 2
+    const E_res = V0 + (PI * PI) / (2 * L * L)
+    const { rRe, rIm } = _testScatteringAmplitudes(E_res, V0, L)
+    expect(rRe*rRe + rIm*rIm).toBeCloseTo(0, 6)
   })
 })

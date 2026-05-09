@@ -5,6 +5,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508f] — 2026-05-08
+
+### Fixed
+- **Scattering reflection amplitude phase (bug)** — `scatteringAmplitudes()` computed the
+  complex reflection amplitude r with an incorrect phase in both the oscillatory (E > V0)
+  and evanescent (E < V0) cases. The old code computed a rough angle then rescaled the
+  magnitude, producing the right |r| but wrong arg(r), which made the standing-wave
+  interference pattern on the incident side appear at wrong positions. Fixed using the
+  exact transfer-matrix formula r = −i·rFactor·t (oscillatory: rFactor = (k²−κ²)/(2kκ)·sin(κL);
+  evanescent: rfFactor = (k²+κ̃²)/(2kκ̃)·sinh(κ̃L)). This satisfies |r|²+|t|²=1
+  algebraically, eliminating the rescaling step entirely. The wavefunction is now exactly
+  continuous at both barrier boundaries.
+- **E ≈ V0 limiting formula (cosmetic)** — `transmissionT` near-threshold branch used
+  1/(1 + V0²L²/(8E)) instead of the correct Taylor limit 1/(1 + V0²L²/(2E)). The
+  threshold (|E−V0| < 1e-12) is too narrow to be triggered by UI sliders, but the
+  formula is now correct.
+
+### Added
+- 8 new tests for `scatteringAmplitudes`: |r|²+|t|²=1 for oscillatory and evanescent
+  cases, wavefunction continuity at both boundaries for both regimes, resonance condition
+  r=0, and V0=0 free-particle check. Tests 269–276.
+
 ## [0.2026.0508e] — 2026-05-08
 
 ### Fixed

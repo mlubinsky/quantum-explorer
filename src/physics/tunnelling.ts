@@ -9,8 +9,8 @@ export function transmissionT(E: number, V0: number, L: number): number {
   const kappaSq = 2 * (E - V0)
 
   if (Math.abs(E - V0) < 1e-12) {
-    // E ≈ V0: limiting form T = 1/(1 + V0²L²/(8E))
-    return 1 / (1 + (V0 * V0 * L * L) / (8 * E))
+    // E ≈ V0: limiting form T = 1/(1 + V0²L²/(2E))
+    return 1 / (1 + (V0 * V0 * L * L) / (2 * E))
   }
 
   if (kappaSq > 0) {
@@ -160,27 +160,10 @@ function scatteringAmplitudes(E: number, V0: number, L: number): Amplitudes {
     // t = (phRe + i·phIm) / (denRe + i·denIm)
     const tRe = (phRe * denRe + phIm * denIm) / denSq
     const tIm = (phIm * denRe - phRe * denIm) / denSq
-    // r from: r = t · e^{ikL} · i·(k²-κ²)/(2kκ) · sin(κL) ... use T + R = 1 for |r|
+    // r = −i·rFactor·t (from transfer-matrix BC with barrier centred at x=0)
+    // satisfies |r|²+|t|²=1 exactly without any rescaling
     const rFactor = (k * k - kappa * kappa) / (2 * k * kappa) * sinKL
-    // r = i·rFactor·t·e^{2ikL/2}  ... use r = (1/T − 1) for magnitude, phase from formula
-    const rSq = Math.max(0, 1 - (tRe * tRe + tIm * tIm))
-    const rMag = Math.sqrt(rSq)
-    // Phase of r: arg(r) = π/2 + arg(t) + 2k·(-half) + angle from sin term
-    // Simpler: for display purposes use r·e^{2ik(-half)} = -i·rFactor·t
-    // Actual r amplitude for |ψ|² on the left:
-    // Left of barrier referenced to x=-half:
-    // r_eff = i·rFactor / (denRe + i·denIm)  × e^{−2ik·half} phase
-    const rfRe = -rFactor * denIm / denSq
-    const rfIm =  rFactor * denRe / denSq
-    // Include e^{−ikL} phase (from x-origin at 0 vs half):
-    const phMRe =  Math.cos(-k * L)
-    const phMIm =  Math.sin(-k * L)
-    const rRe = rfRe * phMRe - rfIm * phMIm
-    const rIm = rfRe * phMIm + rfIm * phMRe
-    // Normalise r to correct magnitude
-    const rCalcSq = rRe * rRe + rIm * rIm
-    const scale = rCalcSq > 1e-14 ? rMag / Math.sqrt(rCalcSq) : 1
-    return { rRe: rRe * scale, rIm: rIm * scale, tRe, tIm }
+    return { rRe: rFactor * tIm, rIm: -rFactor * tRe, tRe, tIm }
   } else {
     // Evanescent inside
     const kappaTilde = Math.sqrt(-kappaSq)
@@ -194,18 +177,9 @@ function scatteringAmplitudes(E: number, V0: number, L: number): Amplitudes {
     const phIm = -Math.sin(k * L)
     const tRe = (phRe * denRe + phIm * denIm) / denSq
     const tIm = (phIm * denRe - phRe * denIm) / denSq
-    const rSq = Math.max(0, 1 - (tRe * tRe + tIm * tIm))
-    const rMag = Math.sqrt(rSq)
-    const rfFactor = (k * k + kappaTilde * kappaTilde) / (2 * k * kappaTilde)
-    const rfRe = -rfFactor * sinhKL * denIm / denSq
-    const rfIm =  rfFactor * sinhKL * denRe / denSq
-    const phMRe =  Math.cos(-k * L)
-    const phMIm =  Math.sin(-k * L)
-    const rRe = rfRe * phMRe - rfIm * phMIm
-    const rIm = rfRe * phMIm + rfIm * phMRe
-    const rCalcSq = rRe * rRe + rIm * rIm
-    const scale = rCalcSq > 1e-14 ? rMag / Math.sqrt(rCalcSq) : 1
-    return { rRe: rRe * scale, rIm: rIm * scale, tRe, tIm }
+    // r = −i·rfFactor·t (analytic continuation κ→iκ̃ of oscillatory formula)
+    const rfFactor = (k * k + kappaTilde * kappaTilde) / (2 * k * kappaTilde) * sinhKL
+    return { rRe: rfFactor * tIm, rIm: -rfFactor * tRe, tRe, tIm }
   }
 }
 
@@ -311,3 +285,6 @@ function insideCoeffsEvanescent(E: number, V0: number, L: number): EvanescentCoe
     BIm: halfFBteIm * eKh,
   }
 }
+
+/** Exported for unit tests only — not part of the public API. */
+export const _testScatteringAmplitudes = scatteringAmplitudes
