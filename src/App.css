@@ -17,10 +17,27 @@
   color: #fff;
 }
 
-.subtitle {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #888;
+.module-strip {
+  padding: 0.45rem 2rem;
+  border-bottom: 1px solid #1a1a1a;
+  background: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.module-strip-eq {
+  font-size: 0.88rem;
+  color: #bbb;
+}
+
+.module-strip-bc {
+  font-size: 0.82rem;
+  color: #666;
+}
+
+.module-strip .katex {
+  color: inherit;
 }
 
 .module-nav {

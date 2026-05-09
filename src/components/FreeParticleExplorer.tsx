@@ -6,7 +6,6 @@ const Plot = (_Plot as any).default ?? _Plot
 import { HelpButton, HelpModal } from './HelpModal'
 import { ParameterSlider } from './ParameterSlider'
 import { FreeParticleInfoPanel } from './FreeParticleInfoPanel'
-import { BlockMath, InlineMath } from './KatexMath'
 import {
   fpSigma, fpSpreadingTime, fpProb, fpExpectX, fpDeltaX, fpDeltaP, fpMomentumDist,
   fpRePsi, fpImPsi,
@@ -193,28 +192,6 @@ export function FreeParticleExplorer() {
         width: 260, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10,
         overflowY: 'auto',
       }}>
-        <h3 style={{ margin: '0 0 4px', fontSize: '1rem', color: DARK.text }}>
-          Free Particle
-        </h3>
-        <div style={{
-          background: '#0e0e0e', borderRadius: 5, padding: '0.5rem 0.75rem',
-          fontSize: '0.78rem', lineHeight: 1.6,
-        }}>
-          <div style={{ color: '#aaa', marginBottom: 4 }}>
-            Time-dependent Schrödinger equation:
-          </div>
-          <BlockMath math="i\,\frac{\partial\psi}{\partial t} = \hat{H}\psi = -\frac{1}{2}\frac{\partial^2\psi}{\partial x^2}" />
-          <div style={{ color: '#666', marginTop: 4 }}>
-            <InlineMath math="V(x) = 0" /> — free particle (no potential)
-          </div>
-          <div style={{ color: '#555', marginTop: 6, fontSize: '0.72rem' }}>
-            Exact Gaussian wavepacket solution with<br />
-            group velocity <InlineMath math="v_g = k_0" />,
-            phase velocity <InlineMath math="v_\phi = k_0/2" />,<br />
-            spreading <InlineMath math="\sigma(t) = \sigma_0\sqrt{1+(t/t_0)^2}" />
-          </div>
-        </div>
-
         <ParameterSlider
           label="x₀ — initial position"
           value={x0} min={-10} max={10} step={0.5}

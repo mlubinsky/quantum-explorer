@@ -611,19 +611,6 @@ export function HydrogenExplorer() {
           <span style={{ color: '#aaa' }}>n−l−1 = <strong>{rNodes}</strong> radial nodes</span>
         </div>
 
-        {/* Potential formula */}
-        <div style={formulaRowStyle}>
-          <span style={{ color: '#666', marginRight: 12 }}>Schrödinger equation:</span>
-          <InlineMath math="\hat{H}\psi = E\psi" />
-          <span style={{ color: '#444', margin: '0 10px' }}>·</span>
-          <InlineMath math="\hat{H} = -\tfrac{1}{2}\nabla^2 + V(r)" />
-          <span style={{ color: '#444', margin: '0 10px' }}>·</span>
-          <span style={{ color: DARK.orange }}>
-            <InlineMath math="V(r) = -Z/r" />
-          </span>
-          <span style={{ color: '#555', marginLeft: 10, fontSize: '0.78rem' }}>Coulomb potential (a.u.)</span>
-        </div>
-
         {/* Radial density */}
         <div style={sectionStyle}>
           <div style={sectionHeaderStyle}>
@@ -815,12 +802,6 @@ const readoutStyle: React.CSSProperties = {
   fontFamily: 'monospace', color: '#e0e0e0',
   background: '#111', padding: '0.5rem 0.75rem',
   borderRadius: '5px 5px 0 0', marginBottom: 0,
-}
-const formulaRowStyle: React.CSSProperties = {
-  display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center',
-  background: '#0e0e0e', padding: '0.35rem 0.75rem',
-  borderRadius: '0 0 5px 5px', marginBottom: '1rem',
-  fontSize: '0.85rem', borderTop: '1px solid #1a1a1a',
 }
 const sectionStyle: React.CSSProperties = {
   marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #1e1e1e',

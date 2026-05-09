@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508h] — 2026-05-08
+
+### Added
+- **Module equation strip** — a compact two-line strip now appears between the
+  navigation buttons and the module content, showing the governing equation and either
+  boundary conditions or key results for each module:
+  - Stationary States: `Ĥψ=Eψ` + ISW/HO boundary conditions
+  - Time Evolution: `i∂ψ/∂t=Ĥψ` + superposition formula
+  - Free Particle: TDSE with V=0 + vg, vφ, σ(t)
+  - Scattering: TISE with step potential + asymptotic scattering BCs
+  - Spin-½: Larmor Hamiltonian + Bloch vector normalisation
+  - Hydrogen: `Ĥψ=Eψ` with Coulomb potential + En and asymptotic BCs
+  - Ring & A-B: Hamiltonian with flux + Aharonov-Bohm phase BC
+
+### Removed
+- Subtitle "Exact analytical quantum mechanics — no backend, no numerical eigensolvers"
+  (replaced by the equation strip which conveys the same intent more concretely)
+- Duplicate Schrödinger equation block from Free Particle left control panel
+- Duplicate Schrödinger equation row from Hydrogen Atom header
+
 ## [0.2026.0508g] — 2026-05-08
 
 ### Fixed
