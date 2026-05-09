@@ -5,6 +5,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509g] — 2026-05-09
+
+### Changed
+- **TODO.md enriched with new feature proposals** — reviewed `TODO_new.md` and merged
+  non-duplicate, analytically-feasible ideas into the roadmap. Added:
+  - ISW cat-state / traveling-packet presets
+  - WKB overlay for Scattering module
+  - Phase 2: Heisenberg picture expansions (animated A_H(t), Ehrenfest panel,
+    ladder operators, commutator display)
+  - Phase 2: Extended entanglement module (Schmidt decomp, concurrence, partial trace)
+  - Phase 2: Two-particle ISW symmetrization (bosons/fermions, Pauli exclusion)
+  - Phase 2: Interactive Fourier Explorer (exact for Gaussians)
+  - Phase 2: Position-space wavefunction collapse (detector click, re-normalise)
+  - Phase 2: Wigner function (exact Gaussian form for coherent/squeezed/Fock)
+  - Phase 2 Hydrogen: Normal Zeeman (detailed), Anomalous Zeeman, Stark effect (linear)
+  - Phase 3: Density matrix + decoherence (Kraus channels, purity, entropy)
+  - Phase 3: Adiabatic theorem / Landau-Zener (exact LZ formula)
+  - Phase 3: URL state encoding, Comparison mode
+  - Excluded section extended with explicit rationale for double-slit, 2D solver,
+    path integral, large many-body, and Paschen-Back as out-of-scope items
+
 ## [0.2026.0509f] — 2026-05-09
 
 ### Fixed

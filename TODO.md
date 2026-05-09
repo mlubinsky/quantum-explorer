@@ -94,6 +94,8 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 ### ISW
 - [ ] Quantum revival annotation: highlight t = T_rev on time axis
 - [ ] Re(ψ)/Im(ψ) overlay on same axes as |ψ|² (currently separate toggle)
+- [ ] **More presets** — cat states (|ψ_m⟩ ± |ψ_n⟩)/√2, "traveling" Gaussian-like
+      superposition, "breathing" state; one-click loading alongside existing presets
 
 ---
 
@@ -152,6 +154,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] **Kronig-Penney model** — exact band structure and band gaps
 - [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
 - [ ] **Pöschl-Teller potential** — reflectionless at certain energies (T = 1 exactly)
+- [ ] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
+      alongside exact results in the Scattering module; educational contrast, highlights
+      where WKB fails (near turning points, near resonances)
 
 ---
 
@@ -161,6 +166,48 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] **Single-qubit gates on Bloch sphere** — X, Y, Z, H, S, T as rotations; compose gates
 - [ ] **Heisenberg dimer** — H = J S₁·S₂, exact singlet/triplet eigenvalues
 - [ ] **Spin-1** — 3×3 matrices, m = −1, 0, +1 levels
+
+## Phase 2 — Heisenberg picture / matrix mechanics (extensions to existing matrix view)
+
+The Stationary States module already has H, X, P heatmaps and a Bohr frequency table.
+These items deepen that into a proper Heisenberg-picture module:
+
+- [ ] **Animated operator evolution** — A_H(t) = e^{iHt}Ae^{−iHt} heatmaps for ISW/HO
+      truncated basis; show off-diagonal elements oscillating at Bohr frequencies; toggle
+      between Schrödinger picture (wavefunction moving) and Heisenberg picture (operators
+      evolving, state fixed)
+- [ ] **Ehrenfest theorem panel** — explicitly show d⟨x⟩/dt = ⟨p⟩/m and d⟨p⟩/dt = −⟨V'⟩
+      computed from matrix elements; verify against expectation-value plots
+- [ ] **Ladder operator visualizer** — show a†|n⟩ = √(n+1)|n+1⟩ and a|n⟩ = √n|n−1⟩
+      acting on ISW/HO eigenstates; visualize raising/lowering in energy-level diagram
+- [ ] **Commutator display** — compute [X, P] = iħ, [L_x, L_y] = iħL_z, Pauli commutators
+      in the truncated matrix basis; show that uncertainty follows from non-commutativity
+
+## Phase 2 — Entanglement / Two-particle
+
+- [ ] **Extended entanglement module** — arbitrary 2-qubit pure states; Schmidt decomposition;
+      concurrence C = |⟨ψ|σ_y⊗σ_y|ψ*⟩|; partial trace; reduced density matrix; entanglement
+      entropy S = −Tr(ρ_A log ρ_A); heatmap of correlation matrix; separable vs entangled
+      indicator. Extends the existing Bell inequality demo.
+- [ ] **Two-particle ISW symmetrization** — exact two-particle wavefunctions
+      ψ_B/F(x₁,x₂) = [ψ_m(x₁)ψ_n(x₂) ± ψ_n(x₁)ψ_m(x₂)]/√2; density heatmap; bosonic
+      bunching vs fermionic avoidance; Pauli exclusion (n=m forbidden for fermions);
+      Slater determinant visualisation
+
+## Phase 2 — New modules
+
+- [ ] **Interactive Fourier Explorer** — dedicated module; draggable Gaussian wavepacket in
+      position space with live exact Fourier transform in momentum space; phase display;
+      chirped packet (linear phase gradient); uncertainty product Δx·Δk animated; exact
+      for Gaussians and ISW eigenstates
+- [ ] **Position-space wavefunction collapse** — on the Free Particle or Time Evolution tab,
+      add a "detector" at x=x₀; click probability P(detector fires); collapse ψ→ projected
+      state re-normalised; show post-measurement Gaussian and its subsequent spreading; exact
+      for Gaussian projection kernels. Connects time evolution, uncertainty, and measurement.
+- [ ] **Wigner function** — exact closed-form W(x,p) for coherent states (Gaussian in phase
+      space), squeezed states (squeezed Gaussian), and Fock states |n⟩ (Laguerre polynomial
+      expression); animated for coherent/squeezed time evolution; highlight negative regions
+      for Fock states; 128×128 heatmap via Plotly
 
 ---
 
@@ -176,7 +223,15 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 ## Phase 2 — Hydrogen atom (remaining)
 
 - [ ] **Emission spectra** — Lyman / Balmer / Paschen; click transition → wavefunctions
-- [ ] **Zeeman effect** — level splitting with B-field slider, exact
+- [ ] **Zeeman effect (normal)** — level splitting ΔE = μ_B B m_l with B-field slider;
+      animated degeneracy lifting; spectral line triplet (σ+, π, σ−); selection rules
+      Δm = 0, ±1 overlaid on Grotrian diagram. Label as "non-relativistic model".
+- [ ] **Zeeman effect (anomalous)** — extend with spin; total J, Landé g-factor
+      g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); ΔE = g_J μ_B B m_J; requires
+      Phase 2 Normal Zeeman to be done first
+- [ ] **Stark effect (linear)** — first-order Stark splitting of hydrogen n=2 levels
+      under electric field F; exact parabolic-coordinate wavefunctions; ΔE = ±3n a₀ F
+      (in a.u.); show lifted degeneracy in Grotrian diagram with field slider
 
 ---
 
@@ -197,11 +252,37 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] Hydrogen 2D cross-sections — |ψ_nlm|² heatmap in xz-plane
 - [ ] Hydrogen 3D orbital isosurfaces — WebGL + marching cubes (Three.js)
 
+### Open quantum systems
+- [ ] **Density matrix + decoherence** — single-qubit 2×2 ρ; exact Kraus-operator channels:
+      dephasing (ρ₀₁ → ρ₀₁ e^{−Γt}), amplitude damping, depolarisation; animated Bloch
+      vector shrinkage; purity Tr(ρ²), von Neumann entropy −Tr(ρ log ρ); purity gauge
+
+### Adiabatic / geometric
+- [ ] **Adiabatic theorem / Landau-Zener** — two-level system with slowly/rapidly varying
+      parameter; exact LZ transition probability P = exp(−2πΓ) where Γ = |⟨1|dH/dt|2⟩|²/(ħ|ΔE|²);
+      animated instantaneous eigenstates and population transfer; adiabatic vs sudden limits
+
+### UX / infrastructure
+- [ ] **URL state encoding** — encode active module + all slider values in the URL hash so
+      any configuration can be shared or bookmarked; useful for classroom demos
+- [ ] **Comparison mode** — side-by-side display of two states or two potentials on the same
+      axes (e.g. coherent vs squeezed, ISW vs HO, classical vs quantum trajectory)
+
 ---
 
 ## Excluded (no exact analytical solutions)
 
-Out of scope by design — these require numerical PDE solvers:
+Out of scope by design — these require numerical PDE solvers or stochastic methods:
 - Double well, deep double well, Gaussian barrier
 - Real-time wavepacket dynamics through smooth arbitrary potentials
 - Any potential without a known closed-form eigenfunction
+- **Double-slit interference** — requires split-step Fourier 2D TDSE (Python/FastAPI backend)
+- **General 2D Schrödinger solver** — Crank–Nicolson / split-step FFT on a grid
+- **Time-dependent potentials** — moving barrier, driven oscillator (no closed-form)
+- **Path integral** (Monte Carlo sum over paths) — stochastic, not exact
+- **Large many-body systems** — Hilbert space grows exponentially (20 qubits = 1M amplitudes)
+- **Relativistic 3D Dirac solver** — requires numerical 4-spinor PDE
+- **Anomalous Zeeman / Paschen-Back in strong-field regime** — requires numerical
+  diagonalisation of the combined Zeeman + spin-orbit Hamiltonian
+
+These belong in [github.com/mlubinsky/QM](https://github.com/mlubinsky/QM) (Python/FastAPI backend).
