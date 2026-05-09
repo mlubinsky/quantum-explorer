@@ -218,6 +218,82 @@ export function hoSqueezedDeltaP(t: number, omega: number, r: number): number {
   return hoSqueezedSigmaP(t, omega, r) / Math.SQRT2
 }
 
+// ── HO complex wavefunctions (Re/Im) ─────────────────────────────────────────
+
+/**
+ * Re(ψ_α(x,t)) for HO coherent state — exact.
+ *
+ * ψ_α(x,t) = (ω/π)^{1/4} exp(−ω(x−⟨x⟩)²/2) · exp(i·phase)
+ * phase = p_cl·(x−⟨x⟩) + p_cl·⟨x⟩/2 − ωt/2
+ * which equals p_cl·x − p_cl·⟨x⟩/2 − ωt/2.
+ *
+ * Satisfies Re²+Im² = hoCoherentProb exactly.
+ */
+export function hoCoherentRePsi(
+  x: number, t: number,
+  alpha: number, phiAlpha: number, omega: number,
+): number {
+  const xMean = hoCoherentExpectX(t, alpha, phiAlpha, omega)
+  const pMean = hoCoherentExpectP(t, alpha, phiAlpha, omega)
+  const xi = x - xMean
+  const envelope = Math.pow(omega / Math.PI, 0.25) * Math.exp(-omega * xi * xi / 2)
+  const phase = pMean * xi + pMean * xMean / 2 - omega * t / 2
+  return envelope * Math.cos(phase)
+}
+
+/** Im(ψ_α(x,t)) for HO coherent state — exact. */
+export function hoCoherentImPsi(
+  x: number, t: number,
+  alpha: number, phiAlpha: number, omega: number,
+): number {
+  const xMean = hoCoherentExpectX(t, alpha, phiAlpha, omega)
+  const pMean = hoCoherentExpectP(t, alpha, phiAlpha, omega)
+  const xi = x - xMean
+  const envelope = Math.pow(omega / Math.PI, 0.25) * Math.exp(-omega * xi * xi / 2)
+  const phase = pMean * xi + pMean * xMean / 2 - omega * t / 2
+  return envelope * Math.sin(phase)
+}
+
+/**
+ * Re(ψ_sq(x,t)) for HO displaced squeezed state D(α)S(r)|0⟩ — exact.
+ *
+ * ψ_sq has the same carrier+drift phase as the coherent state plus a
+ * quadratic chirp term −χ(t)·ξ²:
+ *   χ(t) = sinh(2r)·sin(2ωt) / (2σ_x²(t))
+ * which vanishes at t=0 and t=π/ω (where the state is momentarily chirp-free),
+ * and peaks at t=π/(2ω) where squeezing and anti-squeezing interchange.
+ *
+ * Satisfies Re²+Im² = hoSqueezedProb exactly.
+ */
+export function hoSqueezedRePsi(
+  x: number, t: number,
+  alpha: number, phiAlpha: number, omega: number, r: number,
+): number {
+  const xMean = hoCoherentExpectX(t, alpha, phiAlpha, omega)
+  const pMean = hoCoherentExpectP(t, alpha, phiAlpha, omega)
+  const sigma = hoSqueezedSigmaX(t, omega, r)
+  const xi = x - xMean
+  const envelope = Math.pow(1 / (Math.PI * sigma * sigma), 0.25) * Math.exp(-xi * xi / (2 * sigma * sigma))
+  const chi = Math.sinh(2 * r) * Math.sin(2 * omega * t) / (2 * sigma * sigma)
+  const phase = -chi * xi * xi + pMean * xi + pMean * xMean / 2 - omega * t / 2
+  return envelope * Math.cos(phase)
+}
+
+/** Im(ψ_sq(x,t)) for HO displaced squeezed state — exact. */
+export function hoSqueezedImPsi(
+  x: number, t: number,
+  alpha: number, phiAlpha: number, omega: number, r: number,
+): number {
+  const xMean = hoCoherentExpectX(t, alpha, phiAlpha, omega)
+  const pMean = hoCoherentExpectP(t, alpha, phiAlpha, omega)
+  const sigma = hoSqueezedSigmaX(t, omega, r)
+  const xi = x - xMean
+  const envelope = Math.pow(1 / (Math.PI * sigma * sigma), 0.25) * Math.exp(-xi * xi / (2 * sigma * sigma))
+  const chi = Math.sinh(2 * r) * Math.sin(2 * omega * t) / (2 * sigma * sigma)
+  const phase = -chi * xi * xi + pMean * xi + pMean * xMean / 2 - omega * t / 2
+  return envelope * Math.sin(phase)
+}
+
 /**
  * Fock-state occupation probabilities P(n) = |⟨n|ψ_sq(t=0)⟩|² for
  * the displaced squeezed vacuum D(α)S(r)|0⟩.

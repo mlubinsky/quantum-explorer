@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509b] — 2026-05-09
+
+### Added
+- **HO coherent and squeezed state Re(ψ)/Im(ψ)** — implemented exact complex
+  wavefunctions for both sub-modes. For the coherent state:
+  `ψ_α(x,t) = (ω/π)^{1/4} exp(−ωξ²/2) · exp(i·phase)`,
+  `phase = p_cl·ξ + p_cl·⟨x⟩/2 − ωt/2`. For the squeezed state the same carrier
+  phase gains a quadratic chirp term `−χ(t)·ξ²` where
+  `χ(t) = sinh(2r)·sin(2ωt) / (2σ_x²(t))`, derived from the Riccati equation.
+  Both satisfy `Re² + Im² = |ψ|²` exactly (8 new unit tests verify this pointwise
+  and via numerical norm). The Re/Im display toggle in the UI now works for all
+  three sub-modes (ISW, HO Coherent, HO Squeezed).
+
 ## [0.2026.0509a] — 2026-05-09
 
 ### Fixed

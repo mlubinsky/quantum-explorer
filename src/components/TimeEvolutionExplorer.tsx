@@ -9,8 +9,9 @@ import {
   iswPsi as iswPsiTE,
   iswProb, iswExpectX, iswExpectP, iswExpectX2, iswExpectP2, iswRevivalPeriod,
   hoCoherentProb, hoCoherentExpectX, hoCoherentExpectP,
-  hoCoherentDeltaX, hoCoherentDeltaP,
+  hoCoherentDeltaX, hoCoherentDeltaP, hoCoherentRePsi, hoCoherentImPsi,
   hoSqueezedProb, hoSqueezedDeltaX, hoSqueezedDeltaP, hoSqueezedSigmaX,
+  hoSqueezedRePsi, hoSqueezedImPsi,
   squeezedFockDist,
 } from '../physics/timeEvolution'
 import {
@@ -178,14 +179,24 @@ export function TimeEvolutionExplorer() {
   const hoData = useMemo(() => {
     const xGrid = makeHOGrid(omega)
     const yProb = xGrid.map(x => hoCoherentProb(x, t, alpha, phiAlpha, omega))
-    return { xGrid, yProb, xExp: hoCoherentExpectX(t, alpha, phiAlpha, omega) }
-  }, [t, alpha, phiAlpha, omega])
+    const yPsi: number[] | null = (displayMode === 're' || displayMode === 'im')
+      ? xGrid.map(x => displayMode === 're'
+          ? hoCoherentRePsi(x, t, alpha, phiAlpha, omega)
+          : hoCoherentImPsi(x, t, alpha, phiAlpha, omega))
+      : null
+    return { xGrid, yProb, yPsi, xExp: hoCoherentExpectX(t, alpha, phiAlpha, omega) }
+  }, [t, alpha, phiAlpha, omega, displayMode])
 
   const hoSqData = useMemo(() => {
     const xGrid = makeHOGrid(omega)
     const yProb = xGrid.map(x => hoSqueezedProb(x, t, alpha, phiAlpha, omega, r))
-    return { xGrid, yProb, xExp: hoCoherentExpectX(t, alpha, phiAlpha, omega) }
-  }, [t, alpha, phiAlpha, omega, r])
+    const yPsi: number[] | null = (displayMode === 're' || displayMode === 'im')
+      ? xGrid.map(x => displayMode === 're'
+          ? hoSqueezedRePsi(x, t, alpha, phiAlpha, omega, r)
+          : hoSqueezedImPsi(x, t, alpha, phiAlpha, omega, r))
+      : null
+    return { xGrid, yProb, yPsi, xExp: hoCoherentExpectX(t, alpha, phiAlpha, omega) }
+  }, [t, alpha, phiAlpha, omega, r, displayMode])
 
   // ── Momentum-space data ───────────────────────────────────────────────────
 
@@ -359,7 +370,7 @@ export function TimeEvolutionExplorer() {
               )}
             </div>
             <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.5rem' }}>
-              {(subMode === 'isw' ? ['prob', 're', 'im'] : ['prob'] as DisplayMode[]).map(m => (
+              {(['prob', 're', 'im'] as DisplayMode[]).map(m => (
                 <button key={m} onClick={() => setDisplayMode(m as DisplayMode)} style={{
                   ...controlBtnStyle, fontSize: '0.72rem',
                   background: displayMode === m ? '#2a2a2a' : '#1a1a1a',
@@ -385,7 +396,7 @@ export function TimeEvolutionExplorer() {
               <HelpButton onClick={() => setShowHelpMain(true)} />
             </div>
             <MainWavepacketPlot subMode={subMode} displayMode={displayMode}
-              posData={curPosData} iswPsiData={iswData} L={L} />
+              posData={curPosData} L={L} />
           </div>
 
           {/* Energy decomposition */}
@@ -562,16 +573,13 @@ function HOSqueezedControls({ omega, setOmega, alpha, setAlpha, phiAlpha, setPhi
 
 // ── Plot sub-components ───────────────────────────────────────────────────────
 
-function MainWavepacketPlot({ subMode, displayMode, posData, iswPsiData, L }: {
+function MainWavepacketPlot({ subMode, displayMode, posData, L }: {
   subMode: SubMode; displayMode: DisplayMode
-  posData: { xGrid: number[]; yProb: number[]; xExp: number }
-  iswPsiData: { yPsi: number[] | null }
+  posData: { xGrid: number[]; yProb: number[]; yPsi?: number[] | null; xExp: number }
   L: number
 }) {
-  const { xGrid, yProb, xExp } = posData
-  const yData = (subMode === 'isw' && displayMode !== 'prob' && iswPsiData.yPsi)
-    ? iswPsiData.yPsi
-    : yProb
+  const { xGrid, yProb, yPsi, xExp } = posData
+  const yData = (displayMode !== 'prob' && yPsi) ? yPsi : yProb
   const yLabel   = displayMode === 'prob' ? '|ψ|²' : displayMode === 're' ? 'Re ψ' : 'Im ψ'
   const lineColor = displayMode === 'prob' ? DARK.accent : displayMode === 're' ? DARK.green : DARK.orange
   const yPeak = Math.max(...yData.map(Math.abs)) || 1

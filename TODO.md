@@ -134,9 +134,10 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] **`iswExpectX2` is numerical** — uses a 400-point trapezoid grid; exact off-diagonal
       `⟨ψₘ|x²|ψₙ⟩` elements are computable analytically via the same Fourier integrals as
       `⟨x⟩`. Impacts Δx accuracy in the Heisenberg uncertainty indicator.
-- [ ] **HO Re(ψ)/Im(ψ) not implemented** — `hoCoherentProb` and `hoSqueezedProb` return `|ψ|²`
+- [x] **HO Re(ψ)/Im(ψ) not implemented** — `hoCoherentProb` and `hoSqueezedProb` return `|ψ|²`
       only; the Re/Im toggle in the UI has nothing to display. Add exact complex ψ for the
       coherent state: `ψ_α(x,t) = (ω/π)^{1/4} exp(−ω(x−⟨x⟩)²/2 + i⟨p⟩x − i·phase)`.
+      Implemented: `hoCoherentRePsi`, `hoCoherentImPsi`, `hoSqueezedRePsi`, `hoSqueezedImPsi`.
 - [ ] **Squeezed-state Fock decomposition shows wrong distribution** — the UI renders a Poisson
       distribution based only on `|α|`, ignoring the squeeze parameter `r`. Replace with
       `squeezedFockDist` (already implemented and correct) or derive the exact formula.
