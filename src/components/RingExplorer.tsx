@@ -416,7 +416,7 @@ function Readout({ phi, R, n }: { phi: number; R: number; n: number }) {
         {row('E_gs(φ)', Egs.toFixed(6) + ' Eh')}
         {row('I_gs(φ)', Igs.toFixed(6) + ' a.u.')}
         {row('AB phase 2πφ', abPhase.toFixed(4) + ' rad')}
-        {row('T_rev', (4 * Math.PI * R * R).toFixed(4) + ' a.u.')}
+        {row('T_rev (density)', (4 * Math.PI * R * R).toFixed(4) + ' a.u.')}
       </tbody>
     </table>
   )

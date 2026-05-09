@@ -17,9 +17,8 @@ export function groundStateN(phi: number): number {
 
 /**
  * Persistent current in state n:
- *   I_n(φ) = −∂E_n/∂Φ = (n − φ) / R²
- * (in units where Φ₀ = 2π is absorbed; dimensionally consistent with
- *  E in Hartree and Φ in a.u.)
+ *   I_n(φ) = −∂E_n/∂φ = (n − φ) / R²
+ * where φ = Φ/Φ₀ is the dimensionless flux.
  */
 export function persistentCurrent(n: number, phi: number, R: number): number {
   return (n - phi) / (R * R)
@@ -68,7 +67,7 @@ export function ringPacket(theta: number, t: number, coeffs: number[], phi: numb
   return Math.sqrt(re * re + im * im) / norm
 }
 
-/** Quantum revival time T_rev = 4πR² (exact, valid for φ = 0) */
+/** Density revival time T_rev = 4πR² (exact, valid for all φ) */
 export function revivalTime(R: number): number {
   return 4 * Math.PI * R * R
 }

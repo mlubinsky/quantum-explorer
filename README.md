@@ -1,11 +1,11 @@
 # Quantum Explorer
 
 An interactive quantum mechanics explorer that runs entirely in the browser —
-no backend, no installation, no approximations.
+no backend, no installation.
 
-Every feature uses an **exact analytical solution**. Results are not numerical
-approximations: eigenvalues, expectation values, and time evolution are all
-computed in closed form.
+Every feature uses an **exact analytical solution**. Eigenvalues, expectation
+values, and time evolution are closed-form; a small number of expectation values
+(HO squeezed state) use numerical quadrature over the exact wavefunction.
 
 ## Live demo
 
@@ -39,7 +39,7 @@ Exact wavepacket dynamics — no Crank-Nicolson, no grid PDE solver.
 - Quantum revival at T_rev = 4L²/π — wavepacket reconstructs exactly
 - Energy decomposition \|cₙ\|² bar chart
 - Expectation values plot: ⟨x(t)⟩, ⟨p(t)⟩, Δx, Δp, Δx·Δp with ħ/2 bound
-- Norm history — flat at 1.000 (exact, no drift)
+- Analytic norm = 1 — flat at 1.000 (exact, no drift)
 
 **HO coherent state** \|α⟩ — displaced ground state
 - Sliders for displacement \|α\|, phase φ_α, frequency ω
@@ -66,7 +66,7 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Momentum distribution |φ(k)|² — static Gaussian, width σ_p = 1/(2σ₀)
 - Live readout: spreading time t₀ = 2σ₀², group velocity v_g, phase velocity v_ph = k₀/2, σ(t), Δx·Δp
 - Expectation values: ⟨x⟩ grows linearly, ⟨p⟩ constant, Δx grows as σ₀√(1+(t/t₀)²), Δx·Δp ≥ ħ/2
-- Norm history — exact flat 1.000 (no PDE solver, no drift)
+- Analytic norm = 1 — exact flat 1.000 (no PDE solver, no drift)
 
 ### Scattering
 Two sub-tabs covering both above- and below-barrier regimes.

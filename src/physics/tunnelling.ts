@@ -167,8 +167,25 @@ function scatteringAmplitudes(E: number, V0: number, L: number): Amplitudes {
   } else {
     // Evanescent inside
     const kappaTilde = Math.sqrt(-kappaSq)
-    const coshKL = Math.cosh(kappaTilde * L)
-    const sinhKL = Math.sinh(kappaTilde * L)
+    const kTL = kappaTilde * L
+    // Guard against float64 overflow (sinh/cosh → Infinity for kTL ≳ 710).
+    // In the deep-tunnelling limit (kTL → ∞): T → 0 and |r| → 1.
+    // Exact limiting phase of r derived by cancelling the e^{kTL} factor:
+    //   r = (f·cos(kL) − sin(kL) − i(cos(kL) + f·sin(kL))) / A
+    // where A = (k²+κ̃²)/(2kκ̃),  f = (k²−κ̃²)/(2kκ̃);  verifies |r| = 1.
+    if (kTL > 700) {
+      const A = (k * k + kappaTilde * kappaTilde) / (2 * k * kappaTilde)
+      const f = (k * k - kappaTilde * kappaTilde) / (2 * k * kappaTilde)
+      const cosKL = Math.cos(k * L)
+      const sinKL = Math.sin(k * L)
+      return {
+        rRe: (f * cosKL - sinKL) / A,
+        rIm: -(cosKL + f * sinKL) / A,
+        tRe: 0, tIm: 0,
+      }
+    }
+    const coshKL = Math.cosh(kTL)
+    const sinhKL = Math.sinh(kTL)
     const factor = (k * k - kappaTilde * kappaTilde) / (2 * k * kappaTilde)
     const denRe = coshKL
     const denIm = -factor * sinhKL
