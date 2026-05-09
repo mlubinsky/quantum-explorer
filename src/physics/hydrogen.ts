@@ -41,9 +41,8 @@ export function assocLaguerre(n: number, alpha: number, x: number): number {
  *
  * R_nl(r) = N_nl · exp(-Zr/n) · (2Zr/n)^l · L_{n-l-1}^{2l+1}(2Zr/n)
  *
- * N_nl = -sqrt( (2Z/n)^3 · (n-l-1)! / (2n · ((n+l)!)^3 ) )
- * Note: conventional sign choice — we use the positive square root without the
- * leading minus so that R_10(0) = +2Z^{3/2}.
+ * N_nl = sqrt( (2Z/n)^3 · (n-l-1)! / (2n · (n+l)!) )
+ * (Mathematical / Abramowitz-Stegun convention for L_n^α.)
  */
 export function radialWavefunction(n: number, l: number, r: number, Z: number): number {
   const rho = (2 * Z * r) / n
@@ -82,26 +81,17 @@ export function angularDensity(l: number, m: number, theta: number): number {
 }
 
 /**
- * 2D orbital density in the xz-plane:
- * ρ(x, z) = |R_nl(r)|² · |Θ_lm(θ)|² / r²   (the 1/r² cancels the r² from the volume element
- * but we keep it as the raw volumetric density so ρ dV makes sense in xz-slice)
+ * 2D orbital density in the xz cross-section (y = 0).
  *
- * Actually: |ψ_nlm(r,θ)|² = |R_nl(r)|² · |Y_l^m(θ,φ)|²
- * For the xz cross-section we use φ=0 (or integrate over φ and divide by 2π):
- *   ρ(x, z) = |R_nl(r)|² · (Θ_lm(θ))²
- * where Θ_lm is normalised so that ∫|Θ|² sinθ dθ dφ = 1 overall.
- * We return |R_nl(r)|² · angularDensity(l, m, θ) / (2π) so that integrating over xz gives ~1
- * (with a factor from the φ=0 slice).
- *
- * For plotting we just return |R_nl|² · |Θ_lm(θ)|² (unnormalised in xz, just for visual shape).
+ * Delegates to orbitalDensity3D at y=0, which correctly handles:
+ * - Origin: R(0)²/(4π) for l=0 s-orbitals (non-zero maximum), zero for l>0.
+ * - Real spherical-harmonic φ-factor at φ=0 (x>0) / φ=π (x<0):
+ *     m=0 → 1, m>0 → 2cos²(|m|φ)=2, m<0 → 2sin²(|m|φ)=0.
+ *   Consequence: m<0 real orbitals (sin-type) have zero density in the xz-plane;
+ *   their lobes lie in other planes (e.g. p_y lives in the yz-plane).
  */
 export function orbitalDensity2D(n: number, l: number, m: number, x: number, z: number, Z: number): number {
-  const r = Math.sqrt(x * x + z * z)
-  if (r < 1e-12) return 0
-  const theta = Math.atan2(Math.sqrt(x * x), z)  // angle from z-axis
-  const R = radialWavefunction(n, l, r, Z)
-  const ang = angularDensity(l, m, theta)
-  return R * R * ang
+  return orbitalDensity3D(n, l, m, x, 0, z, Z)
 }
 
 /** r_max covers >99.9% of radial density */

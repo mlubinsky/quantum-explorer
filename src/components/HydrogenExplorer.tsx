@@ -380,6 +380,11 @@ function GrotrianDiagram({
 
       {/* Legend */}
       <div style={{ marginTop: 8, fontSize: '0.76rem', color: '#aaa' }}>
+        <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 5 }}>
+          Simplified nonrelativistic model: E depends only on n, so all same-n sublevels are
+          degenerate (columns show allowed ℓ values, not distinct energies). E1 selection rule
+          shown is Δℓ = ±1 only; Δm is not displayed.
+        </div>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', marginBottom: 5 }}>
           <span style={{ color: '#666', fontStyle: 'italic' }}>Levels:</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -673,6 +678,17 @@ export function HydrogenExplorer() {
             <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
               {/* 2D heatmap */}
               <div style={{ flex: '1 1 0', minWidth: 0 }}>
+                {m < 0 && (
+                  <div style={{
+                    fontSize: '0.74rem', color: '#f77f00', background: 'rgba(247,127,0,0.08)',
+                    border: '1px solid rgba(247,127,0,0.25)', borderRadius: 4,
+                    padding: '4px 8px', marginBottom: 4,
+                  }}>
+                    m = {m} (sin-type real orbital) has no density in the xz cross-section.
+                    Its lobes lie in {Math.abs(m) === 1 ? 'the yz-plane' : 'planes rotated from xz'}.
+                    Select m ≥ 0 to see lobes here.
+                  </div>
+                )}
                 <Plot data={[{
                   x: orbX, y: orbZ, z: orbDensity, type: 'heatmap',
                   colorscale: 'Viridis', zmin: 0, zmax: 1,
@@ -690,7 +706,7 @@ export function HydrogenExplorer() {
                   xaxis: { ...axis('x (a₀)'), scaleanchor: 'y', scaleratio: 1 },
                   yaxis: axis('z (a₀)'),
                   font: { color: DARK.text, size: 11 },
-                  title: { text: 'Cross-section through nucleus (y = 0)',
+                  title: { text: 'xz cross-section (y = 0) — color normalized to peak',
                     font: { size: 10, color: '#666' }, x: 0.5, y: 0.02, xref: 'paper', yref: 'paper' },
                 } as never}
                   config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
@@ -727,9 +743,9 @@ export function HydrogenExplorer() {
                     font: { size: 12, color: '#ccc' },
                   },
                   annotations: [{
-                    text: 'Rotate around z-axis for 3D shape',
+                    text: 'θ-profile only — φ-orientation not shown for m ≠ 0',
                     x: 0.5, y: -0.15, xref: 'paper', yref: 'paper',
-                    showarrow: false, font: { size: 9, color: '#555' },
+                    showarrow: false, font: { size: 9, color: '#666' },
                   }],
                 } as never}
                   config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />

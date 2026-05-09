@@ -5,6 +5,36 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508d] — 2026-05-08
+
+### Fixed
+- **2D orbital origin bug (physics)** — `orbitalDensity2D` returned 0 at r=0 for all
+  orbitals, including 1s where the density is maximum. Fixed by delegating to
+  `orbitalDensity3D(n,l,m, x,0,z, Z)` which already handles the l=0 origin case.
+- **2D orbital m-sign bug (physics)** — `orbitalDensity2D` used only `|m|` for the
+  angular factor, making m=+1 and m=-1 look identical. Real spherical harmonics have
+  a φ-factor: cos(|m|φ) for m>0, sin(|m|φ) for m<0. In the xz-plane (y=0, φ=0 or π),
+  m<0 orbitals have zero density. Delegating to `orbitalDensity3D` at y=0 fixes both
+  issues in one change.
+- **Normalization comment typo** — `radialWavefunction` docstring said `((n+l)!)^3`
+  (Griffiths-convention residue); the code uses the Abramowitz-Stegun convention where
+  it should be `(n+l)!` to the first power. Comment corrected.
+
+### Improved (UI)
+- **2D heatmap**: added orange warning banner when m<0 (xz cross-section is blank);
+  explains the orbital lies in a different plane. Heatmap title updated to say
+  "xz cross-section (y = 0) — color normalized to peak".
+- **Angular shape plot**: annotation updated from "Rotate around z-axis for 3D shape"
+  to "θ-profile only — φ-orientation not shown for m ≠ 0".
+- **Grotrian legend**: added disclaimer that same-n levels are degenerate in this
+  nonrelativistic model; clarified that E1 selection rule shown is Δℓ = ±1 only
+  (Δm not displayed).
+
+### Tests
+- 5 new `orbitalDensity2D` tests: non-zero origin for 1s, zero origin for 2p, m±1
+  distinction, left-right symmetry for m=0, exact equality with orbitalDensity3D at y=0.
+  Total: 268 tests.
+
 ## [0.2026.0508c] — 2026-05-08
 
 ### Fixed

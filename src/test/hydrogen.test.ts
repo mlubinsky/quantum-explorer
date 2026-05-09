@@ -6,6 +6,8 @@ import {
   radialWavefunction,
   radialDensity,
   radialNodes,
+  orbitalDensity2D,
+  orbitalDensity3D,
 } from '../physics/hydrogen'
 
 // Numerical integral ∫₀^∞ f(r) dr via trapezoidal rule on [0, r_max]
@@ -162,6 +164,50 @@ describe('Quantum number validity (sanity checks)', () => {
         const norm = integrate(r => radialDensity(n, l, r, 1), rMax)
         expect(norm).toBeCloseTo(1, 2)
       }
+    }
+  })
+})
+
+describe('orbitalDensity2D (xz cross-section)', () => {
+  it('1s: density at origin is non-zero (maximum for s orbitals)', () => {
+    const atOrigin = orbitalDensity2D(1, 0, 0, 0, 0, 1)
+    expect(atOrigin).toBeGreaterThan(0)
+    // should equal R_10(0)²/(4π) = 4/(4π) = 1/π
+    const expected = radialWavefunction(1, 0, 0, 1) ** 2 / (4 * Math.PI)
+    expect(atOrigin).toBeCloseTo(expected, 6)
+  })
+
+  it('2p (l=1): density at origin is zero', () => {
+    expect(orbitalDensity2D(2, 1, 0, 0, 0, 1)).toBeCloseTo(0, 10)
+  })
+
+  it('m=+1 and m=-1 give different densities in xz-plane (not identical)', () => {
+    const x = 1.5, z = 0.5
+    const plus1  = orbitalDensity2D(2, 1,  1, x, z, 1)
+    const minus1 = orbitalDensity2D(2, 1, -1, x, z, 1)
+    expect(plus1).toBeGreaterThan(0)
+    expect(minus1).toBeCloseTo(0, 8)  // m<0 sin-type → zero in xz-plane (y=0)
+  })
+
+  it('m=0 orbital is symmetric in x (left-right symmetric in xz-plane)', () => {
+    const z = 2.0, x = 1.5
+    const right = orbitalDensity2D(2, 1, 0,  x, z, 1)
+    const left  = orbitalDensity2D(2, 1, 0, -x, z, 1)
+    expect(right).toBeCloseTo(left, 8)
+  })
+
+  it('equals orbitalDensity3D at y=0 for several points and states', () => {
+    const cases: [number, number, number, number, number][] = [
+      [1, 0,  0, 0.5, 0.3],
+      [2, 1,  1, 1.0, 2.0],
+      [2, 1,  0, 1.5, 1.0],
+      [3, 2,  2, 2.0, 1.5],
+      [3, 1, -1, 1.0, 1.0],
+    ]
+    for (const [n, l, m, x, z] of cases) {
+      const d2d = orbitalDensity2D(n, l, m, x, z, 1)
+      const d3d = orbitalDensity3D(n, l, m, x, 0, z, 1)
+      expect(d2d).toBeCloseTo(d3d, 10)
     }
   })
 })
