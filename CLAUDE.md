@@ -49,6 +49,14 @@ Wiring a new module into `App.tsx` requires three touches:
 | Hydrogen Atom | Radial/2D/3D orbitals, Grotrian diagram, Z slider |
 | Ring & A-B | Aharonov-Bohm energy spectrum, persistent current, wavepacket |
 
+## After implementing a new feature
+
+Update these three files before committing:
+
+- **TODO.md** — mark completed items `[x]`; move any new Phase 2 ideas to the appropriate section
+- **CHANGELOG.md** — add an entry under `[Unreleased]` describing what was added
+- **README.md** — add or update the module's entry in the Features section; update the test count
+
 ## What belongs in the related QM repo instead
 
 Anything requiring a numerical eigensolver or time-stepper (double well,
