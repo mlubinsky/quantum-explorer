@@ -7,17 +7,18 @@ interface Props {
   max: number
   step: number
   unit?: string
+  digits?: number
   description?: string
   onChange: (value: number) => void
 }
 
-export function ParameterSlider({ label, value, min, max, step, unit, description, onChange }: Props) {
+export function ParameterSlider({ label, value, min, max, step, unit, digits = 2, description, onChange }: Props) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.labelRow}>
         <span>{label}</span>
         <span className={styles.value}>
-          {value.toFixed(2)}{unit ? ` ${unit}` : ''}
+          {value.toFixed(digits)}{unit ? ` ${unit}` : ''}
         </span>
       </div>
       <input

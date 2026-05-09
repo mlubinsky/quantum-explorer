@@ -171,7 +171,7 @@ export function BellDemo() {
 
         <ParameterSlider
           label="θ (detector angle)"
-          value={thetaDeg} min={0} max={180} step={1} unit="°"
+          value={thetaDeg} min={0} max={180} step={1} unit="°" digits={0}
           description="Angle between Alice's and Bob's detector axes"
           onChange={setThetaDeg}
         />
@@ -204,10 +204,10 @@ export function BellDemo() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1rem' }}>
-          <ParameterSlider label="a (Alice 1)" value={aDeg}  min={0} max={180} step={1} unit="°" onChange={setADeg} />
-          <ParameterSlider label="a′ (Alice 2)" value={aPDeg} min={0} max={180} step={1} unit="°" onChange={setAPDeg} />
-          <ParameterSlider label="b (Bob 1)"   value={bDeg}  min={0} max={180} step={1} unit="°" onChange={setBDeg} />
-          <ParameterSlider label="b′ (Bob 2)"  value={bPDeg} min={0} max={180} step={1} unit="°" onChange={setBPDeg} />
+          <ParameterSlider label="a (Alice 1)" value={aDeg}  min={0} max={180} step={1} unit="°" digits={0} onChange={setADeg} />
+          <ParameterSlider label="a′ (Alice 2)" value={aPDeg} min={0} max={180} step={1} unit="°" digits={0} onChange={setAPDeg} />
+          <ParameterSlider label="b (Bob 1)"   value={bDeg}  min={0} max={180} step={1} unit="°" digits={0} onChange={setBDeg} />
+          <ParameterSlider label="b′ (Bob 2)"  value={bPDeg} min={0} max={180} step={1} unit="°" digits={0} onChange={setBPDeg} />
         </div>
 
         {/* Readout table */}

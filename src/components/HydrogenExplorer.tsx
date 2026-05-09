@@ -593,7 +593,7 @@ export function HydrogenExplorer() {
           </div>
           <div style={{ flex: 1.5, minWidth: 140 }}>
             <ParameterSlider label="Z (nuclear charge)" value={Z} min={1} max={10} step={1}
-              unit="" onChange={setZ} />
+              unit="" digits={0} onChange={setZ} />
           </div>
         </div>
 

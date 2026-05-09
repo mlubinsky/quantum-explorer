@@ -90,14 +90,14 @@ export function StationaryExplorer() {
           {potential === 'isw' ? (
             <ParameterSlider
               label="Quantum number n"
-              value={nISW} min={1} max={N_LEVELS} step={1}
+              value={nISW} min={1} max={N_LEVELS} step={1} digits={0}
               description="n = 1 is the ground state"
               onChange={v => setNISW(Math.round(v))}
             />
           ) : (
             <ParameterSlider
               label="Quantum number n"
-              value={nHO} min={0} max={N_LEVELS - 1} step={1}
+              value={nHO} min={0} max={N_LEVELS - 1} step={1} digits={0}
               description="n = 0 is the ground state"
               onChange={v => setNHO(Math.round(v))}
             />
