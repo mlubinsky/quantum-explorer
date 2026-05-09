@@ -5,6 +5,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508a] — 2026-05-08
+
+### Added — Ring & Aharonov-Bohm Effect module
+- **New top-level tab "Ring & A-B"** — spinless particle on a 1D ring threaded by
+  magnetic flux Φ; dimensionless flux φ = Φ/Φ₀ slider (−1 to 3), ring radius R, quantum number n
+- **Energy level diagram** — E_n(φ) = (n−φ)²/(2R²) parabolic bands for n = −4…4;
+  click plot to set φ; crossing points marked at half-integer φ; ground-state band highlighted
+- **Wavefunction on ring** — polar deformation plot showing Re(ψ_n(θ)); 2|n| lobes for n ≠ 0
+- **Persistent current** — sawtooth ground-state current I_gs(φ) = (n*(φ)−φ)/R² with
+  amplitude ±1/(2R²); selected-n straight line overlay; discontinuities at level crossings
+- **Wavepacket animation** — Gaussian superposition |ψ(θ,t)|² animated on ring;
+  Play/Pause/Reset; speed slider; t/T_rev readout; exact revival time T_rev = 4πR²
+- **Live readout**: E_n(φ), I_n(φ), n*(φ), E_gs, I_gs, AB phase 2πφ, T_rev
+- **`src/physics/ring.ts`** — 8 exact functions: `ringEnergy`, `groundStateN`,
+  `persistentCurrent`, `ringWavefunctionRe/Im`, `ringPacketCoeffs`, `ringPacket`, `revivalTime`, `crossingPhis`
+- **`src/test/ring.test.ts`** — 32 tests (250 total passing)
+- **`specs/aharonov-bohm.md`** — full physics spec
+
+### Changed
+- **README.md** updated to document all 7 implemented modules and 250 tests
+- **CLAUDE.md** added — project conventions, module pattern, post-feature checklist
+
 ## [0.2026.0506j] — 2026-05-06
 
 ### Added / Changed — Hydrogen Atom enhancements

@@ -117,9 +117,20 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
       standing-wave pattern + evanescent decay wavefunction; penetration depth δ;
       sub-tab "Step" under renamed "Scattering" module
 
+## Done ✓ — Ring & Aharonov-Bohm Effect
+
+- [x] **Energy level diagram** — E_n(φ) = (n−φ)²/(2R²) parabolic bands for n = −4…4;
+      click to set φ; crossing points at half-integer φ; ground-state band highlighted
+- [x] **Wavefunction on ring** — polar deformation plot Re(ψ_n(θ)); 2|n| lobes for n ≠ 0
+- [x] **Persistent current** — sawtooth I_gs(φ) and selected-n straight line;
+      discontinuities at level crossings
+- [x] **Wavepacket animation** — Gaussian superposition |ψ(θ,t)|² on ring;
+      Play/Pause/Reset; speed slider; t/T_rev readout; T_rev = 4πR²
+- [x] **Live readout**: E_n, I_n, n*(φ), E_gs, I_gs, AB phase 2πφ, T_rev
+- [x] **32 unit tests** — ringEnergy, groundStateN, persistentCurrent, wavefunction, wavepacket
+
 ## Phase 2 — 1D potentials (remaining)
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes
-- [ ] **Particle on a ring + Aharonov-Bohm** — exact with magnetic flux slider
 - [ ] **Kronig-Penney model** — exact band structure and band gaps
 - [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
 - [ ] **Pöschl-Teller potential** — reflectionless at certain energies (T = 1 exactly)
