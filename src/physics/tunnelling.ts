@@ -105,11 +105,14 @@ export function scatteringPsiSq(x: number, E: number, V0: number, L: number): nu
     const im = imA + imB
     return re * re + im * im
   } else {
-    // Evanescent: ψ_B = A·e^{κ̃x} + B·e^{−κ̃x} (real coefficients for real boundary matching)
+    // Evanescent: ψ_B = A·e^{κ̃x} + B·e^{−κ̃x} with complex A, B
     const kappaTilde = Math.sqrt(-kappaSq)
-    const { ARe, BRe } = insideCoeffsEvanescent(E, V0, L)
-    const val = ARe * Math.exp(kappaTilde * x) + BRe * Math.exp(-kappaTilde * x)
-    return val * val
+    const { ARe, AIm, BRe, BIm } = insideCoeffsEvanescent(E, V0, L)
+    const ePos = Math.exp( kappaTilde * x)
+    const eNeg = Math.exp(-kappaTilde * x)
+    const re = ARe * ePos + BRe * eNeg
+    const im = AIm * ePos + BIm * eNeg
+    return re * re + im * im
   }
 }
 
@@ -264,32 +267,47 @@ function insideCoeffs(E: number, V0: number, L: number): InsideCoeffs {
 }
 
 interface EvanescentCoeffs {
-  ARe: number; BRe: number
+  ARe: number; AIm: number; BRe: number; BIm: number
 }
 
-/** Inside coefficients for evanescent case (E < V0) — real coefficients */
+/**
+ * Inside coefficients for evanescent case (E < V0) — complex coefficients.
+ *
+ * From right boundary (h = L/2):
+ *   2A·e^{κh} = (1 + ik/κ) · t·e^{ikh}
+ *   2B·e^{-κh} = (1 - ik/κ) · t·e^{ikh}
+ *
+ * Using the full complex t ensures |ψ_inside(±L/2)|² is exactly continuous
+ * with the left and right regions.
+ */
 function insideCoeffsEvanescent(E: number, V0: number, L: number): EvanescentCoeffs {
   const k = Math.sqrt(2 * E)
   const kappa = Math.sqrt(2 * (V0 - E))
   const half = L / 2
-  const T = transmissionT(E, V0, L)
-  const sqrtT = Math.sqrt(T)
+  const { tRe, tIm } = scatteringAmplitudes(E, V0, L)
 
-  // From right boundary: ψ_B(L/2) = t·e^{ikL/2}, ψ_B'(L/2) = ik·t·e^{ikL/2}
-  // ψ_B = A·e^{κx} + B·e^{−κx}
-  // A·e^{κh} + B·e^{−κh} = sqrtT · cos(k·half)   (real part of t·e^{ikh})
-  // κ(A·e^{κh} − B·e^{−κh}) = −k · sqrtT · sin(k·half)   (imaginary part × k)
-  // Solve:
-  const rhs1 = sqrtT * Math.cos(k * half)
-  const rhs2 = -sqrtT * (k / kappa) * Math.sin(k * half)
+  // t · e^{ikh}
+  const eikh_Re = Math.cos(k * half)
+  const eikh_Im = Math.sin(k * half)
+  const teRe = tRe * eikh_Re - tIm * eikh_Im
+  const teIm = tRe * eikh_Im + tIm * eikh_Re
 
-  const eKh = Math.exp(kappa * half)
+  // (1 + ik/κ) · te / 2
+  const ratio = k / kappa
+  const halfFAteRe = 0.5 * (teRe - ratio * teIm)
+  const halfFAteIm = 0.5 * (teIm + ratio * teRe)
+
+  // (1 - ik/κ) · te / 2
+  const halfFBteRe = 0.5 * (teRe + ratio * teIm)
+  const halfFBteIm = 0.5 * (teIm - ratio * teRe)
+
+  const eKh  = Math.exp( kappa * half)
   const eMKh = Math.exp(-kappa * half)
 
-  // A·eKh + B·eMKh = rhs1
-  // A·eKh − B·eMKh = rhs2
-  const ARe = (rhs1 + rhs2) / (2 * eKh)
-  const BRe = (rhs1 - rhs2) / (2 * eMKh)
-
-  return { ARe, BRe }
+  return {
+    ARe: halfFAteRe * eMKh,
+    AIm: halfFAteIm * eMKh,
+    BRe: halfFBteRe * eKh,
+    BIm: halfFBteIm * eKh,
+  }
 }

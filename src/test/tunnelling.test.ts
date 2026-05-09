@@ -164,4 +164,20 @@ describe('scatteringPsiSq', () => {
     // evanescent wave decays; interior should be smaller than entrance
     expect(psiInside).toBeLessThan(psiAtLeft)
   })
+
+  it('evanescent: |ψ|² is continuous at right barrier boundary', () => {
+    const E = 1, V0 = 5, L = 2
+    const T = transmissionT(E, V0, L)
+    const eps = 1e-6
+    const psiInsideRight = scatteringPsiSq(L / 2 - eps, E, V0, L)
+    expect(psiInsideRight).toBeCloseTo(T, 4)
+  })
+
+  it('evanescent: |ψ|² is continuous at left barrier boundary', () => {
+    const E = 1, V0 = 5, L = 2
+    const eps = 1e-6
+    const psiLeft  = scatteringPsiSq(-L / 2 - eps, E, V0, L)
+    const psiInside = scatteringPsiSq(-L / 2 + eps, E, V0, L)
+    expect(psiInside).toBeCloseTo(psiLeft, 4)
+  })
 })
