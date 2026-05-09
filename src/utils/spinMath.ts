@@ -45,6 +45,12 @@ export function rodriguezRotate(r: Vec3, axis: Vec3, angle: number): Vec3 {
  *
  * The Bloch vector rotates around Bhat at angular rate ω₀ (rad / a.u.).
  * Frame i corresponds to time t_i = i * tMax / (nFrames - 1).
+ *
+ * Sign convention: positive ω₀ rotates the Bloch vector counterclockwise
+ * around B̂ when viewed from the B̂ direction (right-hand rule).
+ * This corresponds to H = +½ω₀ σ·B̂.
+ * Texts that use H = −½ω₀ σ·B̂ (the common electron/NMR convention) have
+ * the opposite precession direction — equivalent to negating ω₀ here.
  */
 export function computeTrajectory(
   theta: number,

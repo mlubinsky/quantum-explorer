@@ -198,6 +198,10 @@ export function BellDemo() {
           <span style={titleStyle}>CHSH inequality</span>
           <HelpButton onClick={() => setHelpTopic('chsh')} />
         </div>
+        <p style={{ margin: '0 0 0.6rem', fontSize: '0.82rem', color: '#777', fontStyle: 'italic' }}>
+          Coplanar analyzer settings (all four angles in one plane). Real Bell tests
+          can use any 3D orientations; the CHSH maximum 2√2 is achieved in-plane.
+        </p>
 
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
           <button onClick={applyOptimal} style={presetBtnStyle}>Optimal (2√2)</button>
@@ -272,7 +276,8 @@ export function BellDemo() {
 
         <p style={{ margin: '0 0 0.6rem', fontSize: '0.85rem', color: '#aaa' }}>
           Uses the same θ as the correlation plot above. Alice: uniform ±1.
-          Bob: correlated via exact singlet probabilities.
+          Bob: correlated via exact singlet probabilities. Each run is independently
+          random — repeated clicks give different counts.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', flexWrap: 'wrap', marginBottom: '0.75rem' }}>

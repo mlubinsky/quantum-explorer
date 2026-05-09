@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { bornP, collapseState, blochVector } from '../utils/spinMath'
 import type { Vec3 } from '../utils/spinMath'
 
@@ -6,6 +6,7 @@ interface Props {
   theta: number
   phi: number
   onCollapse: (theta: number, phi: number) => void
+  onAxisChange?: (axis: Vec3) => void
 }
 
 type AxisPreset = 'x' | 'y' | 'z' | 'custom'
@@ -136,7 +137,7 @@ function MeasurementHistory({ history, onClear }: { history: MeasurementRecord[]
   )
 }
 
-export function SternGerlachPanel({ theta, phi, onCollapse }: Props) {
+export function SternGerlachPanel({ theta, phi, onCollapse, onAxisChange }: Props) {
   const [axisPreset,   setAxisPreset]   = useState<AxisPreset>('z')
   const [customTheta,  setCustomTheta]  = useState(PI / 4)
   const [customPhi,    setCustomPhi]    = useState(0)
@@ -147,6 +148,11 @@ export function SternGerlachPanel({ theta, phi, onCollapse }: Props) {
   const [prepResult,   setPrepResult]   = useState<{ plus: number; minus: number; pExact: number } | null>(null)
 
   const axis  = axisVec(axisPreset, customTheta, customPhi)
+
+  // Notify parent of axis changes so it can show the axis on the Bloch sphere
+  useEffect(() => {
+    onAxisChange?.(axisVec(axisPreset, customTheta, customPhi))
+  }, [axisPreset, customTheta, customPhi, onAxisChange])
   const label = axisLabel(axisPreset, customTheta, customPhi)
   const bloch = blochVector(theta, phi)
   const pPlus = bornP(axis, bloch)

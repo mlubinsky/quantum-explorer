@@ -5,6 +5,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508e] — 2026-05-08
+
+### Fixed
+- **Bell simulation always returned identical results (bug)** — `simulatePairs` reset
+  its LCG seed to a fixed constant on every call, so pressing "Run simulation" again
+  gave exactly the same counts. Replaced with `Math.random()` (default) and added an
+  optional `rng` parameter so tests can still use deterministic sequences.
+
+### Added
+- **Measurement axis shown on Bloch sphere** — `SternGerlachPanel` now fires an
+  `onAxisChange` callback when the Stern-Gerlach axis changes. `SpinExplorer` stores
+  it and passes it as `measureAxis` to `BlochSphere`, which renders it as the existing
+  dashed yellow line. The axis only appears while on the Measurement tab.
+
+### Improved (documentation / UI)
+- **Precession sign convention documented** — `computeTrajectory` in `spinMath.ts` now
+  has a comment explaining the counterclockwise convention (H = +½ω₀σ·B̂). The
+  Spin help panel now includes a sign-convention note with the NMR/electron alternative.
+- **Bell CHSH section**: added italic note that the four angles are coplanar analyzer
+  settings and the 2√2 maximum is achievable in-plane.
+- **Bell simulation section**: clarified that each run is independently random (now that
+  the LCG is gone) so repeated clicks give different counts.
+
 ## [0.2026.0508d] — 2026-05-08
 
 ### Fixed

@@ -33,16 +33,17 @@ function formatBeta(re: number, im: number): string {
 }
 
 export function SpinExplorer() {
-  const [activeTab,  setActiveTab]  = useState<SpinTab>('precession')
-  const [theta,      setTheta]      = useState(Math.PI / 3)
-  const [phi,        setPhi]        = useState(0)
-  const [omega,      setOmega]      = useState(1.0)
-  const [bTheta,     setBTheta]     = useState(0)
-  const [bPhi,       setBPhi]       = useState(0)
-  const [showHelp,   setShowHelp]   = useState(false)
-  const [playing,    setPlaying]    = useState(false)
-  const [frame,      setFrame]      = useState(0)
-  const [trajectory, setTrajectory] = useState<Vec3[]>([])
+  const [activeTab,   setActiveTab]   = useState<SpinTab>('precession')
+  const [theta,       setTheta]       = useState(Math.PI / 3)
+  const [phi,         setPhi]         = useState(0)
+  const [omega,       setOmega]       = useState(1.0)
+  const [bTheta,      setBTheta]      = useState(0)
+  const [bPhi,        setBPhi]        = useState(0)
+  const [showHelp,    setShowHelp]    = useState(false)
+  const [playing,     setPlaying]     = useState(false)
+  const [frame,       setFrame]       = useState(0)
+  const [trajectory,  setTrajectory]  = useState<Vec3[]>([])
+  const [measureAxis, setMeasureAxis] = useState<Vec3 | undefined>(undefined)
 
   const rafRef   = useRef<number>(0)
   const frameRef = useRef(0)
@@ -119,6 +120,7 @@ export function SpinExplorer() {
             phi={currentPhi}
             trajectory={trajectory.slice(0, frame + 1)}
             playing={playing}
+            measureAxis={activeTab === 'measurement' ? measureAxis : undefined}
           />
           {activeTab === 'precession' && (
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
@@ -259,6 +261,7 @@ export function SpinExplorer() {
               theta={currentTheta}
               phi={currentPhi}
               onCollapse={(t, p) => { setTheta(t); setPhi(p) }}
+              onAxisChange={setMeasureAxis}
             />
           )}
 

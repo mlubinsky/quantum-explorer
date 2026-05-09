@@ -65,8 +65,15 @@ export function SpinInfoPanel() {
           frequency <InlineMath math="\omega_0" /> (Rodrigues' formula — exact, no numerical ODE):
         </p>
         <BlockMath math="\mathbf{r}(t) = \mathbf{r}\cos(\omega_0 t) + (\hat{B}\times\mathbf{r})\sin(\omega_0 t) + \hat{B}(\hat{B}\cdot\mathbf{r})(1-\cos(\omega_0 t))" />
-        <p style={{ margin: '4px 0 0' }}>
+        <p style={{ margin: '4px 0 6px' }}>
           Period <InlineMath math="T = 2\pi/\omega_0" />. All times in atomic units (1 a.u. = 24.19 as).
+        </p>
+        <p style={{ margin: '4px 0 0', fontSize: '0.85em', color: '#aaa' }}>
+          <strong>Sign convention:</strong> positive ω₀ rotates the Bloch vector
+          counterclockwise around B̂ (right-hand rule), matching{' '}
+          <InlineMath math="H = +\tfrac{\omega_0}{2}\hat{B}\cdot\boldsymbol{\sigma}" />.
+          Some textbooks use the opposite sign (e.g. electron NMR with{' '}
+          <InlineMath math="H = -\tfrac{\gamma B}{2}\boldsymbol{\sigma}" />); to match those, negate ω₀.
         </p>
       </section>
 
