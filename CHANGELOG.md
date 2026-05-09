@@ -5,6 +5,29 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0508c] — 2026-05-08
+
+### Fixed
+- **Squeezed state Fock distribution wrong (physics bug)** — `decompData` for `ho-sq`
+  was using the Poisson distribution (valid only for coherent states). Added
+  `squeezedFockDist()` to `timeEvolution.ts` which numerically evaluates
+  `P(n) = |⟨n|ψ_sq(t=0)⟩|²` by grid integration; `TimeEvolutionExplorer` now uses it
+  for the HO Squeezed energy decomposition bar chart.
+- **Re(ψ)/Im(ψ) display buttons visible for HO modes** — these modes only compute
+  `|ψ|²`, not the complex wavefunction. Buttons now hidden when `subMode !== 'isw'`;
+  switching to an HO mode resets `displayMode` to `'prob'`.
+- **Squeezed state description misleading** — description said `S(r)|α⟩`; corrected
+  to `D(α)S(r)|0⟩` to match what the code actually implements.
+- **Expectation-value history stale after parameter change** — `histRef` accumulated
+  entries from old parameter regimes. Added a reset `useEffect` that clears `histRef`
+  whenever `subMode`, coefficients, `L`, `α`, `φ_α`, `ω`, or `r` change.
+- **"Norm history" label misleading** — the plot shows the analytical constant 1, not
+  a numerical norm check. Section header renamed to "Norm conservation".
+
+### Tests
+- 6 new `squeezedFockDist` tests: normalisation, Poisson limit (r=0), even-n-only for
+  squeezed vacuum, ground-state purity, non-negativity. Total: 263 tests.
+
 ## [0.2026.0508b] — 2026-05-08
 
 ### Fixed

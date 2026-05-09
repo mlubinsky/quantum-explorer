@@ -8,6 +8,7 @@ import {
   hoCoherentProb,
   hoCoherentExpectX,
   hoCoherentExpectP,
+  squeezedFockDist,
 } from '../physics/timeEvolution'
 
 const L = 10
@@ -149,5 +150,56 @@ describe('HO coherent state', () => {
       norm += hoCoherentProb(x, 0.5, alpha, phi, omega) * dx
     }
     expect(norm).toBeCloseTo(1.0, 3)
+  })
+})
+
+// ── Squeezed Fock distribution ────────────────────────────────────────────────
+
+describe('squeezedFockDist', () => {
+  const omega = 1.0
+  const nMax = 16
+
+  it('sums to 1 (normalisation) for squeezed vacuum r=1, α=0', () => {
+    const weights = squeezedFockDist(0, 0, omega, 1.0, nMax)
+    const sum = weights.reduce((s, w) => s + w, 0)
+    expect(sum).toBeCloseTo(1.0, 2)
+  })
+
+  it('sums to 1 for displaced squeezed state α=2, r=0.5', () => {
+    const weights = squeezedFockDist(2, 0, omega, 0.5, nMax)
+    const sum = weights.reduce((s, w) => s + w, 0)
+    expect(sum).toBeCloseTo(1.0, 2)
+  })
+
+  it('r=0 matches Poisson distribution for coherent state', () => {
+    const alpha = 1.5
+    const weights = squeezedFockDist(alpha, 0, omega, 0, nMax)
+    // Poisson: P(n) = e^{-α²} α^{2n} / n!
+    const a2 = alpha * alpha
+    let pow = 1, fac = 1
+    for (let n = 0; n < nMax; n++) {
+      if (n > 0) { pow *= a2; fac *= n }
+      const poisson = Math.exp(-a2) * pow / fac
+      expect(weights[n]).toBeCloseTo(poisson, 2)
+    }
+  })
+
+  it('squeezed vacuum (α=0, r>0) only has even-n contributions', () => {
+    const weights = squeezedFockDist(0, 0, omega, 0.8, nMax)
+    // Odd Fock states must vanish by parity
+    for (let n = 1; n < nMax; n += 2) {
+      expect(weights[n]).toBeLessThan(1e-4)
+    }
+  })
+
+  it('r=0, α=0 gives pure ground state (P(0)≈1)', () => {
+    const weights = squeezedFockDist(0, 0, omega, 0, nMax)
+    expect(weights[0]).toBeCloseTo(1.0, 3)
+    expect(weights[1]).toBeLessThan(1e-4)
+  })
+
+  it('all weights are non-negative', () => {
+    const weights = squeezedFockDist(1.5, 0.3, omega, 0.6, nMax)
+    weights.forEach(w => expect(w).toBeGreaterThanOrEqual(0))
   })
 })

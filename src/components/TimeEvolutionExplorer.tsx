@@ -11,6 +11,7 @@ import {
   hoCoherentProb, hoCoherentExpectX, hoCoherentExpectP,
   hoCoherentDeltaX, hoCoherentDeltaP,
   hoSqueezedProb, hoSqueezedDeltaX, hoSqueezedDeltaP, hoSqueezedSigmaX,
+  squeezedFockDist,
 } from '../physics/timeEvolution'
 import {
   iswMomentumProbTE, hoCoherentMomentumProb, hoSqueezedMomentumProb,
@@ -208,6 +209,11 @@ export function TimeEvolutionExplorer() {
 
   const histRef = useRef<{ t: number; x: number; p: number; dx: number; dp: number; dxdp: number }[]>([])
 
+  // Reset history whenever physical parameters change so old values don't mix with new regime
+  useEffect(() => {
+    histRef.current = []
+  }, [subMode, normCoeffs, L, alpha, phiAlpha, omega, r])
+
   useEffect(() => {
     let entry: { t: number; x: number; p: number; dx: number; dp: number; dxdp: number }
     if (subMode === 'isw') {
@@ -243,7 +249,12 @@ export function TimeEvolutionExplorer() {
         weights: normCoeffs.map(c => c * c),
       }
     }
-    const nMax = 12
+    const nMax = 16
+    if (subMode === 'ho-sq') {
+      const weights = squeezedFockDist(alpha, phiAlpha, omega, r, nMax)
+      return { labels: Array.from({ length: nMax }, (_, n) => `n=${n}`), weights }
+    }
+    // Coherent state: Poisson distribution P(n) = e^{-|α|²} |α|^{2n} / n!
     const exp2 = Math.exp(-alpha * alpha)
     let pow = 1, fac = 1
     const weights = Array.from({ length: nMax }, (_, n) => {
@@ -251,7 +262,7 @@ export function TimeEvolutionExplorer() {
       return exp2 * pow / fac
     })
     return { labels: Array.from({ length: nMax }, (_, n) => `n=${n}`), weights }
-  }, [subMode, normCoeffs, alpha])
+  }, [subMode, normCoeffs, alpha, phiAlpha, omega, r])
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -287,7 +298,7 @@ export function TimeEvolutionExplorer() {
               ['ho',    'HO Coherent'],
               ['ho-sq', 'HO Squeezed'],
             ] as [SubMode, string][]).map(([m, label]) => (
-              <button key={m} onClick={() => { setSubMode(m); reset() }} style={{
+              <button key={m} onClick={() => { setSubMode(m); reset(); if (m !== 'isw') setDisplayMode('prob') }} style={{
                 ...btnStyle,
                 background:  subMode === m ? '#4361ee' : '#1a1a1a',
                 color:       subMode === m ? '#fff'    : '#aaa',
@@ -300,7 +311,7 @@ export function TimeEvolutionExplorer() {
           <div style={{ fontSize: '0.72rem', color: '#666', marginBottom: '0.8rem', lineHeight: 1.4 }}>
             {subMode === 'isw' && 'Superposition Σ cₙ ψₙ e⁻ⁱEₙᵗ — beating, revivals at T_rev = 4L²/π'}
             {subMode === 'ho'  && 'Coherent state |α⟩ — Gaussian oscillates at ω, shape invariant, Δx·Δp = ħ/2'}
-            {subMode === 'ho-sq' && 'Squeezed state S(r)|α⟩ — Gaussian breathes at 2ω, width oscillates ±e^r'}
+            {subMode === 'ho-sq' && 'Squeezed state D(α)S(r)|0⟩ — Gaussian breathes at 2ω, width oscillates ±e^r'}
           </div>
 
           {subMode === 'isw' && (
@@ -348,8 +359,8 @@ export function TimeEvolutionExplorer() {
               )}
             </div>
             <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.5rem' }}>
-              {(['prob', 're', 'im'] as DisplayMode[]).map(m => (
-                <button key={m} onClick={() => setDisplayMode(m)} style={{
+              {(subMode === 'isw' ? ['prob', 're', 'im'] : ['prob'] as DisplayMode[]).map(m => (
+                <button key={m} onClick={() => setDisplayMode(m as DisplayMode)} style={{
                   ...controlBtnStyle, fontSize: '0.72rem',
                   background: displayMode === m ? '#2a2a2a' : '#1a1a1a',
                   borderColor: displayMode === m ? '#555' : '#333',
@@ -414,7 +425,7 @@ export function TimeEvolutionExplorer() {
           <div style={detailsStyle}>
             <div style={sectionHeaderStyle}>
               <button style={sectionToggleStyle} onClick={() => setShowNorm(p => !p)}>
-                {showNorm ? '▾' : '▸'} Norm history
+                {showNorm ? '▾' : '▸'} Norm conservation
               </button>
               <HelpButton onClick={() => setShowHelpNorm(true)} />
             </div>

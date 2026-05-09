@@ -5,6 +5,7 @@
  */
 
 import { iswEnergy, iswPsi as iswEigenPsi } from './isw'
+import { hoWavefunction } from './harmonic'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -215,6 +216,46 @@ export function hoSqueezedDeltaX(t: number, omega: number, r: number): number {
 /** Δp(t) = σ_p(t)/√2 */
 export function hoSqueezedDeltaP(t: number, omega: number, r: number): number {
   return hoSqueezedSigmaP(t, omega, r) / Math.SQRT2
+}
+
+/**
+ * Fock-state occupation probabilities P(n) = |⟨n|ψ_sq(t=0)⟩|² for
+ * the displaced squeezed vacuum D(α)S(r)|0⟩.
+ *
+ * ψ_sq(x,0) = (ω·e^{2r}/π)^{1/4} · exp(−ω·e^{2r}/2·(x−x₀)²) · exp(i·p₀·x)
+ * where x₀ = α√(2/ω)cos(φ_α),  p₀ = −α√(2ω)sin(φ_α).
+ *
+ * P(n) is computed numerically via ∫ ψ_n*(x) ψ_sq(x,0) dx on a fine grid.
+ */
+export function squeezedFockDist(
+  alpha: number, phiAlpha: number, omega: number, r: number, nMax = 20
+): number[] {
+  const x0 = alpha * Math.sqrt(2 / omega) * Math.cos(phiAlpha)
+  const p0 = -alpha * Math.sqrt(2 * omega) * Math.sin(phiAlpha)
+  const omegaSq = omega * Math.exp(2 * r)          // squeezed Gaussian width parameter
+  const norm = Math.pow(omegaSq / Math.PI, 0.25)   // overall amplitude factor
+
+  // Grid must cover both the squeezed Gaussian and the HO eigenfunctions
+  const sigmaX = 1 / Math.sqrt(omegaSq)
+  const xMax = Math.max(
+    Math.abs(x0) + 6 * sigmaX,
+    Math.sqrt((2 * nMax + 1) / omega) * 2.0,
+  )
+  const N = 800
+  const dx = (2 * xMax) / (N - 1)
+
+  return Array.from({ length: nMax }, (_, n) => {
+    let re = 0, im = 0
+    for (let k = 0; k < N; k++) {
+      const x = -xMax + k * dx
+      const psiN = hoWavefunction(n, x, omega)
+      const envelope = norm * Math.exp(-omegaSq / 2 * (x - x0) * (x - x0))
+      const phase = p0 * x
+      re += psiN * envelope * Math.cos(phase) * dx
+      im += psiN * envelope * Math.sin(phase) * dx
+    }
+    return re * re + im * im
+  })
 }
 
 /**
