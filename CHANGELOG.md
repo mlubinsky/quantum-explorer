@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509f] — 2026-05-09
+
+### Fixed
+- **Ring wavepacket animation frozen on Play** — `coeffs` and `thetas` were plain
+  `const` array assignments inside the component, so every `setFrame`/`setDisplayT`
+  state update produced new array references, causing `getFrame` and `tick`
+  `useCallback`s to be recreated each frame. This triggered `useEffect([running, tick])`
+  on every render, which cancelled and restarted the `requestAnimationFrame` loop and
+  reset `lastTimeRef.current = null`, making `dt = 0` on every tick and leaving `t`
+  permanently at 0. Fixed by wrapping `coeffs` in `useMemo([n0])` and `thetas` in
+  `useMemo([])` so both have stable references across renders.
+
 ## [0.2026.0509e] — 2026-05-09
 
 ### Fixed
