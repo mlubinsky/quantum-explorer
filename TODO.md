@@ -140,9 +140,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [ ] **Squeezed-state Fock decomposition shows wrong distribution** — the UI renders a Poisson
       distribution based only on `|α|`, ignoring the squeeze parameter `r`. Replace with
       `squeezedFockDist` (already implemented and correct) or derive the exact formula.
-- [ ] **`groundStateN` silent branch at half-integer φ** — `Math.round` picks one degenerate
-      state at crossing points `φ = k + 0.5`. Consider showing a "degenerate" label or
-      highlighting both bands instead of silently selecting one.
+- [x] **`groundStateN` silent branch at half-integer φ** — added `isDegenerateGS` and
+      `degenerateGSPair`; energy diagram highlights both bands and shows a callout;
+      readout shows `k, k+1 (degenerate)` in amber.
 - [ ] **`angularShape` shows φ-integrated density, not xz-section** — for `m < 0` real
       orbitals the xz-plane density is identically zero (lobes live in yz-plane), but the
       plot looks the same as `m > 0`. Label the plot explicitly as "|Y_lm(θ)|² integrated

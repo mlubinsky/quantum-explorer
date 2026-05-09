@@ -5,6 +5,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509d] — 2026-05-09
+
+### Fixed
+- **`groundStateN` silent branch at half-integer φ** — at level crossings
+  (`φ = k + 0.5`) two bands are exactly degenerate and `Math.round` silently
+  picked one. Added `isDegenerateGS(phi, eps=0.005)` and `degenerateGSPair(phi)`
+  to `ring.ts`. In the UI:
+  - Energy diagram: both degenerate bands drawn at full width (3 px) with star
+    markers and a labelled callout arrow `"degenerate n=k, k+1"`.
+  - Readout panel: `n*(φ)` row shows `k, k+1 (degenerate)` in amber instead of a
+    single silent integer.
+  9 new unit tests for `isDegenerateGS` and `degenerateGSPair`; test count 301 → 310.
+
 ## [0.2026.0509c] — 2026-05-09
 
 ### Fixed

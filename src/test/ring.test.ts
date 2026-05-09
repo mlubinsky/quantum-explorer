@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import {
   ringEnergy,
   groundStateN,
+  isDegenerateGS,
+  degenerateGSPair,
   persistentCurrent,
   ringWavefunctionRe,
   ringWavefunctionIm,
@@ -74,6 +76,56 @@ describe('groundStateN', () => {
         expect(ringEnergy(n, phi, 1)).toBeGreaterThanOrEqual(Egs - 1e-12)
       }
     }
+  })
+})
+
+// ── isDegenerateGS / degenerateGSPair ─────────────────────────────────────
+
+describe('isDegenerateGS', () => {
+  it('false away from crossings', () => {
+    for (const phi of [0, 0.3, 0.7, 1.0, 1.3, -0.4]) {
+      expect(isDegenerateGS(phi)).toBe(false)
+    }
+  })
+  it('true at exact half-integers', () => {
+    for (const phi of [0.5, 1.5, -0.5, 2.5]) {
+      expect(isDegenerateGS(phi)).toBe(true)
+    }
+  })
+  it('true within default eps=0.005', () => {
+    expect(isDegenerateGS(0.503)).toBe(true)
+    expect(isDegenerateGS(0.497)).toBe(true)
+  })
+  it('false just outside eps', () => {
+    expect(isDegenerateGS(0.51)).toBe(false)
+    expect(isDegenerateGS(0.49)).toBe(false)
+  })
+})
+
+describe('degenerateGSPair', () => {
+  it('φ=0.5: pair is [0, 1]', () => {
+    expect(degenerateGSPair(0.5)).toEqual([0, 1])
+  })
+  it('φ=1.5: pair is [1, 2]', () => {
+    expect(degenerateGSPair(1.5)).toEqual([1, 2])
+  })
+  it('φ=-0.5: pair is [-1, 0]', () => {
+    expect(degenerateGSPair(-0.5)).toEqual([-1, 0])
+  })
+  it('both n in pair have equal energy', () => {
+    for (const phi of [0.5, 1.5, -0.5, 2.5]) {
+      const [n1, n2] = degenerateGSPair(phi)
+      expect(ringEnergy(n1, phi, 1)).toBeCloseTo(ringEnergy(n2, phi, 1), 12)
+    }
+  })
+  it('both n in pair are true ground states (no lower energy state)', () => {
+    const phi = 0.5
+    const [n1, n2] = degenerateGSPair(phi)
+    const Egs = ringEnergy(n1, phi, 1)
+    for (let n = -5; n <= 5; n++) {
+      expect(ringEnergy(n, phi, 1)).toBeGreaterThanOrEqual(Egs - 1e-12)
+    }
+    expect(ringEnergy(n2, phi, 1)).toBeCloseTo(Egs, 12)
   })
 })
 

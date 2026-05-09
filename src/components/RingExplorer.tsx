@@ -7,6 +7,8 @@ import { RingInfoPanel } from './RingInfoPanel'
 import {
   ringEnergy,
   groundStateN,
+  isDegenerateGS,
+  degenerateGSPair,
   persistentCurrent,
   ringWavefunctionRe,
   ringPacket,
@@ -47,12 +49,16 @@ function EnergyDiagram({
   const phiArr = Array.from({ length: PHI_POINTS + 1 }, (_, i) => -1 + (4 / PHI_POINTS) * i)
   const crossings = crossingPhis(-4, 4)
   const gsN = groundStateN(phi)
+  const degenerate = isDegenerateGS(phi)
+  const [degN1, degN2] = degenerate ? degenerateGSPair(phi) : [gsN, gsN]
+
+  const isGS = (n: number) => degenerate ? (n === degN1 || n === degN2) : n === gsN
 
   const traces: Plotly.Data[] = N_BANDS.map(n => ({
     x: phiArr,
     y: phiArr.map(p => ringEnergy(n, p, R)),
     mode: 'lines',
-    line: { color: bandColor(n), width: n === gsN ? 3 : 1.5 },
+    line: { color: bandColor(n), width: isGS(n) ? 3 : 1.5 },
     name: `n=${n}`,
     hovertemplate: `n=${n}, φ=%{x:.2f}, E=%{y:.4f}<extra></extra>`,
   }))
@@ -73,7 +79,7 @@ function EnergyDiagram({
       x: [phi],
       y: [ringEnergy(n, phi, R)],
       mode: 'markers',
-      marker: { color: bandColor(n), size: n === gsN ? 10 : 6, symbol: 'circle' },
+      marker: { color: bandColor(n), size: isGS(n) ? 10 : 6, symbol: isGS(n) ? 'star' : 'circle' },
       showlegend: false,
       hovertemplate: `n=${n}, E=%{y:.4f}<extra></extra>`,
     } as Plotly.Data)
@@ -88,6 +94,18 @@ function EnergyDiagram({
     showlegend: false,
     hoverinfo: 'skip',
   } as Plotly.Data)
+
+  const annotations: Partial<Plotly.Annotations>[] = degenerate ? [{
+    x: phi,
+    y: ringEnergy(degN2, phi, R),
+    xref: 'x', yref: 'y',
+    text: `degenerate<br>n=${degN1}, ${degN2}`,
+    showarrow: true, arrowhead: 2, arrowcolor: '#fff',
+    ax: 30, ay: -30,
+    font: { color: '#fff', size: 10 },
+    bgcolor: 'rgba(40,40,60,0.85)',
+    bordercolor: '#fff', borderwidth: 1,
+  }] : []
 
   return (
     <div style={{ position: 'relative' }}>
@@ -106,6 +124,7 @@ function EnergyDiagram({
           legend: { x: 1.01, y: 1, font: { color: TEXT, size: 10 }, bgcolor: 'transparent' },
           font: { color: TEXT },
           height: 340,
+          annotations,
         }}
         config={{ displayModeBar: false, responsive: true }}
         style={{ width: '100%' }}
@@ -394,25 +413,31 @@ function WavepacketAnimation({ phi, R }: { phi: number; R: number }) {
 
 function Readout({ phi, R, n }: { phi: number; R: number; n: number }) {
   const ngs = groundStateN(phi)
+  const degenerate = isDegenerateGS(phi)
+  const [degN1, degN2] = degenerate ? degenerateGSPair(phi) : [ngs, ngs]
   const E = ringEnergy(n, phi, R)
   const Egs = ringEnergy(ngs, phi, R)
   const I = persistentCurrent(n, phi, R)
   const Igs = persistentCurrent(ngs, phi, R)
   const abPhase = 2 * Math.PI * phi
 
-  const row = (label: string, val: string) => (
-    <tr key={label}>
+  const row = (label: string, val: string | React.ReactNode) => (
+    <tr key={label as string}>
       <td style={{ color: '#aaa', paddingRight: '1rem' }}>{label}</td>
       <td style={{ color: TEXT, fontFamily: 'monospace' }}>{val}</td>
     </tr>
   )
+
+  const nStarDisplay = degenerate
+    ? <span style={{ color: '#ffd166' }}>{degN1}, {degN2} <span style={{ fontSize: '0.75rem', color: '#f4a261' }}>(degenerate)</span></span>
+    : String(ngs)
 
   return (
     <table style={{ borderCollapse: 'collapse', fontSize: '0.82rem', width: '100%' }}>
       <tbody>
         {row(`E_${n}(φ)`, E.toFixed(6) + ' Eh')}
         {row(`I_${n}(φ)`, I.toFixed(6) + ' a.u.')}
-        {row('n*(φ)', String(ngs))}
+        {row('n*(φ)', nStarDisplay)}
         {row('E_gs(φ)', Egs.toFixed(6) + ' Eh')}
         {row('I_gs(φ)', Igs.toFixed(6) + ' a.u.')}
         {row('AB phase 2πφ', abPhase.toFixed(4) + ' rad')}

@@ -10,9 +10,26 @@ export function ringEnergy(n: number, phi: number, R: number): number {
 /**
  * Ground-state quantum number: n*(φ) = round(φ).
  * Changes by ±1 at half-integer φ (level crossings).
+ * At exact crossings both round(φ)−1 and round(φ) are degenerate;
+ * use isDegenerateGS / degenerateGSPair to detect and display this.
  */
 export function groundStateN(phi: number): number {
   return Math.round(phi) || 0
+}
+
+/** True when φ is within eps of a half-integer (level crossing / degeneracy). */
+export function isDegenerateGS(phi: number, eps = 0.005): boolean {
+  const frac = ((phi % 1) + 1) % 1   // fractional part in [0, 1)
+  return Math.abs(frac - 0.5) < eps
+}
+
+/**
+ * At a level crossing the two degenerate ground-state quantum numbers are
+ * [round(φ)−1, round(φ)].  Only meaningful when isDegenerateGS returns true.
+ */
+export function degenerateGSPair(phi: number): [number, number] {
+  const upper = Math.round(phi) || 0  // || 0 converts −0 to +0
+  return [upper - 1, upper]
 }
 
 /**
