@@ -93,9 +93,12 @@ export function iswMomentumAmplitude(n: number, L: number, k: number): { re: num
   const scale = 1 / Math.sqrt(Math.PI * L)
 
   if (Math.abs(denom) < 1e-9 * kn * kn) {
-    // Resolved limit at k = ±kₙ: lim_{k→kₙ} φₙ(k) = −i · √(L/(4π)) for all n
-    // (verified by L'Hôpital; sign is −√(L/4π) in Im part, independent of n)
-    return { re: 0, im: -Math.sqrt(L / (4 * Math.PI)) }
+    // Resolved limits via L'Hôpital (the 0/0 cancellation is the same for both poles):
+    //   k → +kₙ: φₙ(+kₙ) = −i · √(L/(4π))
+    //   k → −kₙ: φₙ(−kₙ) = +i · √(L/(4π))
+    // The sign flip at the negative-k pole matters for time-evolved interference sums.
+    const im = k >= 0 ? -Math.sqrt(L / (4 * Math.PI)) : Math.sqrt(L / (4 * Math.PI))
+    return { re: 0, im }
   }
 
   // numerator: (1 − (−1)ⁿ e^{−ikL}) = (1 − (−1)ⁿ cos(kL)) + i·(−1)ⁿ sin(kL)

@@ -33,9 +33,13 @@ export function reflectionR(E: number, V0: number, L: number): number {
   return 1 - transmissionT(E, V0, L)
 }
 
-/** WKB tunnelling approximation exp(−2κ̃L), defined only for E < V0 */
+/**
+ * WKB tunnelling approximation exp(−2κ̃L), defined only for E < V0.
+ * Returns NaN for E ≥ V0: WKB has no evanescent region to tunnel through
+ * above the barrier and must not be evaluated there.
+ */
 export function wkbT(E: number, V0: number, L: number): number {
-  if (E >= V0) return 1
+  if (E >= V0) return NaN
   const kappaTilde = Math.sqrt(2 * (V0 - E))
   return Math.exp(-2 * kappaTilde * L)
 }
@@ -89,8 +93,20 @@ export function scatteringPsiSq(x: number, E: number, V0: number, L: number): nu
   const kappaSq = 2 * (E - V0)
 
   if (Math.abs(kappaSq) < 1e-12) {
-    // E ≈ V0: linear solutions — approximate with evanescent
-    return transmissionT(E, V0, L)
+    // E ≈ V0: inside solution is linear ψ_B = A + Bx (not evanescent).
+    // Match at x = +L/2 (h = L/2): ψ_B(h) = t·e^{ikh}, ψ_B'(h) = ik·t·e^{ikh}
+    //   → B = ik·t·e^{ikh},  A = t·e^{ikh} − B·h
+    const eikh_Re = Math.cos(k * half)
+    const eikh_Im = Math.sin(k * half)
+    const teRe = tRe * eikh_Re - tIm * eikh_Im
+    const teIm = tRe * eikh_Im + tIm * eikh_Re
+    const BRe = -k * teIm
+    const BIm =  k * teRe
+    const ARe = teRe - BRe * half
+    const AIm = teIm - BIm * half
+    const re = ARe + BRe * x
+    const im = AIm + BIm * x
+    return re * re + im * im
   }
 
   if (kappaSq > 0) {
@@ -134,9 +150,17 @@ function scatteringAmplitudes(E: number, V0: number, L: number): Amplitudes {
   const kappaSq = 2 * (E - V0)
 
   if (Math.abs(kappaSq) < 1e-12) {
-    const T = transmissionT(E, V0, L)
-    const sqrtT = Math.sqrt(T)
-    return { rRe: -Math.sqrt(1 - T), rIm: 0, tRe: sqrtT, tIm: 0 }
+    // E = V0: inside solution is linear ψ=A+Bx. Exact transfer matrix gives:
+    //   t = 2e^{-ikL} / (2 − ikL),   r = −ikL·e^{-ikL} / (2 − ikL)
+    const kL = k * L
+    const dSq = 4 + kL * kL
+    const cosKL = Math.cos(kL)
+    const sinKL = Math.sin(kL)
+    const tRe = (4 * cosKL + 2 * kL * sinKL) / dSq
+    const tIm = (2 * kL * cosKL - 4 * sinKL) / dSq
+    const rRe = (kL * kL * cosKL - 2 * kL * sinKL) / dSq
+    const rIm = -(kL * kL * sinKL + 2 * kL * cosKL) / dSq
+    return { rRe, rIm, tRe, tIm }
   }
 
   if (kappaSq > 0) {

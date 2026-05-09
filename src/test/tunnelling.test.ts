@@ -94,21 +94,26 @@ describe('reflectionR', () => {
 })
 
 describe('wkbT', () => {
-  it('equals exp(−2κ̃L) exactly', () => {
+  it('equals exp(−2κ̃L) exactly for E < V0', () => {
     const E = 1, V0 = 5, L = 2
     const kappa = Math.sqrt(2 * (V0 - E))
     expect(wkbT(E, V0, L)).toBeCloseTo(Math.exp(-2 * kappa * L), 10)
   })
 
+  it('returns NaN for E = V0 (formula undefined above barrier)', () => {
+    expect(wkbT(5, 5, 2)).toBeNaN()
+  })
+
+  it('returns NaN for E > V0', () => {
+    expect(wkbT(8, 5, 2)).toBeNaN()
+  })
+
   it('WKB approximates exact T, is less than exact T for finite barrier', () => {
-    // For moderate κ̃L, WKB underestimates T (ignores pre-factor)
     const E = 1, V0 = 5, L = 2
     const Texact = transmissionT(E, V0, L)
     const Twkb  = wkbT(E, V0, L)
-    // Both should be between 0 and 1
     expect(Twkb).toBeGreaterThan(0)
     expect(Twkb).toBeLessThanOrEqual(1)
-    // For this case exact T > WKB (prefactor > 1)
     expect(Texact).toBeGreaterThanOrEqual(Twkb - 1e-9)
   })
 
@@ -196,6 +201,25 @@ describe('scatteringPsiSq', () => {
     const eps = 1e-6
     const psiInsideRight = scatteringPsiSq(L / 2 - eps, E, V0, L)
     expect(psiInsideRight).toBeCloseTo(T, 4)
+  })
+
+  it('E = V0: |ψ|² is continuous at both barrier boundaries (linear inside solution)', () => {
+    const V0 = 4, L = 2, E = V0
+    const eps = 1e-5
+    const psiLeftOut  = scatteringPsiSq(-L / 2 - eps, E, V0, L)
+    const psiLeftIn   = scatteringPsiSq(-L / 2 + eps, E, V0, L)
+    const psiRightIn  = scatteringPsiSq( L / 2 - eps, E, V0, L)
+    const psiRightOut = scatteringPsiSq( L / 2 + eps, E, V0, L)
+    expect(psiLeftIn).toBeCloseTo(psiLeftOut, 3)
+    expect(psiRightIn).toBeCloseTo(psiRightOut, 3)
+  })
+
+  it('E = V0: inside |ψ|² varies with x (not constant)', () => {
+    const V0 = 4, L = 2, E = V0
+    const psiCenter = scatteringPsiSq(0, E, V0, L)
+    const psiEdge   = scatteringPsiSq(L / 2 - 1e-4, E, V0, L)
+    // Linear solution — centre and edge differ
+    expect(Math.abs(psiCenter - psiEdge)).toBeGreaterThan(1e-6)
   })
 })
 

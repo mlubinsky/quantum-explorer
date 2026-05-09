@@ -16,12 +16,12 @@ export function groundStateN(phi: number): number {
 }
 
 /**
- * Persistent current in state n:
- *   I_n(φ) = −∂E_n/∂φ = (n − φ) / R²
- * where φ = Φ/Φ₀ is the dimensionless flux.
+ * Persistent current in state n — physical current in atomic units:
+ *   I_n(φ) = −∂E_n/∂Φ = (n − φ) / (2πR²)
+ * where Φ = φ·Φ₀ = 2πφ is the flux in a.u. (Φ₀ = 2π in atomic units).
  */
 export function persistentCurrent(n: number, phi: number, R: number): number {
-  return (n - phi) / (R * R)
+  return (n - phi) / (2 * Math.PI * R * R)
 }
 
 /** Re(ψ_n(θ)) = cos(nθ) / √(2π) */

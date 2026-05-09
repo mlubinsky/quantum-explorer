@@ -83,28 +83,23 @@ describe('persistentCurrent', () => {
   it('I_0(φ=0, R=1) = 0', () => {
     expect(persistentCurrent(0, 0, 1)).toBeCloseTo(0, 12)
   })
-  it('I_1(φ=0, R=1) = 1', () => {
-    // I = (n - φ)/R² = (1-0)/1 = 1
-    expect(persistentCurrent(1, 0, 1)).toBeCloseTo(1, 12)
+  it('I_1(φ=0, R=1) = 1/(2π)', () => {
+    // I = (n − φ)/(2πR²) = 1/(2π) ≈ 0.15915
+    expect(persistentCurrent(1, 0, 1)).toBeCloseTo(1 / (2 * Math.PI), 10)
   })
-  it('I_0(φ=0.5) = I_1(φ=0.5) = -0.5  (both −(n−φ)/R², n=0: -0.5, n=1: +0.5)', () => {
-    // Wait: I_n = (n - phi)/R^2
-    // I_0(0.5) = (0 - 0.5)/1 = -0.5
-    // I_1(0.5) = (1 - 0.5)/1 = +0.5
-    // They are NOT equal; the comment in spec was wrong. Let me correct:
-    expect(persistentCurrent(0, 0.5, 1)).toBeCloseTo(-0.5, 12)
-    expect(persistentCurrent(1, 0.5, 1)).toBeCloseTo(0.5, 12)
+  it('I_0(φ=0.5) = −1/(4π),  I_1(φ=0.5) = +1/(4π)', () => {
+    expect(persistentCurrent(0, 0.5, 1)).toBeCloseTo(-0.5 / (2 * Math.PI), 10)
+    expect(persistentCurrent(1, 0.5, 1)).toBeCloseTo( 0.5 / (2 * Math.PI), 10)
   })
-  it('Scales as 1/R²: I_1(φ=0, R=2) = 0.25', () => {
-    expect(persistentCurrent(1, 0, 2)).toBeCloseTo(0.25, 12)
+  it('Scales as 1/R²: I_1(φ=0, R=2) = 1/(8π)', () => {
+    expect(persistentCurrent(1, 0, 2)).toBeCloseTo(1 / (8 * Math.PI), 10)
   })
-  it('I_n = -dE_n/dφ × Φ₀ (φ-derivative)', () => {
+  it('I_n = −(1/Φ₀)·dE_n/dφ — physical current via Φ-derivative', () => {
     const dPhi = 1e-6
+    const Phi0 = 2 * Math.PI
     for (const [n, phi] of [[2, 0.3], [0, 0.8], [-1, 1.2]]) {
       const dEdPhi = (ringEnergy(n, phi + dPhi, 1) - ringEnergy(n, phi - dPhi, 1)) / (2 * dPhi)
-      // I = -dE/dΦ; in our units Φ₀ = 2π, Φ = φ·Φ₀, so I = -dE/d(φ·Φ₀) = -(1/Φ₀) dE/dφ
-      // Our persistentCurrent returns (n-phi)/R² = (n-phi) which is dE/dφ with opposite sign
-      expect(persistentCurrent(n as number, phi as number, 1)).toBeCloseTo(-dEdPhi, 6)
+      expect(persistentCurrent(n as number, phi as number, 1)).toBeCloseTo(-dEdPhi / Phi0, 6)
     }
   })
 })

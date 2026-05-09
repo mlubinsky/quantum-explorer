@@ -129,6 +129,25 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] **Live readout**: E_n, I_n, n*(φ), E_gs, I_gs, AB phase 2πφ, T_rev
 - [x] **32 unit tests** — ringEnergy, groundStateN, persistentCurrent, wavefunction, wavepacket
 
+## Known physics issues (from physicist review — to fix)
+
+- [ ] **`iswExpectX2` is numerical** — uses a 400-point trapezoid grid; exact off-diagonal
+      `⟨ψₘ|x²|ψₙ⟩` elements are computable analytically via the same Fourier integrals as
+      `⟨x⟩`. Impacts Δx accuracy in the Heisenberg uncertainty indicator.
+- [ ] **HO Re(ψ)/Im(ψ) not implemented** — `hoCoherentProb` and `hoSqueezedProb` return `|ψ|²`
+      only; the Re/Im toggle in the UI has nothing to display. Add exact complex ψ for the
+      coherent state: `ψ_α(x,t) = (ω/π)^{1/4} exp(−ω(x−⟨x⟩)²/2 + i⟨p⟩x − i·phase)`.
+- [ ] **Squeezed-state Fock decomposition shows wrong distribution** — the UI renders a Poisson
+      distribution based only on `|α|`, ignoring the squeeze parameter `r`. Replace with
+      `squeezedFockDist` (already implemented and correct) or derive the exact formula.
+- [ ] **`groundStateN` silent branch at half-integer φ** — `Math.round` picks one degenerate
+      state at crossing points `φ = k + 0.5`. Consider showing a "degenerate" label or
+      highlighting both bands instead of silently selecting one.
+- [ ] **`angularShape` shows φ-integrated density, not xz-section** — for `m < 0` real
+      orbitals the xz-plane density is identically zero (lobes live in yz-plane), but the
+      plot looks the same as `m > 0`. Label the plot explicitly as "|Y_lm(θ)|² integrated
+      over φ" and note that m < 0 orbitals are not visible in this cross-section.
+
 ## Phase 2 — 1D potentials (remaining)
 - [ ] **Delta function potential** — one bound state, exact scattering amplitudes
 - [ ] **Kronig-Penney model** — exact band structure and band gaps

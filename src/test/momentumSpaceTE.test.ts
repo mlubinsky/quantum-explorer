@@ -40,6 +40,35 @@ describe('iswMomentumAmplitude', () => {
       expect(im).toBeCloseTo(0, 10)
     }
   })
+
+  it('pole at k = +kₙ: resolved limit is −i·√(L/4π)', () => {
+    for (const n of [1, 2, 3]) {
+      const kn = n * Math.PI / L
+      const { re, im } = iswMomentumAmplitude(n, L, kn)
+      expect(re).toBeCloseTo(0, 8)
+      expect(im).toBeCloseTo(-Math.sqrt(L / (4 * Math.PI)), 8)
+    }
+  })
+
+  it('pole at k = −kₙ: resolved limit is +i·√(L/4π) — opposite sign to +kₙ', () => {
+    for (const n of [1, 2, 3]) {
+      const kn = n * Math.PI / L
+      const { re, im } = iswMomentumAmplitude(n, L, -kn)
+      expect(re).toBeCloseTo(0, 8)
+      expect(im).toBeCloseTo(+Math.sqrt(L / (4 * Math.PI)), 8)
+    }
+  })
+
+  it('|amplitude|² = L/4π at both poles (magnitude unaffected by phase)', () => {
+    for (const n of [1, 2, 3]) {
+      const kn = n * Math.PI / L
+      const pos = iswMomentumAmplitude(n, L,  kn)
+      const neg = iswMomentumAmplitude(n, L, -kn)
+      const expected = L / (4 * Math.PI)
+      expect(pos.re ** 2 + pos.im ** 2).toBeCloseTo(expected, 8)
+      expect(neg.re ** 2 + neg.im ** 2).toBeCloseTo(expected, 8)
+    }
+  })
 })
 
 // ── iswMomentumProbTE ────────────────────────────────────────────────────────

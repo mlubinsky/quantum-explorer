@@ -5,6 +5,36 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509a] — 2026-05-09
+
+### Fixed
+- **ISW momentum amplitude: wrong phase at k = −kₙ pole (bug)** — `iswMomentumAmplitude`
+  resolved both poles to `−i·√(L/4π)`, but the L'Hôpital limit at `k = −kₙ` is
+  `+i·√(L/4π)`. The incorrect sign had no effect on the static `|φₙ(k)|²` plot (the
+  magnitude is the same) but caused wrong interference in `iswMomentumProbTE` at the
+  negative-momentum peaks. Fixed by branching on `k ≥ 0`. Added 3 new tests for
+  pole phases and magnitudes.
+
+- **`wkbT` returned 1 for E ≥ V₀ (wrong physics)** — WKB tunnelling is undefined
+  above the barrier (no evanescent region). The function now returns `NaN` for
+  `E ≥ V₀`; the UI readout was already guarded by `{E < V₀ && ...}` so no UI
+  change. Added 2 tests confirming NaN for `E = V₀` and `E > V₀`.
+
+- **`scatteringPsiSq` at E = V₀ returned a constant (wrong physics)** — the `E ≈ V₀`
+  branch returned `transmissionT(...)` (a single number) as the inside density, but
+  the true TISE solution at `E = V₀` is linear: `ψ_B = A + Bx`. The branch now
+  derives `A` and `B` by matching the exact boundary conditions at `x = +L/2` and
+  evaluates `|A + Bx|²`. `scatteringAmplitudes` was also updated for `E = V₀`: it
+  now uses the exact linear transfer-matrix result `t = 2e^{−ikL}/(2−ikL)` and
+  `r = −ikL·e^{−ikL}/(2−ikL)` instead of the incorrect zero-imaginary-part
+  approximation. Added 2 continuity tests for the `E = V₀` wavefunction.
+
+- **`persistentCurrent` was off by 2π (unit error)** — the function returned
+  `−∂E/∂φ = (n−φ)/R²`, which is the φ-derivative, not the physical persistent
+  current `I = −∂E/∂Φ = (n−φ)/(2πR²)` (where `Φ₀ = 2π` in atomic units). Divided
+  by `2π` to match the textbook definition. Updated 4 ring unit tests to the
+  corrected values; the derivative identity test now verifies against `−dE/dΦ`.
+
 ## [0.2026.0508h] — 2026-05-08
 
 ### Added
