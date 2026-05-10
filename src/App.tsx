@@ -7,10 +7,11 @@ import { FreeParticleExplorer } from './components/FreeParticleExplorer'
 import { ScatteringExplorer } from './components/ScatteringExplorer'
 import { HydrogenExplorer } from './components/HydrogenExplorer'
 import { RingExplorer } from './components/RingExplorer'
+import { WignerExplorer } from './components/WignerExplorer'
 import { InlineMath } from './components/KatexMath'
 import './App.css'
 
-type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring'
+type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner'
 
 const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }[] = [
   {
@@ -20,6 +21,7 @@ const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }
       { id: 'time-evolution', label: 'Time Evolution' },
       { id: 'free-particle',  label: 'Free Particle' },
       { id: 'tunnelling',     label: 'Scattering' },
+      { id: 'wigner',         label: 'Wigner Function' },
     ],
   },
   {
@@ -66,6 +68,10 @@ const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
     eq: String.raw`\hat{H}=\tfrac{1}{2}\!\left(-i\tfrac{d}{d\phi}-\tfrac{\Phi}{\Phi_0}\right)^{\!2},\quad\Phi_0=2\pi\ \text{(a.u.)}`,
     bc: String.raw`\psi(\phi+2\pi)=e^{\,i2\pi\Phi/\Phi_0}\,\psi(\phi)`,
   },
+  'wigner': {
+    eq: String.raw`W(x,p)=\tfrac{1}{\pi}\!\int_{-\infty}^{\infty}\!\psi^*(x+y)\,\psi(x-y)\,e^{2ipy}\,dy`,
+    bc: String.raw`\textstyle\int W\,dp=|\psi(x)|^2,\quad\int W\,dx=|\tilde\psi(p)|^2,\quad\iint W\,dx\,dp=1`,
+  },
 }
 
 export default function App() {
@@ -105,6 +111,7 @@ export default function App() {
         {active === 'spin'           && <SpinExplorer />}
         {active === 'hydrogen'       && <HydrogenExplorer />}
         {active === 'ring'           && <RingExplorer />}
+        {active === 'wigner'         && <WignerExplorer />}
       </main>
 
       <footer className="app-footer">

@@ -5,6 +5,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+- **Wigner Function module** — new tab in Single Particle — 1D group
+  - Closed-form W(x,p) for: Fock |n⟩ (n=0..6), coherent |α⟩, displaced squeezed D(α)S(r)|0⟩,
+    even/odd cat states (|α⟩±|−α⟩)/N, and Fock superpositions (|n⟩+|m⟩)/√2
+  - 70×70 phase-space heatmap with diverging blue–white–red colorscale; negative regions
+    (non-classical) highlighted in red with a warning banner
+  - Marginal plots ∫W dp = |ψ(x)|² and ∫W dx = |φ̃(p)|² with exact |ψ|² overlay for
+    Fock states and superpositions
+  - Negativity readout 𝒩 = ∫|W<0||W| dx dp
+  - 24 new unit tests: Laguerre recurrence, all Wigner types integrate to 1, marginals match
+    |ψ|², negativity zero for classical states and positive for Fock n≥1 and cat states
+
 ## [0.2026.0509m] — 2026-05-09
 
 ### Fixed

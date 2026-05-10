@@ -117,6 +117,22 @@ Exact hydrogenic solutions for n = 1–5, l = 0–4, m = −l…l, Z = 1–10.
 - **3D isosurface** — lazy-rendered Plotly isosurface at 10% of peak density; drag to rotate
 - **Grotrian diagram** — n=1..5, Δl=±1 arrows coloured by series (Lyman/Balmer/Paschen/Brackett); clickable levels; series filter buttons; wavelength-accurate arrow colours; λ labels toggle; forbidden transitions toggle; metastable 2s marker; hover tooltips
 
+### Wigner Function
+Phase-space quasi-probability distribution W(x,p) — the closest quantum analogue of a classical phase-space density.
+
+| State | Formula |
+|---|---|
+| Fock \|n⟩ | W_n = (−1)^n/π · e^{−s} · L_n(2s),  s = p²/ω + ωx² |
+| Coherent \|α⟩ | Gaussian, always non-negative |
+| Squeezed D(α)S(r)\|0⟩ | Tilted Gaussian ellipse, still non-negative |
+| Even/odd cat (\|α⟩±\|−α⟩)/N | Two blobs + cos-modulated interference fringe |
+| Fock super (\|n⟩+\|m⟩)/√2 | Cross-term computed by 1D quadrature |
+
+- 70×70 phase-space heatmap with diverging blue–white–red colorscale; negative regions flagged
+- Marginal plots: ∫W dp = \|ψ(x)\|², ∫W dx = \|φ̃(p)\|², with exact \|ψ\|² overlay for Fock states
+- Negativity readout 𝒩 = ∫\|W<0\|\|W\| dx dp (zero for classical states)
+- Sliders for ω, Fock n, displacement \|α\|, squeeze r
+
 ### Ring & Aharonov-Bohm Effect
 Exact solutions for a spinless particle on a 1D ring threaded by magnetic flux Φ.
 
@@ -155,7 +171,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (250 passing) |
+| Vitest | Unit tests (334 passing) |
 
 No Python, no server, no dependencies beyond npm.
 
