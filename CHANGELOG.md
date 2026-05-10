@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509h] — 2026-05-09
+
+### Fixed
+- **GitHub Actions deploy blocked by 10 TypeScript errors** — all resolved:
+  - Removed unused imports: `hoSqueezedSigmaX` (TimeEvolutionExplorer),
+    `hoEigenstate` (StationaryExplorer), `iswEigenstate` (EnergyLevelsDiagram),
+    `InlineMath` (HydrogenExplorer), `fpExpectX` (FreeParticleExplorer)
+  - `FreeParticleExplorer`: `useRef<number>()` → `useRef<number|undefined>(undefined)`;
+    React 19 requires an explicit initial value to return a `MutableRefObject`
+    (the no-arg overload returns a read-only `RefObject`, causing assignment errors)
+  - `RingExplorer`: renamed unused `EnergyDiagram` prop `n: selectedN` → `n: _n`;
+    added explicit type `{ points?: Array<{ x?: unknown }> }` to Plotly `onClick`
+    parameter `e` to satisfy `noImplicitAny`
+
 ## [0.2026.0509g] — 2026-05-09
 
 ### Changed
