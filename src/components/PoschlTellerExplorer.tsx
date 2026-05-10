@@ -131,7 +131,7 @@ export function PoschlTellerExplorer() {
       line: { color: '#333', width: 1 },
     })
     return traces
-  }, [xPot, vVals, energies, alpha, V0, N])
+  }, [xPot, vVals, energies, alpha, V0])
 
   const potLayout = {
     ...darkLayout({ height: 280 }),
