@@ -8,6 +8,7 @@ export type HydrogenInfoTopic =
   | 'isosurface'
   | 'grotrian'
   | 'zeeman'
+  | 'anomalousZeeman'
 
 export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'radialDensity')     return <RadialDensitySection />
@@ -16,6 +17,7 @@ export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'angularShape')      return <AngularShapeSection />
   if (topic === 'isosurface')        return <IsosurfaceSection />
   if (topic === 'zeeman')            return <ZeemanSection />
+  if (topic === 'anomalousZeeman')   return <AnomalousZeemanSection />
   return <GrotrianSection />
 }
 
@@ -115,6 +117,24 @@ function ZeemanSection() {
         <em>Simplified nonrelativistic model — orbital angular momentum only, spin ignored.
         The anomalous Zeeman effect (which requires spin and the Landé g-factor) is not shown here.</em>
       </p>
+    </div>
+  )
+}
+
+function AnomalousZeemanSection() {
+  return (
+    <div>
+      <p>When electron spin S=½ is included, the total angular momentum is <strong>J = L + S</strong>, giving two J-multiplets per orbital state (for L &gt; 0):</p>
+      <BlockMath math="J = L \pm \tfrac{1}{2},\quad m_J = -J,\,-J{+}1,\ldots,+J" />
+      <p><strong>Landé g-factor</strong> (exact, first-principles):</p>
+      <BlockMath math="g_J = 1 + \frac{J(J+1)+S(S+1)-L(L+1)}{2J(J+1)}" />
+      <p>Special cases: S=0 → g<sub>J</sub>=1 (normal Zeeman); L=0 → g<sub>J</sub>=2 (pure spin).</p>
+      <p><strong>Zeeman energy</strong> of sublevel |J, m<sub>J</sub>⟩:</p>
+      <BlockMath math="\Delta E = g_J\,\mu_B\,B\,m_J,\quad \mu_B = \tfrac{1}{2}\text{ a.u.}" />
+      <p><strong>Why more than 3 lines?</strong> Each J term has a different g<sub>J</sub>, so m<sub>J</sub> sublevels of J=L+½ and J=L−½ split at different rates. The E1 selection rules allow ΔJ=0,±1 and |Δm<sub>J</sub>|≤1, producing up to 10 lines for a 2p→1s transition (vs 3 for normal Zeeman).</p>
+      <p><strong>Selection rules:</strong></p>
+      <BlockMath math="\Delta L = \pm 1,\quad \Delta J = 0,\pm 1\;(J{=}0\not\to J{=}0),\quad |\Delta m_J|\le 1" />
+      <p>Fine-structure splitting (spin-orbit) is much smaller than the displayed B range and is omitted — all J terms are degenerate at B=0 in this view.</p>
     </div>
   )
 }

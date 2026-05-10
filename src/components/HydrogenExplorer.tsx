@@ -9,6 +9,7 @@ import {
   radialWavefunction, radialDensity, orbitalDensity2D,
   angularShape, orbitalDensity3D, rMax as calcRMax,
   MU_B, zeemanSublevels, zeemanTriplet,
+  landeG, jTerms, anomalousSublevels, anomalousZeemanLines,
 } from '../physics/hydrogen'
 import { HydrogenInfoPanel } from './HydrogenInfoPanel'
 import type { HydrogenInfoTopic } from './HydrogenInfoPanel'
@@ -508,7 +509,8 @@ export function HydrogenExplorer() {
   const [showOrbital,  setShowOrbital]  = useState(true)
   const [showIso,      setShowIso]      = useState(false)
   const [showGrotrian, setShowGrotrian] = useState(true)
-  const [showZeeman,   setShowZeeman]   = useState(true)
+  const [showZeeman,          setShowZeeman]          = useState(true)
+  const [showAnomalousZeeman, setShowAnomalousZeeman] = useState(true)
 
   const [B, setB] = useState(0)
   const [zeemanLoN, setZeemanLoN] = useState(1)
@@ -780,13 +782,21 @@ export function HydrogenExplorer() {
           )}
         </div>
 
-        {/* Zeeman effect (collapsible) */}
+        {/* Normal Zeeman effect (collapsible) */}
         <ZeemanSection
           n={n} l={l} Z={Z} B={B} onBChange={setB}
           loN={zeemanLoN} loL={zeemanLoL}
           onLoChange={(nn, ll) => { setZeemanLoN(nn); setZeemanLoL(ll) }}
           show={showZeeman} onToggle={() => setShowZeeman(s => !s)}
           onHelpClick={() => setHelpTopic('zeeman')}
+        />
+
+        {/* Anomalous Zeeman effect (collapsible) */}
+        <AnomalousZeemanSection
+          n={n} l={l} Z={Z} B={B}
+          loN={zeemanLoN} loL={zeemanLoL}
+          show={showAnomalousZeeman} onToggle={() => setShowAnomalousZeeman(s => !s)}
+          onHelpClick={() => setHelpTopic('anomalousZeeman')}
         />
       </div>
     </>
@@ -1021,6 +1031,216 @@ function ZeemanSection({
   )
 }
 
+// ─── Anomalous Zeeman section component ──────────────────────────────────────
+
+const HC_NM_AZ = 45.5640  // hc in nm·Hartree
+
+function AnomalousZeemanSection({
+  n, l, Z, B,
+  loN, loL,
+  show, onToggle, onHelpClick,
+}: {
+  n: number; l: number; Z: number; B: number
+  loN: number; loL: number
+  show: boolean; onToggle: () => void; onHelpClick: () => void
+}) {
+  const B_MAX = 0.3
+  const N_B   = 120
+
+  const terms = jTerms(l)
+  const upperJ = Math.max(...terms)
+  const lowerJ = terms.length > 1 ? Math.min(...terms) : null
+
+  // Valid lower levels (same ΔL = ±1 as normal Zeeman)
+  const validLower = useMemo(() => {
+    const pairs: { nLo: number; lLo: number; label: string }[] = []
+    for (let nLo = 1; nLo < n; nLo++) {
+      for (const lLo of [l - 1, l + 1]) {
+        if (lLo >= 0 && lLo < nLo) {
+          pairs.push({ nLo, lLo, label: `${nLo}${L_LABELS[lLo]} (n=${nLo}, ℓ=${lLo})` })
+        }
+      }
+    }
+    return pairs.sort((a, b) => a.nLo - b.nLo || a.lLo - b.lLo)
+  }, [n, l])
+
+  // Fan traces: E(J, m_J, B) vs B for selected (n, l)
+  const fanTraces = useMemo(() => {
+    const bVals = Array.from({ length: N_B + 1 }, (_, i) => i * B_MAX / N_B)
+    const subs = anomalousSublevels(n, l, Z, 0)  // get (J, mJ, g) at B=0
+    return subs.map(({ J, mJ, g }) => {
+      const isUpper = Math.abs(J - upperJ) < 0.01
+      // Warm reds for upper J, cool blues for lower J; intensity by |mJ|
+      const hue = isUpper
+        ? (mJ > 0 ? 5  + Math.round(Math.abs(mJ) * 2) * 12 : 345 - Math.round(Math.abs(mJ) * 2) * 12)
+        : (mJ > 0 ? 195 - Math.round(Math.abs(mJ) * 2) * 12 : 215 + Math.round(Math.abs(mJ) * 2) * 12)
+      const color = `hsl(${(hue + 360) % 360}, 80%, 60%)`
+      const dash = isUpper ? 'solid' : 'dash'
+      const sign = mJ > 0 ? '+' : ''
+      return {
+        x: bVals,
+        y: bVals.map(b => hydrogenEnergy(n, Z) + g * MU_B * b * mJ),
+        type: 'scatter' as const,
+        mode: 'lines' as const,
+        name: `J=${J < 1 ? '½' : J === 1.5 ? '³⁄₂' : J === 2.5 ? '⁵⁄₂' : J}, m<sub>J</sub>=${sign}${mJ}`,
+        line: { color, width: isUpper ? 2 : 1.5, dash: dash as 'solid' | 'dash' },
+        hovertemplate: `J=${J}, m<sub>J</sub>=${sign}${mJ}<br>g<sub>J</sub>=${g.toFixed(4)}<br>B=%{x:.3f}, E=%{y:.5f} Eh<extra></extra>`,
+      }
+    })
+  }, [n, l, Z, upperJ])
+
+  const fanLayout = useMemo(() => {
+    const base = hydrogenEnergy(n, Z)
+    const maxG = landeG(upperJ, l, 0.5)
+    const spread = Math.max(maxG * MU_B * B_MAX * upperJ, 0.02)
+    return {
+      ...darkLayout({ height: 260, margin: { l: 72, r: 20, t: 28, b: 48 } }),
+      xaxis: axis('B (a.u.)'),
+      yaxis: axis('Energy (Eh)', { range: [base - spread * 1.25, base + spread * 1.25] }),
+      shapes: B > 0 ? [{ type: 'line', x0: B, x1: B, y0: 0, y1: 1, yref: 'paper',
+        line: { color: '#888', width: 1, dash: 'dot' } }] : [],
+      annotations: B > 0 ? [{ x: B, y: 1.04, yref: 'paper', text: 'B',
+        showarrow: false, font: { size: 10, color: '#888' }, xanchor: 'center' }] : [],
+      title: {
+        text: `${n}${L_LABELS[l]} sublevel fan — anomalous Zeeman (${2 * (2 * l + 1)} levels)`,
+        font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper',
+      },
+    }
+  }, [n, l, Z, B, upperJ])
+
+  // Spectral lines chart
+  const { lineTraces, lineLayout, lineCount } = useMemo(() => {
+    if (validLower.length === 0) return { lineTraces: [], lineLayout: {}, lineCount: 0 }
+    const lines = anomalousZeemanLines(n, l, loN, loL, Z, B)
+    const nm = lines.map(c => c.dE > 0 ? HC_NM_AZ / c.dE : null)
+
+    const dE0_val = hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z)
+    const λ0 = HC_NM_AZ / dE0_val
+    const validNm = nm.filter((v): v is number => v !== null)
+    const spread = validNm.length >= 2 ? Math.max(Math.abs(validNm[0] - validNm[validNm.length - 1]) * 1.6, 2) : 5
+    const rangeHalf = Math.max(spread, 2)
+
+    // Narrow bar width
+    const barW = Math.max(0.3, MU_B * B * HC_NM_AZ / (dE0_val ** 2) * 0.3)
+
+    const traces = ([1, 0, -1] as const).map(dMJ => {
+      const group = lines.map((l, i) => ({ ...l, nm: nm[i] })).filter(x => x.dMJ === dMJ && x.nm !== null)
+      return {
+        x: group.map(g => g.nm),
+        y: group.map(() => 1),
+        type: 'bar' as const,
+        name: dMJ ===  1 ? 'σ+ (Δm=+1)' : dMJ === 0 ? 'π  (Δm=0)' : 'σ− (Δm=−1)',
+        marker: { color: POL_COLOR[dMJ === 1 ? 'sigma+' : dMJ === 0 ? 'pi' : 'sigma-'],
+          line: { color: '#111', width: 0.5 } },
+        width: group.map(() => barW),
+        hovertemplate: `%{fullData.name}<br>λ=%{x:.2f} nm<extra></extra>`,
+      }
+    })
+
+    const layout = {
+      ...darkLayout({ height: 220, margin: { l: 50, r: 20, t: 38, b: 52 } }),
+      xaxis: axis('Wavelength (nm)', { range: [λ0 - rangeHalf, λ0 + rangeHalf] }),
+      yaxis: { ...axis('Intensity'), range: [0, 1.5], showticklabels: false },
+      barmode: 'overlay',
+      title: {
+        text: `${n}${L_LABELS[l]} → ${loN}${L_LABELS[loL]}  anomalous Zeeman pattern`,
+        font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper',
+      },
+    }
+
+    return { lineTraces: traces, lineLayout: layout, lineCount: lines.length }
+  }, [n, l, loN, loL, Z, B, validLower.length])
+
+  const hasLower = validLower.length > 0
+
+  return (
+    <div style={{ ...sectionStyle, borderBottom: 'none' }}>
+      <button onClick={onToggle} style={collapseStyle}>
+        <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
+        <span style={sectionTitleStyle}>
+          Anomalous Zeeman Effect
+          {B > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
+            B = {B.toFixed(3)} a.u.
+          </span>}
+        </span>
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={onHelpClick} />
+        </span>
+      </button>
+
+      {show && (
+        <div>
+          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+            Includes electron spin S=½. Uses Landé g-factor g<sub>J</sub> — slopes differ per J term.
+            Shares the B slider above. Fine-structure splitting ignored (all J terms degenerate at B=0).
+          </div>
+
+          {/* g_J readout */}
+          <div style={{ ...readoutStyle, marginBottom: 10, gap: 20 }}>
+            {terms.map(J => (
+              <span key={J}>
+                J={J}: g<sub>J</sub> = <strong style={{ color: Math.abs(J - upperJ) < 0.01 ? '#f77f00' : '#00b4d8' }}>
+                  {landeG(J, l, 0.5).toFixed(4)}
+                </strong>
+              </span>
+            ))}
+            <span style={{ color: '#555', fontSize: '0.75rem' }}>
+              (normal Zeeman: g<sub>l</sub> = 1 for all m<sub>l</sub>)
+            </span>
+          </div>
+
+          {/* Fan diagram */}
+          <Plot data={fanTraces as never} layout={fanLayout as never}
+            config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+
+          {l === 0 && (
+            <div style={{ fontSize: '0.78rem', color: '#4361ee', marginTop: 4, marginBottom: 8 }}>
+              s orbital (ℓ=0): <strong>no normal Zeeman splitting</strong> (m<sub>l</sub>=0 only),
+              but <strong>anomalous Zeeman gives a spin doublet</strong> (m<sub>J</sub>=±½, g=2).
+            </div>
+          )}
+
+          {/* Spectral lines */}
+          {!hasLower ? (
+            <div style={{ color: '#888', fontSize: '0.85rem', padding: '6px 0' }}>
+              No E1 transition from {n}{L_LABELS[l]} — select n≥2 with ℓ≥1 to see the spectral pattern.
+            </div>
+          ) : (
+            <div style={{ marginTop: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.82rem', color: '#aaa' }}>Transition to:</span>
+                <select value={`${loN},${loL}`} disabled
+                  style={{ ...selectStyle, opacity: 0.7, cursor: 'default' }}>
+                  {validLower.map(p => (
+                    <option key={`${p.nLo},${p.lLo}`} value={`${p.nLo},${p.lLo}`}>{p.label}</option>
+                  ))}
+                </select>
+                <span style={{ fontSize: '0.8rem', color: '#06d6a0', fontFamily: 'monospace' }}>
+                  {lineCount} lines
+                  {B > 0 ? ` (vs 3 for normal Zeeman)` : ` (merge to 1 at B=0)`}
+                </span>
+              </div>
+
+              <Plot data={lineTraces as never} layout={lineLayout as never}
+                config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+
+              {lowerJ !== null && B > 0 && (
+                <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4, fontFamily: 'monospace' }}>
+                  g<sub>J</sub> = {landeG(upperJ, l, 0.5).toFixed(4)} (J={upperJ})
+                  {' · '}
+                  g<sub>J</sub> = {landeG(lowerJ, l, 0.5).toFixed(4)} (J={lowerJ})
+                  {' · '}
+                  splitting: ±{(MU_B * B).toFixed(4)} Eh × g<sub>J</sub>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function helpTitle(t: HydrogenInfoTopic): string {
@@ -1030,6 +1250,7 @@ function helpTitle(t: HydrogenInfoTopic): string {
   if (t === 'angularShape')       return 'Angular Shape |Y_l^m(θ)|²'
   if (t === 'isosurface')         return '3D Orbital Isosurface |ψ|²'
   if (t === 'zeeman')             return 'Normal Zeeman Effect'
+  if (t === 'anomalousZeeman')    return 'Anomalous Zeeman Effect'
   return 'Energy Level Diagram (Grotrian)'
 }
 

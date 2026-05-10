@@ -198,6 +198,91 @@ export function zeemanTriplet(
   ]
 }
 
+// ─── Anomalous Zeeman Effect ─────────────────────────────────────────────────
+
+/** Landé g-factor: g_J = 1 + [J(J+1)+S(S+1)−L(L+1)] / (2J(J+1)). Returns 0 for J=0. */
+export function landeG(J: number, L: number, S: number): number {
+  if (J === 0) return 0
+  return 1 + (J * (J + 1) + S * (S + 1) - L * (L + 1)) / (2 * J * (J + 1))
+}
+
+/** J values for electron (S=½) in state L: |L−½| and L+½. */
+export function jTerms(L: number): number[] {
+  if (L === 0) return [0.5]
+  return [L - 0.5, L + 0.5]
+}
+
+/** m_J values for J: −J, −J+1, …, +J (2J+1 values). */
+export function mJValues(J: number): number[] {
+  const count = Math.round(2 * J) + 1
+  return Array.from({ length: count }, (_, i) => -J + i)
+}
+
+/**
+ * Anomalous Zeeman energy for |n, L, S=½, J, m_J⟩.
+ * Ignores fine-structure splitting (all J terms degenerate at B=0).
+ * E = E_n + g_J · μ_B · B · m_J
+ */
+export function anomalousZeemanEnergy(
+  n: number, Z: number, L: number, J: number, mJ: number, B: number,
+): number {
+  return hydrogenEnergy(n, Z) + landeG(J, L, 0.5) * MU_B * B * mJ
+}
+
+/**
+ * All (J, m_J) sublevels for level (n, L) with S=½ at field B.
+ * Total count = 2·(2L+1). Sorted by J then m_J.
+ */
+export function anomalousSublevels(
+  n: number, L: number, Z: number, B: number,
+): Array<{ J: number; mJ: number; g: number; energy: number }> {
+  const result: Array<{ J: number; mJ: number; g: number; energy: number }> = []
+  for (const J of jTerms(L)) {
+    const g = landeG(J, L, 0.5)
+    for (const mJ of mJValues(J)) {
+      result.push({ J, mJ, g, energy: hydrogenEnergy(n, Z) + g * MU_B * B * mJ })
+    }
+  }
+  return result.sort((a, b) => a.J - b.J || a.mJ - b.mJ)
+}
+
+/**
+ * E1 selection rules for anomalous Zeeman:
+ *   |ΔL|=1, |ΔJ|≤1 (J=0↔J=0 forbidden), |Δm_J|≤1
+ * dL = lHi − lLo, dMJ = m_Jhi − m_Jlo (emission convention).
+ */
+export function anomalousAllowed(
+  dL: number, Jhi: number, Jlo: number, dMJ: number,
+): boolean {
+  if (Math.abs(dL) !== 1) return false
+  if (Math.abs(Jhi - Jlo) > 1) return false
+  if (Jhi === 0 && Jlo === 0) return false
+  if (Math.abs(dMJ) > 1) return false
+  return true
+}
+
+/**
+ * All allowed E1 emission lines for (nHi, lHi) → (nLo, lLo) at field B.
+ * dMJ = m_Jhi − m_Jlo. Sorted by ascending photon energy dE.
+ */
+export function anomalousZeemanLines(
+  nHi: number, lHi: number, nLo: number, lLo: number, Z: number, B: number,
+): Array<{ Jhi: number; mJhi: number; Jlo: number; mJlo: number; dMJ: number; dE: number }> {
+  const subHi = anomalousSublevels(nHi, lHi, Z, B)
+  const subLo = anomalousSublevels(nLo, lLo, Z, B)
+  const dL = lHi - lLo
+  const lines: Array<{ Jhi: number; mJhi: number; Jlo: number; mJlo: number; dMJ: number; dE: number }> = []
+  for (const hi of subHi) {
+    for (const lo of subLo) {
+      const dMJ = hi.mJ - lo.mJ
+      if (anomalousAllowed(dL, hi.J, lo.J, dMJ)) {
+        lines.push({ Jhi: hi.J, mJhi: hi.mJ, Jlo: lo.J, mJlo: lo.mJ, dMJ, dE: hi.energy - lo.energy })
+      }
+    }
+  }
+  return lines.sort((a, b) => a.dE - b.dE)
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function factorial(n: number): number {

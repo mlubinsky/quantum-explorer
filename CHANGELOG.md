@@ -6,6 +6,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Anomalous Zeeman effect** — new collapsible section in Hydrogen module
+  - `src/physics/hydrogen.ts`: `landeG`, `jTerms`, `mJValues`, `anomalousZeemanEnergy`,
+    `anomalousSublevels`, `anomalousAllowed`, `anomalousZeemanLines` — all exact, no numerics
+  - Landé g-factor g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)) with S=½
+  - Fan diagram for both J=L±½ multiplets: solid (upper J) vs dashed (lower J), slopes g_J·μ_B
+  - Spectral pattern bar chart: up to 10 lines for 2p→1s (vs 3 Lorentz triplet in normal Zeeman)
+  - Selection rules: |ΔL|=1, ΔJ=0,±1 (J=0↔J=0 forbidden), |Δm_J|≤1
+  - g_J readout per J term; note that s orbitals show spin doublet (g=2) absent from normal Zeeman
+  - `HydrogenInfoPanel.tsx`: new `'anomalousZeeman'` topic with Landé g-factor formula
+  - 50 unit tests; 544 total
 - **Morse potential** — 6th sub-tab in the Scattering module
   - `src/physics/morse.ts`: `morseV`, `morseLambda`, `morseOmega`, `morseNBound`,
     `morseEnergy`, `morseTurningPoints`, `laguerreAssoc`, `morsePsi`, `morseProb` — all exact

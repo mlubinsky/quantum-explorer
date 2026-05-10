@@ -238,9 +238,10 @@ These items deepen that into a proper Heisenberg-picture module:
       sublevel fan diagram (energy vs B for all m_l); Lorentz spectral triplet (σ+, π, σ−)
       as bar chart; transition selector; Δm = 0, ±1 labelled; "non-relativistic model" note;
       33 unit tests; 441 total
-- [ ] **Zeeman effect (anomalous)** — extend with spin; total J, Landé g-factor
-      g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); ΔE = g_J μ_B B m_J; requires
-      Phase 2 Normal Zeeman to be done first
+- [x] **Zeeman effect (anomalous)** — extend with spin; total J, Landé g-factor
+      g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); ΔE = g_J μ_B B m_J;
+      fan diagram for J=L±½ multiplets; up to 10 spectral lines for 2p→1s;
+      50 unit tests; 544 total
 - [ ] **Stark effect (linear)** — first-order Stark splitting of hydrogen n=2 levels
       under electric field F; exact parabolic-coordinate wavefunctions; ΔE = ±3n a₀ F
       (in a.u.); show lifted degeneracy in Grotrian diagram with field slider
