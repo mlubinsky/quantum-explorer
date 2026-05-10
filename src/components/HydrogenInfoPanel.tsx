@@ -7,13 +7,15 @@ export type HydrogenInfoTopic =
   | 'angularShape'
   | 'isosurface'
   | 'grotrian'
+  | 'zeeman'
 
 export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
-  if (topic === 'radialDensity')    return <RadialDensitySection />
+  if (topic === 'radialDensity')     return <RadialDensitySection />
   if (topic === 'radialWavefunction') return <RadialWavefunctionSection />
-  if (topic === 'orbital2D')        return <Orbital2DSection />
-  if (topic === 'angularShape')     return <AngularShapeSection />
-  if (topic === 'isosurface')       return <IsosurfaceSection />
+  if (topic === 'orbital2D')         return <Orbital2DSection />
+  if (topic === 'angularShape')      return <AngularShapeSection />
+  if (topic === 'isosurface')        return <IsosurfaceSection />
+  if (topic === 'zeeman')            return <ZeemanSection />
   return <GrotrianSection />
 }
 
@@ -81,6 +83,38 @@ function IsosurfaceSection() {
       <BlockMath math="|\psi_{nlm}(x,y,z)|^2 = |R_{nl}(r)|^2\cdot|Y_l^m(\theta,\phi)|^2" />
       <p>Real spherical harmonics are used, with the φ-factor <InlineMath math="\cos(|m|\phi)" /> for <InlineMath math="m>0" /> and <InlineMath math="\sin(|m|\phi)" /> for <InlineMath math="m<0" />. Drag to rotate; scroll to zoom.</p>
       <p>Computed on a uniform 3D grid using the same exact normalised functions as the 2D cross-section.</p>
+    </div>
+  )
+}
+
+function ZeemanSection() {
+  return (
+    <div>
+      <p>In a uniform magnetic field <strong>B</strong> along z, the energy of sublevel |n, l, m<sub>l</sub>⟩ becomes:</p>
+      <BlockMath math="E(n,l,m_l,B) = E_n + \mu_B B m_l = -\frac{Z^2}{2n^2} + \frac{B\, m_l}{2}" />
+      <p>where <InlineMath math="\mu_B = \tfrac{1}{2}" /> in atomic units (Bohr magneton). Each degenerate level splits into 2l + 1 equally-spaced sublevels.</p>
+      <p><strong>Lorentz triplet:</strong> any E1-allowed transition (Δl = ±1) produces exactly three distinct frequencies regardless of l:</p>
+      <BlockMath math="\Delta E = \Delta E_0 + \mu_B B\,\Delta m_l, \quad \Delta m_l \in \{-1,\,0,\,+1\}" />
+      <p>The photon energy depends only on Δm<sub>l</sub>, not on the specific m<sub>l</sub> values — multiple paths contribute to each component at the same frequency.</p>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', marginTop: 8 }}>
+        <thead>
+          <tr style={{ borderBottom: '1px solid #444' }}>
+            <th style={{ textAlign: 'left', padding: '3px 8px', color: '#aaa' }}>Component</th>
+            <th style={{ textAlign: 'left', padding: '3px 8px', color: '#aaa' }}>Δm<sub>l</sub></th>
+            <th style={{ textAlign: 'left', padding: '3px 8px', color: '#aaa' }}>Polarization</th>
+            <th style={{ textAlign: 'left', padding: '3px 8px', color: '#aaa' }}>Frequency shift</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style={{ padding: '3px 8px', color: '#ff7070' }}>σ+</td><td style={{ padding: '3px 8px' }}>+1</td><td style={{ padding: '3px 8px' }}>right circular (along B)</td><td style={{ padding: '3px 8px' }}>+μ_B B</td></tr>
+          <tr><td style={{ padding: '3px 8px', color: '#e0e0e0' }}>π</td><td style={{ padding: '3px 8px' }}>0</td><td style={{ padding: '3px 8px' }}>linear (⊥ to B)</td><td style={{ padding: '3px 8px' }}>0</td></tr>
+          <tr><td style={{ padding: '3px 8px', color: '#70b0ff' }}>σ−</td><td style={{ padding: '3px 8px' }}>−1</td><td style={{ padding: '3px 8px' }}>left circular (along B)</td><td style={{ padding: '3px 8px' }}>−μ_B B</td></tr>
+        </tbody>
+      </table>
+      <p style={{ marginTop: 10, fontSize: '0.82rem', color: '#999' }}>
+        <em>Simplified nonrelativistic model — orbital angular momentum only, spin ignored.
+        The anomalous Zeeman effect (which requires spin and the Landé g-factor) is not shown here.</em>
+      </p>
     </div>
   )
 }

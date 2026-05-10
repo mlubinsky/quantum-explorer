@@ -230,9 +230,10 @@ These items deepen that into a proper Heisenberg-picture module:
 ## Phase 2 — Hydrogen atom (remaining)
 
 - [ ] **Emission spectra** — Lyman / Balmer / Paschen; click transition → wavefunctions
-- [ ] **Zeeman effect (normal)** — level splitting ΔE = μ_B B m_l with B-field slider;
-      animated degeneracy lifting; spectral line triplet (σ+, π, σ−); selection rules
-      Δm = 0, ±1 overlaid on Grotrian diagram. Label as "non-relativistic model".
+- [x] **Zeeman effect (normal)** — level splitting ΔE = μ_B B m_l with B-field slider;
+      sublevel fan diagram (energy vs B for all m_l); Lorentz spectral triplet (σ+, π, σ−)
+      as bar chart; transition selector; Δm = 0, ±1 labelled; "non-relativistic model" note;
+      33 unit tests; 441 total
 - [ ] **Zeeman effect (anomalous)** — extend with spin; total J, Landé g-factor
       g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); ΔE = g_J μ_B B m_J; requires
       Phase 2 Normal Zeeman to be done first

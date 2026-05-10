@@ -140,6 +140,64 @@ export function orbitalDensity3D(n: number, l: number, m: number, x: number, y: 
   return R * R * N2 * P * P * phiFactor
 }
 
+// ─── Normal Zeeman Effect ───────────────────────────────────────────────────
+
+/** Bohr magneton in atomic units: μ_B = 1/2 */
+export const MU_B = 0.5
+
+/** Normal Zeeman energy shift: ΔE = μ_B · B · m_l */
+export function zeemanShift(ml: number, B: number): number {
+  return MU_B * B * ml
+}
+
+/** Energy of sublevel |n, l, m_l⟩ in field B: E_n + μ_B · B · m_l */
+export function zeemanEnergy(n: number, Z: number, ml: number, B: number): number {
+  return hydrogenEnergy(n, Z) + zeemanShift(ml, B)
+}
+
+/**
+ * All 2l+1 sublevels of level (n, l) in field B.
+ * Returns array sorted by m_l from −l to +l.
+ */
+export function zeemanSublevels(
+  n: number, l: number, Z: number, B: number,
+): Array<{ ml: number; energy: number; shift: number }> {
+  return Array.from({ length: 2 * l + 1 }, (_, i) => {
+    const ml = i - l
+    const shift = zeemanShift(ml, B)
+    return { ml, energy: hydrogenEnergy(n, Z) + shift, shift }
+  })
+}
+
+/** E1 selection rules: |Δl| = 1 AND |Δm_l| ≤ 1 */
+export function zeemanAllowed(deltaL: number, deltaMl: number): boolean {
+  return Math.abs(deltaL) === 1 && Math.abs(deltaMl) <= 1
+}
+
+/** Polarization from Δm_l = m_l(upper) − m_l(lower) (emission convention) */
+export function polarization(deltaMl: number): 'sigma+' | 'pi' | 'sigma-' {
+  if (deltaMl ===  1) return 'sigma+'
+  if (deltaMl ===  0) return 'pi'
+  return 'sigma-'
+}
+
+/**
+ * The three Lorentz components of the normal Zeeman triplet.
+ * Photon energy depends only on Δm_l, not on specific m_l values:
+ *   ΔE(Δm_l) = ΔE₀ + μ_B · B · Δm_l
+ * where ΔE₀ = E_nHi − E_nLo.
+ */
+export function zeemanTriplet(
+  nHi: number, nLo: number, Z: number, B: number,
+): Array<{ pol: 'sigma+' | 'pi' | 'sigma-'; deltaMl: number; dE: number }> {
+  const dE0 = hydrogenEnergy(nHi, Z) - hydrogenEnergy(nLo, Z)
+  return [
+    { pol: 'sigma+', deltaMl:  1, dE: dE0 + MU_B * B },
+    { pol: 'pi',     deltaMl:  0, dE: dE0 },
+    { pol: 'sigma-', deltaMl: -1, dE: dE0 - MU_B * B },
+  ]
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function factorial(n: number): number {

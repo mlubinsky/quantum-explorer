@@ -8,6 +8,7 @@ import {
   hydrogenEnergy, meanRadius, radialNodes,
   radialWavefunction, radialDensity, orbitalDensity2D,
   angularShape, orbitalDensity3D, rMax as calcRMax,
+  MU_B, zeemanSublevels, zeemanTriplet,
 } from '../physics/hydrogen'
 import { HydrogenInfoPanel } from './HydrogenInfoPanel'
 import type { HydrogenInfoTopic } from './HydrogenInfoPanel'
@@ -507,6 +508,11 @@ export function HydrogenExplorer() {
   const [showOrbital,  setShowOrbital]  = useState(true)
   const [showIso,      setShowIso]      = useState(false)
   const [showGrotrian, setShowGrotrian] = useState(true)
+  const [showZeeman,   setShowZeeman]   = useState(true)
+
+  const [B, setB] = useState(0)
+  const [zeemanLoN, setZeemanLoN] = useState(1)
+  const [zeemanLoL, setZeemanLoL] = useState(0)
 
   const [helpTopic, setHelpTopic] = useState<HydrogenInfoTopic | null>(null)
 
@@ -759,7 +765,7 @@ export function HydrogenExplorer() {
         </div>
 
         {/* Grotrian (collapsible) */}
-        <div style={{ ...sectionStyle, borderBottom: 'none' }}>
+        <div style={sectionStyle}>
           <button onClick={() => setShowGrotrian(s => !s)} style={collapseStyle}>
             <span style={{ marginRight: 6 }}>{showGrotrian ? '▾' : '▸'}</span>
             <span style={sectionTitleStyle}>Energy level diagram (Grotrian)</span>
@@ -773,19 +779,245 @@ export function HydrogenExplorer() {
             }} />
           )}
         </div>
+
+        {/* Zeeman effect (collapsible) */}
+        <ZeemanSection
+          n={n} l={l} Z={Z} B={B} onBChange={setB}
+          loN={zeemanLoN} loL={zeemanLoL}
+          onLoChange={(nn, ll) => { setZeemanLoN(nn); setZeemanLoL(ll) }}
+          show={showZeeman} onToggle={() => setShowZeeman(s => !s)}
+          onHelpClick={() => setHelpTopic('zeeman')}
+        />
       </div>
     </>
+  )
+}
+
+// ─── Zeeman section component ─────────────────────────────────────────────────
+
+const HC_NM_ZEEMAN = 45.5640  // hc in nm·Hartree: λ_nm = HC_NM / ΔE_hartree
+
+const POL_COLOR: Record<string, string> = {
+  'sigma+': '#ff7070',
+  'pi':     '#e0e0e0',
+  'sigma-': '#70b0ff',
+}
+const POL_LABEL: Record<string, string> = {
+  'sigma+': 'σ+ (Δm=+1)',
+  'pi':     'π  (Δm=0)',
+  'sigma-': 'σ− (Δm=−1)',
+}
+
+function ZeemanSection({
+  n, l, Z, B, onBChange,
+  loN, loL, onLoChange,
+  show, onToggle, onHelpClick,
+}: {
+  n: number; l: number; Z: number; B: number; onBChange: (v: number) => void
+  loN: number; loL: number; onLoChange: (n: number, l: number) => void
+  show: boolean; onToggle: () => void; onHelpClick: () => void
+}) {
+  // Valid lower levels reachable from (n, l) via E1: Δl = ±1, nLo < n, lLo ≥ 0, lLo < nLo
+  const validLower = useMemo(() => {
+    const pairs: { nLo: number; lLo: number; label: string }[] = []
+    for (let nLo = 1; nLo < n; nLo++) {
+      for (const lLo of [l - 1, l + 1]) {
+        if (lLo >= 0 && lLo < nLo) {
+          pairs.push({ nLo, lLo, label: `${nLo}${L_LABELS[lLo]} (n=${nLo}, ℓ=${lLo})` })
+        }
+      }
+    }
+    return pairs.sort((a, b) => a.nLo - b.nLo || a.lLo - b.lLo)
+  }, [n, l])
+
+  // Clamp loN/loL to a valid choice whenever (n, l) changes
+  useEffect(() => {
+    if (validLower.length === 0) return
+    const stillValid = validLower.some(p => p.nLo === loN && p.lLo === loL)
+    if (!stillValid) onLoChange(validLower[0].nLo, validLower[0].lLo)
+  }, [n, l])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  const B_MAX = 0.3
+  const N_B   = 120
+
+  // Sublevel fan: E(m_l, B) vs B for selected (n, l)
+  const fanTraces = useMemo(() => {
+    const bVals = Array.from({ length: N_B + 1 }, (_, i) => i * B_MAX / N_B)
+    const sublevels = zeemanSublevels(n, l, Z, 0).map(s => s.ml)
+    return sublevels.map(ml => {
+      const color = ml > 0 ? `hsl(${10 + ml * 18},80%,60%)`
+                  : ml < 0 ? `hsl(${210 + ml * (-18)},80%,60%)`
+                  : '#e0e0e0'
+      return {
+        x: bVals,
+        y: bVals.map(b => hydrogenEnergy(n, Z) + MU_B * b * ml),
+        type: 'scatter' as const,
+        mode: 'lines' as const,
+        name: `m = ${ml > 0 ? '+' : ''}${ml}`,
+        line: { color, width: ml === 0 ? 2.5 : 1.8 },
+        hovertemplate: `m<sub>l</sub>=${ml}, B=%{x:.3f}, E=%{y:.5f} Eh<extra></extra>`,
+      }
+    })
+  }, [n, l, Z])
+
+  const fanLayout = useMemo(() => {
+    const base = hydrogenEnergy(n, Z)
+    const spread = Math.max(MU_B * B_MAX * l, 0.02)
+    return {
+      ...darkLayout({ height: 240, margin: { l: 72, r: 20, t: 28, b: 48 } }),
+      xaxis: axis('B (a.u.)'),
+      yaxis: axis('Energy (Eh)', { range: [base - spread * 1.25, base + spread * 1.25] }),
+      shapes: B > 0 ? [{ type: 'line', x0: B, x1: B, y0: 0, y1: 1, yref: 'paper',
+        line: { color: '#888', width: 1, dash: 'dot' } }] : [],
+      annotations: B > 0 ? [{ x: B, y: 1.04, yref: 'paper', text: 'B',
+        showarrow: false, font: { size: 10, color: '#888' }, xanchor: 'center' }] : [],
+      title: { text: `${n}${L_LABELS[l]} sublevel splitting  (2l+1 = ${2*l+1} lines)`,
+        font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper' },
+    }
+  }, [n, l, Z, B])
+
+  // Spectral triplet bar chart
+  const { tripletTraces, tripletLayout, tripletReadout } = useMemo(() => {
+    if (validLower.length === 0) return { tripletTraces: [], tripletLayout: {}, tripletReadout: [] }
+
+    const triplet = zeemanTriplet(n, loN, Z, B)
+    const nm = triplet.map(c => HC_NM_ZEEMAN / c.dE)
+
+    const barWidth = Math.max(0.6, MU_B * B * HC_NM_ZEEMAN / (triplet[1].dE ** 2) * 0.5)
+
+    const traces = triplet.map((c, i) => ({
+      x: [nm[i]],
+      y: [1],
+      type: 'bar' as const,
+      name: POL_LABEL[c.pol],
+      marker: { color: POL_COLOR[c.pol], line: { color: POL_COLOR[c.pol], width: 1 } },
+      width: [barWidth],
+      hovertemplate: `${POL_LABEL[c.pol]}<br>λ = %{x:.2f} nm<br>ΔE = ${c.dE.toFixed(5)} Eh<extra></extra>`,
+    }))
+
+    const λ0 = HC_NM_ZEEMAN / (hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z))
+    const Δλ = Math.abs(nm[0] - nm[1])
+    const rangeHalf = Math.max(Δλ * 3, 1.5)
+    const layout = {
+      ...darkLayout({ height: 220, margin: { l: 50, r: 20, t: 38, b: 52 } }),
+      xaxis: axis('Wavelength (nm)', { range: [λ0 - rangeHalf, λ0 + rangeHalf] }),
+      yaxis: { ...axis('Intensity'), range: [0, 1.5], showticklabels: false },
+      barmode: 'overlay',
+      title: {
+        text: `${n}${L_LABELS[l]} → ${loN}${L_LABELS[loL]}  Lorentz triplet`,
+        font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper',
+      },
+    }
+
+    const readout = triplet.map((c, i) => ({ pol: c.pol, dE: c.dE, nm: nm[i] }))
+    return { tripletTraces: traces, tripletLayout: layout, tripletReadout: readout }
+  }, [n, l, loN, loL, Z, B, validLower.length])
+
+  const hasLower = validLower.length > 0
+
+  return (
+    <div style={{ ...sectionStyle, borderBottom: 'none' }}>
+      <button onClick={onToggle} style={collapseStyle}>
+        <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
+        <span style={sectionTitleStyle}>
+          Normal Zeeman Effect
+          {B > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
+            B = {B.toFixed(3)} a.u.
+          </span>}
+        </span>
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={onHelpClick} />
+        </span>
+      </button>
+
+      {show && (
+        <div>
+          {/* B slider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+            <label style={{ ...labelStyle, marginBottom: 0, whiteSpace: 'nowrap' }}>B (a.u.)</label>
+            <input type="range" min={0} max={B_MAX} step={0.005} value={B}
+              onChange={e => onBChange(+e.target.value)}
+              style={{ flex: 1, accentColor: '#4361ee' }} />
+            <span style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: '#e0e0e0', minWidth: 52 }}>
+              {B.toFixed(3)}
+            </span>
+            <button onClick={() => onBChange(0)}
+              style={{ fontSize: '0.74rem', padding: '2px 8px', borderRadius: 4, border: '1px solid #444',
+                background: 'none', color: '#aaa', cursor: 'pointer' }}>reset</button>
+          </div>
+
+          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+            B in atomic units; 1 a.u. ≈ 2.35 × 10⁵ T. Slider is scaled for visual clarity.
+            Simplified nonrelativistic model — orbital angular momentum only.
+          </div>
+
+          {/* Fan diagram */}
+          {l === 0 ? (
+            <div style={{ color: '#888', fontSize: '0.85rem', padding: '8px 0' }}>
+              ℓ = 0 (s orbital): no splitting — only m<sub>l</sub> = 0 sublevel.
+              Select ℓ ≥ 1 to see degeneracy lifting.
+            </div>
+          ) : (
+            <Plot data={fanTraces as never} layout={fanLayout as never}
+              config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+          )}
+
+          {/* Transition selector + triplet */}
+          {!hasLower ? (
+            <div style={{ color: '#888', fontSize: '0.85rem', padding: '6px 0' }}>
+              No E1 transition available from {n}{L_LABELS[l]} — select n ≥ 2 with ℓ ≥ 1 to show the spectral triplet.
+            </div>
+          ) : (
+            <div style={{ marginTop: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                <span style={{ fontSize: '0.82rem', color: '#aaa' }}>Transition to:</span>
+                <select value={`${loN},${loL}`}
+                  onChange={e => {
+                    const [nn, ll] = e.target.value.split(',').map(Number)
+                    onLoChange(nn, ll)
+                  }} style={selectStyle}>
+                  {validLower.map(p => (
+                    <option key={`${p.nLo},${p.lLo}`} value={`${p.nLo},${p.lLo}`}>{p.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              <Plot data={tripletTraces as never} layout={tripletLayout as never}
+                config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+
+              {/* Readout */}
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 6,
+                fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                {tripletReadout.map(r => (
+                  <span key={r.pol} style={{ color: POL_COLOR[r.pol] }}>
+                    {POL_LABEL[r.pol]}: <strong>{r.nm.toFixed(2)} nm</strong>
+                    <span style={{ color: '#777', marginLeft: 4 }}>({r.dE.toFixed(4)} Eh)</span>
+                  </span>
+                ))}
+              </div>
+              {B > 0 && tripletReadout.length === 3 && (
+                <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4 }}>
+                  Splitting: Δλ = ±{Math.abs(tripletReadout[0].nm - tripletReadout[1].nm).toFixed(3)} nm
+                  from π line  ·  μ<sub>B</sub>B = {(MU_B * B).toFixed(4)} Eh
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function helpTitle(t: HydrogenInfoTopic): string {
-  if (t === 'radialDensity')     return 'Radial Probability Density P(r)'
+  if (t === 'radialDensity')      return 'Radial Probability Density P(r)'
   if (t === 'radialWavefunction') return 'Radial Wavefunction R_nl(r)'
   if (t === 'orbital2D')          return 'Orbital Cross-Section |ψ(x,z)|²'
   if (t === 'angularShape')       return 'Angular Shape |Y_l^m(θ)|²'
   if (t === 'isosurface')         return '3D Orbital Isosurface |ψ|²'
+  if (t === 'zeeman')             return 'Normal Zeeman Effect'
   return 'Energy Level Diagram (Grotrian)'
 }
 

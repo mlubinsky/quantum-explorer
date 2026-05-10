@@ -6,6 +6,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Normal Zeeman effect** — new collapsible section in the Hydrogen Atom module
+  - `src/physics/hydrogen.ts`: `MU_B`, `zeemanShift`, `zeemanEnergy`, `zeemanSublevels`,
+    `zeemanAllowed`, `polarization`, `zeemanTriplet` — all exact, no numerics
+  - `specs/zeeman.md`: physics spec written before implementation (TDD)
+  - B-field slider (0–0.3 a.u.; labelled "simplified nonrelativistic model")
+  - **Sublevel fan diagram**: energy vs B for all 2l+1 m_l sublevels of the selected level;
+    warm/cool colouring by m_l sign; shows degeneracy lifting continuously
+  - **Lorentz spectral triplet** bar chart for any selectable E1 transition;
+    σ+ (red), π (grey), σ− (blue) bars; merge at B=0, spread symmetrically for B>0
+  - Transition selector: all valid lower levels reachable via |Δl|=1
+  - Readout: λ (nm) and ΔE (Hartree) per component; Δλ from π line
+  - ? help modal with formula, triplet explanation, polarization table
+  - 33 new unit tests (441 total)
+
 - **Pöschl-Teller potential** — fourth sub-tab inside the Scattering module
   - `src/physics/poschlTeller.ts`: `ptV0`, `ptPotential`, `ptBoundEnergy`, `ptBoundPsiSqArray` — fully exact
   - `specs/poschl-teller.md`: physics spec written before implementation
