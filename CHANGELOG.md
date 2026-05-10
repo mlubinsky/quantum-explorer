@@ -6,6 +6,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Delta function potential** — third sub-tab inside the Scattering module
+  - `src/physics/delta.ts`: exact closed-form `deltaT`, `deltaR`, `deltaBoundEnergy`,
+    `deltaBoundPsiSq`, `deltaPsiSq` — no numerics
+  - T = k²/(k²+α²) — same for attractive and repulsive (depends only on α²)
+  - Attractive/Repulsive toggle; α strength slider; E energy slider
+  - T(E) and R(E) curves with |E_b| half-transmission marker for attractive case
+  - Scattering wavefunction: standing wave for x < 0, flat T for x ≥ 0 (annotated)
+  - Bound-state wavefunction |ψ_b|² = α e^{−2α|x|} with peak and 1/α decay-length labels
+  - Potential diagram: vertical spike showing sign and strength; E and E_b level lines
+  - 3 KaTeX help sections: T formula, wavefunctions, physical interpretation
+  - 19 new unit tests: T+R=1, half-transmission at |E_b|, bound-state normalization,
+    wavefunction continuity and flatness (389 total)
+
+### Added
 - **Wigner function — time animation** — coherent and squeezed HO states now animate in phase space
   - Coherent blob rigidly orbits the classical ellipse at ω without any spreading or distortion
   - Squeezed ellipse rotates and breathes at 2ω; exact cross-term B = 2sinh(2r)sin(2ωt) preserves det = 1

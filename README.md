@@ -73,6 +73,13 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 ### Scattering
 Two sub-tabs covering both above- and below-barrier regimes.
 
+**Delta function potential** V(x) = ±αδ(x) — exact zero-range scattering
+- T = k²/(k²+α²) — same for attractive and repulsive; monotonically rises to 1
+- Attractive delta: one bound state E_b = −α²/2; T(|E_b|) = 1/2 exactly
+- Scattering wavefunction: standing wave on left, perfectly flat T on right
+- Bound-state wavefunction |ψ_b|² = α e^{−2α|x|} with decay length 1/α
+- Potential diagram shows spike direction, E level, and E_b level line
+
 **Rectangular barrier** (T & R via exact transfer matrix)
 - T(E) and R(E) vs E; WKB comparison; resonance markers at E = V₀ + n²π²/2a²
 - Scattering wavefunction |ψ(x)|² with incident, reflected, and transmitted regions
@@ -190,7 +197,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (370 passing) |
+| Vitest | Unit tests (389 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

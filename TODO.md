@@ -152,7 +152,8 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
       explains cos vs sin φ-factor and which plane the lobes inhabit.
 
 ## Phase 2 — 1D potentials (remaining)
-- [ ] **Delta function potential** — one bound state, exact scattering amplitudes
+- [x] **Delta function potential** — one bound state, exact scattering; T = k²/(k²+α²);
+      attractive/repulsive toggle; bound-state |ψ_b|²; 19 tests; 389 total
 - [ ] **Kronig-Penney model** — exact band structure and band gaps
 - [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
 - [ ] **Pöschl-Teller potential** — reflectionless at certain energies (T = 1 exactly)

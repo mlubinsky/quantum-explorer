@@ -1,8 +1,15 @@
 import { useState } from 'react'
 import { BarrierExplorer } from './BarrierExplorer'
 import { StepExplorer } from './StepExplorer'
+import { DeltaExplorer } from './DeltaExplorer'
 
-type ScatteringTab = 'barrier' | 'step'
+type ScatteringTab = 'barrier' | 'step' | 'delta'
+
+const TAB_LABELS: Record<ScatteringTab, string> = {
+  barrier: 'Barrier',
+  step:    'Step',
+  delta:   'Delta',
+}
 
 export function ScatteringExplorer() {
   const [tab, setTab] = useState<ScatteringTab>('barrier')
@@ -11,7 +18,7 @@ export function ScatteringExplorer() {
     <div>
       {/* Sub-tab strip */}
       <div style={{ display: 'flex', gap: 0, marginBottom: '1.25rem', borderBottom: '1px solid #222' }}>
-        {(['barrier', 'step'] as ScatteringTab[]).map(t => (
+        {(['barrier', 'step', 'delta'] as ScatteringTab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -25,13 +32,14 @@ export function ScatteringExplorer() {
               transition: 'color 0.15s',
             }}
           >
-            {t === 'barrier' ? 'Barrier' : 'Step'}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
 
       {tab === 'barrier' && <BarrierExplorer />}
       {tab === 'step'    && <StepExplorer />}
+      {tab === 'delta'   && <DeltaExplorer />}
     </div>
   )
 }

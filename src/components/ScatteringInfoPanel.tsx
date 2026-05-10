@@ -3,16 +3,20 @@ import { BlockMath, InlineMath } from './KatexMath'
 export type ScatteringInfoTopic =
   | 'tvsE' | 'wavefunction' | 'potential'
   | 'stepTvsE' | 'stepWavefunction' | 'stepPotential'
+  | 'deltaTvsE' | 'deltaWavefunction' | 'deltaPotential'
 
 export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
   return (
     <div style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
-      {topic === 'tvsE'            && <BarrierTvsESection />}
-      {topic === 'wavefunction'    && <BarrierWavefunctionSection />}
-      {topic === 'potential'       && <BarrierPotentialSection />}
-      {topic === 'stepTvsE'        && <StepTvsESection />}
-      {topic === 'stepWavefunction' && <StepWavefunctionSection />}
-      {topic === 'stepPotential'   && <StepPotentialSection />}
+      {topic === 'tvsE'             && <BarrierTvsESection />}
+      {topic === 'wavefunction'     && <BarrierWavefunctionSection />}
+      {topic === 'potential'        && <BarrierPotentialSection />}
+      {topic === 'stepTvsE'         && <StepTvsESection />}
+      {topic === 'stepWavefunction'  && <StepWavefunctionSection />}
+      {topic === 'stepPotential'    && <StepPotentialSection />}
+      {topic === 'deltaTvsE'        && <DeltaTvsESection />}
+      {topic === 'deltaWavefunction' && <DeltaWavefunctionSection />}
+      {topic === 'deltaPotential'   && <DeltaPotentialSection />}
     </div>
   )
 }
@@ -279,6 +283,157 @@ function StepPotentialSection() {
           <li>Set V₀ &lt; 0 — partial reflection from a well, penetration depth disappears.</li>
           <li>Watch the evanescent tail shrink as E increases toward V₀ from below.</li>
         </ul>
+      </section>
+    </>
+  )
+}
+
+// ── Delta topics ───────────────────────────────────────────────────────────────
+
+function DeltaTvsESection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Exact transmission formula</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          With <InlineMath math="k = \sqrt{2E}" /> and coupling strength{' '}
+          <InlineMath math="\alpha = |g|" />, boundary matching at <InlineMath math="x=0" /> gives:
+        </p>
+        <BlockMath math="T = \frac{k^2}{k^2 + \alpha^2} = \frac{2E}{2E + \alpha^2}, \qquad R = \frac{\alpha^2}{k^2+\alpha^2}" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          T starts at 0, rises monotonically to 1. No resonances. No threshold.
+          T depends only on <InlineMath math="\alpha^2" /> — the same for attractive and
+          repulsive delta with equal <InlineMath math="\alpha" />.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Half-transmission and the bound state</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          For the attractive delta (<InlineMath math="g = -\alpha" />), the bound-state energy is{' '}
+          <InlineMath math="E_b = -\alpha^2/2" />. Substituting <InlineMath math="E = |E_b|" />:
+        </p>
+        <BlockMath math="T(|E_b|) = \frac{\alpha^2}{\alpha^2 + \alpha^2} = \frac{1}{2}" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          The bound-state energy sets the energy scale for scattering — a deep well scatters
+          more strongly than a shallow one.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Comparison with other potentials</h4>
+        <table style={{ fontSize: '0.85rem', width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ color: '#aaa', borderBottom: '1px solid #333' }}>
+              <th style={{ textAlign: 'left', paddingBottom: 4 }}>Potential</th>
+              <th style={{ textAlign: 'center', paddingBottom: 4 }}>T at low E</th>
+              <th style={{ textAlign: 'center', paddingBottom: 4 }}>Resonances</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['Barrier (width L)', '→ 0 (tunnelling)', 'Yes (T=1 at κL=nπ)'],
+              ['Step', '= 0 (E < V₀)', 'No'],
+              ['Delta', '→ 0 (no threshold)', 'No'],
+            ].map(([p, lo, res]) => (
+              <tr key={p as string} style={{ borderBottom: '1px solid #1e1e1e' }}>
+                <td style={{ padding: '4px 0' }}>{p}</td>
+                <td style={{ textAlign: 'center' }}>{lo}</td>
+                <td style={{ textAlign: 'center' }}>{res}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </>
+  )
+}
+
+function DeltaWavefunctionSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Scattering wavefunction</h4>
+        <BlockMath math="\psi(x) = \begin{cases} e^{ikx} + r\,e^{-ikx} & x < 0 \\ t\,e^{ikx} & x \geq 0 \end{cases}" />
+        <p style={{ margin: '4px 0 6px' }}>
+          Continuity at <InlineMath math="x=0" />: <InlineMath math="1+r = t" />.
+          Derivative jump: <InlineMath math="\psi'(0^+) - \psi'(0^-) = 2g\,\psi(0)" />.
+          Solving:
+        </p>
+        <BlockMath math="t = \frac{ik}{ik - g}, \qquad r = \frac{g}{ik - g}" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Key result: <InlineMath math="|\psi(x)|^2 = T" /> for all <InlineMath math="x > 0" /> —
+          perfectly flat, no standing wave on the transmitted side.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Bound state (attractive only)</h4>
+        <BlockMath math="\psi_b(x) = \sqrt{\alpha}\,e^{-\alpha|x|}, \qquad E_b = -\frac{\alpha^2}{2}" />
+        <p style={{ margin: '4px 0 6px' }}>
+          Normalised: <InlineMath math="\int_{-\infty}^\infty |\psi_b|^2\,dx = 1" />.
+          Probability density peaks at <InlineMath math="|\psi_b(0)|^2 = \alpha" />.
+          Penetration depth = <InlineMath math="1/\alpha" />.
+        </p>
+        <p style={{ margin: '0 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          The delta function has exactly one bound state for any <InlineMath math="\alpha > 0" />,
+          however small — unlike a finite square well which needs a minimum depth.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Standing wave on the left</h4>
+        <BlockMath math="|\psi(x)|^2 = 1 + R + 2\bigl(r_{\mathrm{Re}}\cos 2kx + r_{\mathrm{Im}}\sin 2kx\bigr), \quad x < 0" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Amplitude oscillates between{' '}
+          <InlineMath math="(1-\sqrt{R})^2" /> and <InlineMath math="(1+\sqrt{R})^2" />.
+          The sin term has opposite sign for attractive vs repulsive —
+          same <InlineMath math="|r|" /> but different phase.
+        </p>
+      </section>
+    </>
+  )
+}
+
+function DeltaPotentialSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>What is a delta potential?</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          <InlineMath math="V(x) = g\,\delta(x)" /> is a zero-range contact interaction —
+          the particle feels a force only exactly at <InlineMath math="x=0" />.
+          The Schrödinger equation everywhere except the origin is just the free-particle
+          equation; the delta enters only via the derivative boundary condition.
+        </p>
+        <p style={{ margin: '0 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Physical realisation: a very thin, very tall barrier or well in the limit where
+          the product <InlineMath math="\alpha = V_0 L" /> is kept fixed as <InlineMath math="L \to 0" />.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Striking symmetry: same T for ±α</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          The transmission coefficient <InlineMath math="T = k^2/(k^2+\alpha^2)" /> depends
+          on <InlineMath math="\alpha^2" /> only. An attractive and a repulsive delta of the same
+          strength reflect equally — a strong attractive well is as opaque as a strong wall.
+        </p>
+        <p style={{ margin: '0 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Contrast: classically, the attractive well would allow perfect transmission for all E.
+          Quantum mechanically, the wave nature of the particle makes even an attractive singularity
+          a near-perfect reflector in the strong-coupling limit.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Only one bound state</h4>
+        <p style={{ margin: '0 0 0' }}>
+          Any attractive delta has exactly one bound state, regardless of <InlineMath math="\alpha" />.
+          This contrasts with the finite square well, which needs a minimum depth
+          <InlineMath math="V_0 \geq \pi^2/(8L^2)" /> to bind even one state.
+          The delta is the maximally concentrated well — one bound state, infinitely sharp.
+        </p>
       </section>
     </>
   )
