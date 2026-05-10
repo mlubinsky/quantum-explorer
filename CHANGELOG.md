@@ -5,6 +5,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509i] — 2026-05-09
+
+### Fixed
+- **GitHub Actions deploy: second round of TypeScript errors** — removed two unused variables:
+  - `matrixElements.test.ts`: `hoEnergies` → `_hoEnergies`
+  - `tunnelling.test.ts`: `k` → `_k`
+
 ## [0.2026.0509h] — 2026-05-09
 
 ### Fixed
