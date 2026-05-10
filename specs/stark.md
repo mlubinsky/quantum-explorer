@@ -58,12 +58,12 @@ The general linear Stark energy shift (exact parabolic-coordinate result):
 
 For n = 2, the four parabolic states and their shifts:
 
-| n₁ | n₂ | m  | ΔE        | Spherical state           |
-|----|----|----|-----------|---------------------------|
-| 1  | 0  | 0  | −3 F/Z    | (|2s⟩ + |2p₀⟩)/√2       |
-| 0  | 1  | 0  | +3 F/Z    | (|2s⟩ − |2p₀⟩)/√2       |
-| 0  | 0  | +1 | 0         | |2p₊₁⟩                   |
-| 0  | 0  | −1 | 0         | |2p₋₁⟩                   |
+| n₁ | n₂ | m  | ΔE     | Spherical state              |
+|----|----|----|--------|------------------------------|
+| 1  | 0  | 0  | −3 F/Z | (\|2s⟩ + \|2p₀⟩)/√2        |
+| 0  | 1  | 0  | +3 F/Z | (\|2s⟩ − \|2p₀⟩)/√2        |
+| 0  | 0  | +1 | 0      | \|2p₊₁⟩                     |
+| 0  | 0  | −1 | 0      | \|2p₋₁⟩                     |
 
 Physical picture (F along +z):
 - The n₁=1, n₂=0 state has its charge cloud displaced toward −z (⟨z⟩ = −3/Z a₀).

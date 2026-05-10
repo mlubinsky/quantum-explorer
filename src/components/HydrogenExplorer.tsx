@@ -1311,18 +1311,24 @@ function StarkSection({
       xaxis: axis('F (a.u.)'),
       yaxis: axis('Energy (Eh)', { range: [E2 - spread * 1.3, E2 + spread * 1.3] }),
       shapes: [
+        // gray shading for the non-perturbative region (F > F_ion)
+        { type: 'rect', xref: 'x', yref: 'paper', x0: fIon, x1: F_MAX * 1.05,
+          y0: 0, y1: 1, fillcolor: 'rgba(180,80,0,0.10)', line: { width: 0 }, layer: 'below' },
         // current F line
         ...(F > 0 ? [{ type: 'line', x0: F, x1: F, y0: 0, y1: 1, yref: 'paper',
           line: { color: '#888', width: 1, dash: 'dot' } }] : []),
         // ionization threshold
         { type: 'line', x0: fIon, x1: fIon, y0: 0, y1: 1, yref: 'paper',
-          line: { color: '#f77f00', width: 1, dash: 'dash' } },
+          line: { color: '#f77f00', width: 1.5, dash: 'dash' } },
       ],
       annotations: [
         ...(F > 0 ? [{ x: F, y: 1.04, yref: 'paper', text: 'F',
           showarrow: false, font: { size: 10, color: '#888' }, xanchor: 'center' }] : []),
         { x: fIon, y: 1.06, yref: 'paper', text: 'F_ion',
           showarrow: false, font: { size: 9, color: '#f77f00' }, xanchor: 'center' },
+        { x: (fIon + F_MAX) / 2, y: 0.06, yref: 'paper',
+          text: 'PT not reliable', showarrow: false,
+          font: { size: 9, color: '#f77f00' }, xanchor: 'center' },
       ],
       title: {
         text: 'n = 2 linear Stark splitting — 4 states vs electric field',

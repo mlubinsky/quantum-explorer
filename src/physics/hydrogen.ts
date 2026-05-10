@@ -287,9 +287,10 @@ export function anomalousZeemanLines(
 
 /**
  * First-order linear Stark energy shift for a hydrogen-like atom (a.u.).
- * Uses parabolic quantum numbers n₁, n₂ with n₁+n₂+|m|+1 = n.
+ * Exact within first-order degenerate perturbation theory for ideal hydrogen degeneracy.
+ * Uses parabolic quantum numbers n₁, n₂ with n₁+n₂+|m|+1 = n (caller's responsibility).
  *   ΔE = −(3/2) n (n₁−n₂) F / Z
- * Physical meaning: n₁>n₂ → charge displaced downward → lower energy in +z field.
+ * Physical meaning: n₁>n₂ → charge displaced toward −z → lower energy in +z field.
  */
 export function starkLinearShift(n: number, n1: number, n2: number, F: number, Z: number): number {
   return -(3 / 2) * n * (n1 - n2) * F / Z
@@ -303,6 +304,7 @@ export interface StarkLevel {
 
 /**
  * All 4 first-order linear Stark levels for the n=2 hydrogen shell.
+ * Energies are exact within first-order perturbation theory (valid for F ≪ F_ion).
  * Parabolic quantum numbers: n₁+n₂+|m|=1 (so n₁+n₂+|m|+1=2=n).
  * Returned sorted ascending by energy.
  */
