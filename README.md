@@ -71,7 +71,7 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Analytic norm = 1 — exact flat 1.000 (no PDE solver, no drift)
 
 ### Scattering
-Four sub-tabs covering zero-range, reflectionless, and extended potentials.
+Five sub-tabs covering zero-range, reflectionless, periodic, and extended potentials.
 
 **Pöschl-Teller potential** V(x) = −N(N+1)α²/2 · sech²(αx) — reflectionless well
 - T = 1 for all E > 0 (R = 0 exactly) for integer N — the defining reflectionless property
@@ -96,6 +96,13 @@ Four sub-tabs covering zero-range, reflectionless, and extended potentials.
 - Total reflection for E < V₀ (T = 0 exactly); T rises monotonically for E > V₀
 - Wavefunction: standing-wave pattern left of step, evanescent decay right for E < V₀
 - Penetration depth δ = 1/κ annotated; live readout T, R, T+R, δ
+
+**Kronig-Penney model** V(x) = α·a · Σ δ(x−na) — periodic delta-function lattice
+- Exact dispersion: cos(Ka) = f(ka), f(u) = cos(u) + P·sin(u)/u, P = αa
+- Allowed bands |f| ≤ 1, forbidden gaps |f| > 1 — visualized with blue/red shading
+- Reduced Brillouin zone band structure E(Ka/π) with bands colored distinctly
+- Zone-boundary energies E_n = (nπ/a)²/2 exact for any P (sin(nπ) = 0)
+- α slider (0–5), lattice constant a slider (1–8); limits: P=0 free particle, P→∞ tight-binding
 
 ### Spin-½ / Bloch Sphere
 Three sub-tabs.
@@ -205,7 +212,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (441 passing) |
+| Vitest | Unit tests (465 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

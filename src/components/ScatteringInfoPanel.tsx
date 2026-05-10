@@ -5,22 +5,26 @@ export type ScatteringInfoTopic =
   | 'stepTvsE' | 'stepWavefunction' | 'stepPotential'
   | 'deltaTvsE' | 'deltaWavefunction' | 'deltaPotential'
   | 'ptTvsE' | 'ptWavefunction' | 'ptPotential'
+  | 'kpDispersion' | 'kpBandStructure' | 'kpBands'
 
 export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
   return (
     <div style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
-      {topic === 'tvsE'             && <BarrierTvsESection />}
-      {topic === 'wavefunction'     && <BarrierWavefunctionSection />}
-      {topic === 'potential'        && <BarrierPotentialSection />}
-      {topic === 'stepTvsE'         && <StepTvsESection />}
+      {topic === 'tvsE'              && <BarrierTvsESection />}
+      {topic === 'wavefunction'      && <BarrierWavefunctionSection />}
+      {topic === 'potential'         && <BarrierPotentialSection />}
+      {topic === 'stepTvsE'          && <StepTvsESection />}
       {topic === 'stepWavefunction'  && <StepWavefunctionSection />}
-      {topic === 'stepPotential'    && <StepPotentialSection />}
-      {topic === 'deltaTvsE'        && <DeltaTvsESection />}
+      {topic === 'stepPotential'     && <StepPotentialSection />}
+      {topic === 'deltaTvsE'         && <DeltaTvsESection />}
       {topic === 'deltaWavefunction' && <DeltaWavefunctionSection />}
-      {topic === 'deltaPotential'   && <DeltaPotentialSection />}
-      {topic === 'ptTvsE'           && <PtTvsESection />}
-      {topic === 'ptWavefunction'   && <PtWavefunctionSection />}
-      {topic === 'ptPotential'      && <PtPotentialSection />}
+      {topic === 'deltaPotential'    && <DeltaPotentialSection />}
+      {topic === 'ptTvsE'            && <PtTvsESection />}
+      {topic === 'ptWavefunction'    && <PtWavefunctionSection />}
+      {topic === 'ptPotential'       && <PtPotentialSection />}
+      {topic === 'kpDispersion'      && <KpDispersionSection />}
+      {topic === 'kpBandStructure'   && <KpBandStructureSection />}
+      {topic === 'kpBands'           && <KpBandsSection />}
     </div>
   )
 }
@@ -603,5 +607,55 @@ function PtPotentialSection() {
         </table>
       </section>
     </>
+  )
+}
+
+// ── Kronig-Penney topics ───────────────────────────────────────────────────────
+
+function KpDispersionSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Dispersion relation</h4>
+        <p>Bloch boundary conditions at each delta barrier give the exact condition:</p>
+        <BlockMath math="\cos(Ka) = f(ka), \quad f(u) = \cos u + P\,\frac{\sin u}{u}" />
+        <p>where <InlineMath math="u = ka = a\sqrt{2E}" />, <InlineMath math="K" /> is the Bloch wavevector, and <InlineMath math="P = \alpha a" />.</p>
+        <p><strong>Allowed band</strong>: <InlineMath math="|f| \leq 1" /> — propagating Bloch state exists.</p>
+        <p><strong>Forbidden gap</strong>: <InlineMath math="|f| > 1" /> — evanescent, no real K.</p>
+        <p>At <InlineMath math="u=n\pi" />: <InlineMath math="\sin(n\pi)=0" />, so <InlineMath math="f=(-1)^n=\pm 1" /> — always a band boundary, for any P.</p>
+      </section>
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Limits</h4>
+        <p><strong>P = 0</strong>: free particle (<InlineMath math="f=\cos ka \in [-1,1]" />, no gaps).</p>
+        <p><strong>P → ∞</strong>: bands collapse, full spectrum forbidden except at <InlineMath math="ka=n\pi" />.</p>
+      </section>
+    </>
+  )
+}
+
+function KpBandStructureSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Reduced Brillouin zone</h4>
+        <BlockMath math="Ka = \arccos\!\bigl(f(ka)\bigr) \in [0,\pi]" />
+        <p>Plotting <InlineMath math="E" /> vs <InlineMath math="Ka/\pi" /> in the first zone gives the band structure. Successive bands alternate direction: band 1 runs <InlineMath math="Ka\!:\,0\!\to\!\pi" />, band 2 runs <InlineMath math="\pi\!\to\!0" />, etc.</p>
+      </section>
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Zone-boundary energies</h4>
+        <BlockMath math="E_n = \frac{(n\pi/a)^2}{2}, \quad n=1,2,3,\ldots" />
+        <p>At <InlineMath math="E_n" />, <InlineMath math="f=\pm 1" /> exactly. Gaps open symmetrically around these energies; gap width grows with P.</p>
+      </section>
+    </>
+  )
+}
+
+function KpBandsSection() {
+  return (
+    <section>
+      <h4 style={{ margin: '0 0 6px' }}>Physical picture</h4>
+      <p>A periodic lattice Bragg-reflects waves at <InlineMath math="k = n\pi/a" />, splitting the free-particle parabola into allowed bands with forbidden gaps. In the delta-function KP model, complete stop-bands arise from constructive/destructive Bragg interference — the same delta barrier that gives <InlineMath math="T = k^2/(k^2+\alpha^2)" /> individually now blocks all propagation within a gap energy range.</p>
+      <p>Higher bands are wider: the relative effect of each barrier shrinks as <InlineMath math="\Delta E/E \sim \alpha/\sqrt{E}" /> at large E.</p>
+    </section>
   )
 }

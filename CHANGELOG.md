@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Kronig-Penney model** — 5th sub-tab in the Scattering module
+  - `src/physics/kronigPenney.ts`: `kpP`, `kpRHS`, `kpAllowed`, `kpBlochKa`, `kpZoneBoundaries` — all exact, no numerics
+  - `specs/kronig-penney.md`: physics spec (TDD-first)
+  - Delta-function periodic potential V(x) = α·a·Σ δ(x−na); dimensionless P = αa
+  - **Dispersion condition** plot f(E) = cos(ka) + P·sin(ka)/(ka): cyan trace, ±1 dashed reference, blue/red allowed/forbidden shading
+  - **Band structure** E(Ka/π) scatter in reduced Brillouin zone; each band colored distinctly
+  - **Zone-boundary table**: E_n = (nπ/a)²/2 in a.u. and eV; gap-above indicator; approximate bandwidth
+  - α slider (0–5) and a slider (1–8); derived P readout; limits: P=0 free particle, P→∞ tight-binding
+  - 24 unit tests; 465 total
 - **Normal Zeeman effect** — new collapsible section in the Hydrogen Atom module
   - `src/physics/hydrogen.ts`: `MU_B`, `zeemanShift`, `zeemanEnergy`, `zeemanSublevels`,
     `zeemanAllowed`, `polarization`, `zeemanTriplet` — all exact, no numerics

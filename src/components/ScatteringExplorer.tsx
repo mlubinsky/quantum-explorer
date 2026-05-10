@@ -3,14 +3,16 @@ import { BarrierExplorer } from './BarrierExplorer'
 import { StepExplorer } from './StepExplorer'
 import { DeltaExplorer } from './DeltaExplorer'
 import { PoschlTellerExplorer } from './PoschlTellerExplorer'
+import { KronigPenneyExplorer } from './KronigPenneyExplorer'
 
-type ScatteringTab = 'barrier' | 'step' | 'delta' | 'poschl-teller'
+type ScatteringTab = 'barrier' | 'step' | 'delta' | 'poschl-teller' | 'kronig-penney'
 
 const TAB_LABELS: Record<ScatteringTab, string> = {
-  barrier:        'Barrier',
-  step:           'Step',
-  delta:          'Delta',
+  barrier:         'Barrier',
+  step:            'Step',
+  delta:           'Delta',
   'poschl-teller': 'Pöschl-Teller',
+  'kronig-penney': 'Kronig-Penney',
 }
 
 export function ScatteringExplorer() {
@@ -20,7 +22,7 @@ export function ScatteringExplorer() {
     <div>
       {/* Sub-tab strip */}
       <div style={{ display: 'flex', gap: 0, marginBottom: '1.25rem', borderBottom: '1px solid #222' }}>
-        {(['barrier', 'step', 'delta', 'poschl-teller'] as ScatteringTab[]).map(t => (
+        {(['barrier', 'step', 'delta', 'poschl-teller', 'kronig-penney'] as ScatteringTab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -43,6 +45,7 @@ export function ScatteringExplorer() {
       {tab === 'step'           && <StepExplorer />}
       {tab === 'delta'          && <DeltaExplorer />}
       {tab === 'poschl-teller'  && <PoschlTellerExplorer />}
+      {tab === 'kronig-penney'  && <KronigPenneyExplorer />}
     </div>
   )
 }

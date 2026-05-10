@@ -156,7 +156,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
       attractive/repulsive toggle; bound-state |ψ_b|²; 19 tests; 389 total
 - [x] **Pöschl-Teller potential** — reflectionless (T = 1 for all E > 0, integer N);
       N bound states; Rodrigues-formula wavefunctions; 19 tests; 408 total
-- [ ] **Kronig-Penney model** — exact band structure and band gaps
+- [x] **Kronig-Penney model** — exact band structure and band gaps; delta-function periodic
+      potential; dispersion f(ka) = cos(ka) + P·sin(ka)/(ka); band/gap coloring; reduced
+      Brillouin zone E(Ka/π) scatter; zone-boundary table; 24 unit tests; 465 total
 - [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
 - [ ] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
       alongside exact results in the Scattering module; educational contrast, highlights
