@@ -71,7 +71,14 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Analytic norm = 1 — exact flat 1.000 (no PDE solver, no drift)
 
 ### Scattering
-Two sub-tabs covering both above- and below-barrier regimes.
+Four sub-tabs covering zero-range, reflectionless, and extended potentials.
+
+**Pöschl-Teller potential** V(x) = −N(N+1)α²/2 · sech²(αx) — reflectionless well
+- T = 1 for all E > 0 (R = 0 exactly) for integer N — the defining reflectionless property
+- Classical comparison: T_cl = 0 for E < V₀, T_cl = 1 for E ≥ V₀; quantum wins for all E
+- Exactly N bound states: E_j = −α²(N−j)²/2; V₀ = N(N+1)α²/2 derived, not free
+- Wavefunctions via Rodrigues formula P_N^{N−j}(tanh(αx)); normalised by trapezoidal quadrature
+- Energy level lines use classical turning points for accurate width display
 
 **Delta function potential** V(x) = ±αδ(x) — exact zero-range scattering
 - T = k²/(k²+α²) — same for attractive and repulsive; monotonically rises to 1
@@ -152,7 +159,7 @@ Phase-space quasi-probability distribution W(x,p) — the closest quantum analog
 | Even/odd cat (\|α⟩±\|−α⟩)/N | Two blobs + cos-modulated interference fringe |
 | Fock super (\|n⟩+\|m⟩)/√2 | Cross-term computed by 1D quadrature |
 
-- 70×70 phase-space heatmap with diverging blue–white–red colorscale; negative regions flagged
+- 70×70 phase-space heatmap with diverging blue–white–red colour scale; negative regions flagged
 - Marginal plots: ∫W dp = \|ψ(x)\|², ∫W dx = \|φ̃(p)\|², with exact \|ψ\|² overlay for Fock states
 - Negativity readout 𝒩 = ∫\|W<0\|\|W\| dx dp (zero for classical states)
 - Sliders for ω, Fock n, displacement \|α\|, squeeze r
@@ -197,7 +204,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (389 passing) |
+| Vitest | Unit tests (408 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

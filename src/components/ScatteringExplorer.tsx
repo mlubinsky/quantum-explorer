@@ -2,13 +2,15 @@ import { useState } from 'react'
 import { BarrierExplorer } from './BarrierExplorer'
 import { StepExplorer } from './StepExplorer'
 import { DeltaExplorer } from './DeltaExplorer'
+import { PoschlTellerExplorer } from './PoschlTellerExplorer'
 
-type ScatteringTab = 'barrier' | 'step' | 'delta'
+type ScatteringTab = 'barrier' | 'step' | 'delta' | 'poschl-teller'
 
 const TAB_LABELS: Record<ScatteringTab, string> = {
-  barrier: 'Barrier',
-  step:    'Step',
-  delta:   'Delta',
+  barrier:        'Barrier',
+  step:           'Step',
+  delta:          'Delta',
+  'poschl-teller': 'Pöschl-Teller',
 }
 
 export function ScatteringExplorer() {
@@ -18,7 +20,7 @@ export function ScatteringExplorer() {
     <div>
       {/* Sub-tab strip */}
       <div style={{ display: 'flex', gap: 0, marginBottom: '1.25rem', borderBottom: '1px solid #222' }}>
-        {(['barrier', 'step', 'delta'] as ScatteringTab[]).map(t => (
+        {(['barrier', 'step', 'delta', 'poschl-teller'] as ScatteringTab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -37,9 +39,10 @@ export function ScatteringExplorer() {
         ))}
       </div>
 
-      {tab === 'barrier' && <BarrierExplorer />}
-      {tab === 'step'    && <StepExplorer />}
-      {tab === 'delta'   && <DeltaExplorer />}
+      {tab === 'barrier'        && <BarrierExplorer />}
+      {tab === 'step'           && <StepExplorer />}
+      {tab === 'delta'          && <DeltaExplorer />}
+      {tab === 'poschl-teller'  && <PoschlTellerExplorer />}
     </div>
   )
 }

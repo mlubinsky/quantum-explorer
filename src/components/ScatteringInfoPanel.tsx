@@ -4,6 +4,7 @@ export type ScatteringInfoTopic =
   | 'tvsE' | 'wavefunction' | 'potential'
   | 'stepTvsE' | 'stepWavefunction' | 'stepPotential'
   | 'deltaTvsE' | 'deltaWavefunction' | 'deltaPotential'
+  | 'ptTvsE' | 'ptWavefunction' | 'ptPotential'
 
 export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
   return (
@@ -17,6 +18,9 @@ export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
       {topic === 'deltaTvsE'        && <DeltaTvsESection />}
       {topic === 'deltaWavefunction' && <DeltaWavefunctionSection />}
       {topic === 'deltaPotential'   && <DeltaPotentialSection />}
+      {topic === 'ptTvsE'           && <PtTvsESection />}
+      {topic === 'ptWavefunction'   && <PtWavefunctionSection />}
+      {topic === 'ptPotential'      && <PtPotentialSection />}
     </div>
   )
 }
@@ -434,6 +438,169 @@ function DeltaPotentialSection() {
           <InlineMath math="V_0 \geq \pi^2/(8L^2)" /> to bind even one state.
           The delta is the maximally concentrated well — one bound state, infinitely sharp.
         </p>
+      </section>
+    </>
+  )
+}
+
+// ── Pöschl-Teller topics ───────────────────────────────────────────────────────
+
+function PtTvsESection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>The reflectionless result</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          For integer <InlineMath math="N" />, the Pöschl-Teller potential is{' '}
+          <strong>reflectionless</strong> — transmission is perfect at every energy:
+        </p>
+        <BlockMath math="T(E) = 1, \quad R(E) = 0 \quad \text{for all } E > 0" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Classically, a particle with <InlineMath math="E < V_0" /> bounces back
+          (<InlineMath math="T_\mathrm{cl} = 0" />). Quantum mechanically, the wave
+          always passes through — the reflected components from all points in the
+          smooth well cancel exactly by destructive interference.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Why integer N?</h4>
+        <p style={{ margin: '0 0 6px' }}>
+          The potential <InlineMath math="V(x) = -\tfrac{N(N+1)\alpha^2}{2}\,\mathrm{sech}^2(\alpha x)" />{' '}
+          is exactly solvable for any <InlineMath math="\lambda" /> via the substitution{' '}
+          <InlineMath math="\lambda(\lambda+1) = 2V_0/\alpha^2" />. The S-matrix has
+          the exact form:
+        </p>
+        <BlockMath math="t(k) = \prod_{n=1}^{N} \frac{k - i n\alpha}{k + i n\alpha}" />
+        <p style={{ margin: '4px 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Each factor has <InlineMath math="|{(k-in\alpha)}/{(k+in\alpha)}|=1" />, so{' '}
+          <InlineMath math="|t|^2 = 1" /> — the product of pure phases is still a
+          pure phase. R = 0 follows from unitarity: <InlineMath math="|r|^2 = 1 - |t|^2 = 0" />.
+          For non-integer <InlineMath math="\lambda" />, the product doesn't close and <InlineMath math="R > 0" />.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Physical analogy</h4>
+        <p style={{ margin: '0 0 0' }}>
+          An anti-reflection coating on a camera lens eliminates reflection by destructive
+          interference at both surfaces. The Pöschl-Teller well is the quantum analogue —
+          a smooth potential shape that cancels its own reflected wave at every energy
+          simultaneously.
+        </p>
+      </section>
+    </>
+  )
+}
+
+function PtWavefunctionSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Bound-state energies</h4>
+        <BlockMath math="E_j = -\frac{\alpha^2 (N-j)^2}{2}, \quad j = 0, 1, \ldots, N{-}1" />
+        <p style={{ margin: '4px 0 6px' }}>
+          <InlineMath math="j=0" /> is the ground state (deepest).{' '}
+          The top state always has <InlineMath math="E_{N-1} = -\alpha^2/2" />, independent of <InlineMath math="N" />.
+          All states satisfy <InlineMath math="-V_0 < E_j < 0" />.
+        </p>
+        <p style={{ margin: '0 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          The <InlineMath math="j" />-th state has exactly <InlineMath math="j" /> nodes (node theorem).
+          Even <InlineMath math="j" /> → symmetric wavefunction; odd <InlineMath math="j" /> → antisymmetric.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Wavefunctions via Rodrigues formula</h4>
+        <BlockMath math="\psi_j(x) \propto P_N^{N-j}(\tanh\alpha x) = \mathrm{sech}^{N-j}(\alpha x)\cdot\left[\frac{d^{N-j}P_N}{du^{N-j}}\right]_{\!u=\tanh\alpha x}" />
+        <p style={{ margin: '4px 0 6px' }}>
+          where <InlineMath math="P_N" /> is the Legendre polynomial of degree <InlineMath math="N" />.
+          Explicit forms:
+        </p>
+        <table style={{ fontSize: '0.82rem', borderCollapse: 'collapse', width: '100%' }}>
+          <tbody>
+            {[
+              ['j=0', 'sech^N(αx)'],
+              ['j=1', 'sech^{N−1}(αx)·tanh(αx)'],
+              ['j=2', 'sech^{N−2}(αx)·[(2N−1)tanh²(αx)−1]'],
+            ].map(([j, f]) => (
+              <tr key={j} style={{ borderBottom: '1px solid #1e1e1e' }}>
+                <td style={{ padding: '3px 8px 3px 0', color: '#aaa', whiteSpace: 'nowrap' }}>{j}</td>
+                <td style={{ padding: '3px 0', fontFamily: 'monospace', fontSize: '0.80rem' }}>{f}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Unique bound-state property</h4>
+        <p style={{ margin: '0 0 0' }}>
+          Unlike the delta potential (one bound state for any depth) or the finite square
+          well (integer count depends on depth), the Pöschl-Teller well has{' '}
+          <em>exactly</em> <InlineMath math="N" /> bound states by construction —
+          the integer <InlineMath math="N" /> controls both the depth <InlineMath math="V_0 = N(N+1)\alpha^2/2" />{' '}
+          and the number of states simultaneously.
+        </p>
+      </section>
+    </>
+  )
+}
+
+function PtPotentialSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>The sech² shape</h4>
+        <BlockMath math="V(x) = -\frac{N(N+1)\alpha^2}{2}\,\mathrm{sech}^2(\alpha x)" />
+        <p style={{ margin: '4px 0 6px' }}>
+          <InlineMath math="\mathrm{sech}^2(u) = 1/\cosh^2(u)" /> decays exponentially
+          as <InlineMath math="e^{-2\alpha|x|}" /> for large <InlineMath math="|x|" />.
+          The well has depth <InlineMath math="V_0 = N(N+1)\alpha^2/2" /> at <InlineMath math="x=0" />{' '}
+          and half-width <InlineMath math="{\approx}\,1/\alpha" />.
+        </p>
+        <p style={{ margin: '0 0 0', color: '#aaa', fontSize: '0.85em' }}>
+          Increasing <InlineMath math="\alpha" /> narrows and deepens the well proportionally.
+          Increasing <InlineMath math="N" /> adds bound states and deepens the well while
+          keeping the width fixed.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Role in inverse scattering theory</h4>
+        <p style={{ margin: '0 0 0' }}>
+          The Pöschl-Teller family are the simplest{' '}
+          <em>reflectionless potentials</em> — a class discovered by
+          Kay and Moses (1956) via the Gel&apos;fand-Levitan inverse scattering method.
+          They are the building blocks of multi-soliton solutions to the
+          Korteweg-de Vries (KdV) equation — each bound state corresponds to one soliton.
+        </p>
+      </section>
+
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Comparison with other wells</h4>
+        <table style={{ fontSize: '0.85rem', width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ color: '#aaa', borderBottom: '1px solid #333' }}>
+              <th style={{ textAlign: 'left', paddingBottom: 4 }}>Potential</th>
+              <th style={{ textAlign: 'center', paddingBottom: 4 }}>Bound states</th>
+              <th style={{ textAlign: 'center', paddingBottom: 4 }}>T (E &lt; V₀)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['Delta −αδ(x)', '1 (always)', '< 1'],
+              ['Finite square well', 'depends on depth', '< 1 (tunnelling)'],
+              ['Pöschl-Teller', 'exactly N', '1 (always!)'],
+            ].map(([p, b, t]) => (
+              <tr key={p as string} style={{ borderBottom: '1px solid #1e1e1e' }}>
+                <td style={{ padding: '4px 0' }}>{p}</td>
+                <td style={{ textAlign: 'center' }}>{b}</td>
+                <td style={{ textAlign: 'center', color: t === '1 (always!)' ? '#06d6a0' : '#e0e0e0' }}>{t}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
     </>
   )

@@ -154,9 +154,10 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 ## Phase 2 — 1D potentials (remaining)
 - [x] **Delta function potential** — one bound state, exact scattering; T = k²/(k²+α²);
       attractive/repulsive toggle; bound-state |ψ_b|²; 19 tests; 389 total
+- [x] **Pöschl-Teller potential** — reflectionless (T = 1 for all E > 0, integer N);
+      N bound states; Rodrigues-formula wavefunctions; 19 tests; 408 total
 - [ ] **Kronig-Penney model** — exact band structure and band gaps
 - [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
-- [ ] **Pöschl-Teller potential** — reflectionless at certain energies (T = 1 exactly)
 - [ ] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
       alongside exact results in the Scattering module; educational contrast, highlights
       where WKB fails (near turning points, near resonances)

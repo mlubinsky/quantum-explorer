@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Pöschl-Teller potential** — fourth sub-tab inside the Scattering module
+  - `src/physics/poschlTeller.ts`: `ptV0`, `ptPotential`, `ptBoundEnergy`, `ptBoundPsiSqArray` — fully exact
+  - `specs/poschl-teller.md`: physics spec written before implementation
+  - V(x) = −N(N+1)α²/2 · sech²(αx); T = 1 for all E > 0 (reflectionless for integer N)
+  - Exactly N bound states with energies E_j = −α²(N−j)²/2
+  - Wavefunctions via Rodrigues formula: sech^m(αx) · [d^m P_N/du^m](tanh(αx)), m = N−j
+  - Section 1: T = 1 flat vs classical step at V₀; V₀ annotation
+  - Section 2: Potential shape with N energy levels; classical turning-point line widths
+  - Section 3: All N normalised |ψ_j(x)|² on one plot, each a different colour
+  - 3 KaTeX help sections: reflectionless T, bound-state wavefunctions, potential well
+  - 19 new unit tests: V₀ formula, V(0) = −V₀, energy spectrum, normalisation, symmetry/node structure (408 total)
+
+### Added
 - **Delta function potential** — third sub-tab inside the Scattering module
   - `src/physics/delta.ts`: exact closed-form `deltaT`, `deltaR`, `deltaBoundEnergy`,
     `deltaBoundPsiSq`, `deltaPsiSq` — no numerics
