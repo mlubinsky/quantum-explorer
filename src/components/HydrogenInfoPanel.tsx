@@ -126,7 +126,7 @@ function AnomalousZeemanSection() {
     <div>
       <p>When electron spin S=½ is included, the total angular momentum is <strong>J = L + S</strong>, giving two J-multiplets per orbital state (for L &gt; 0):</p>
       <BlockMath math="J = L \pm \tfrac{1}{2},\quad m_J = -J,\,-J{+}1,\ldots,+J" />
-      <p><strong>Landé g-factor</strong> (exact, first-principles):</p>
+      <p><strong>Landé g-factor</strong> (LS-coupling approximation; assumes g<sub>L</sub>=1, g<sub>S</sub>=2, pure LS coupling):</p>
       <BlockMath math="g_J = 1 + \frac{J(J+1)+S(S+1)-L(L+1)}{2J(J+1)}" />
       <p>Special cases: S=0 → g<sub>J</sub>=1 (normal Zeeman); L=0 → g<sub>J</sub>=2 (pure spin).</p>
       <p><strong>Zeeman energy</strong> of sublevel |J, m<sub>J</sub>⟩:</p>

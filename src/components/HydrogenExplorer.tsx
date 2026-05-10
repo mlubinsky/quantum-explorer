@@ -1102,15 +1102,15 @@ function AnomalousZeemanSection({
       annotations: B > 0 ? [{ x: B, y: 1.04, yref: 'paper', text: 'B',
         showarrow: false, font: { size: 10, color: '#888' }, xanchor: 'center' }] : [],
       title: {
-        text: `${n}${L_LABELS[l]} sublevel fan — anomalous Zeeman (${2 * (2 * l + 1)} levels)`,
+        text: `${n}${L_LABELS[l]} sublevel fan — anomalous Zeeman (${2 * (2 * l + 1)} levels; J terms degenerate at B=0)`,
         font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper',
       },
     }
   }, [n, l, Z, B, upperJ])
 
   // Spectral lines chart
-  const { lineTraces, lineLayout, lineCount } = useMemo(() => {
-    if (validLower.length === 0) return { lineTraces: [], lineLayout: {}, lineCount: 0 }
+  const { lineTraces, lineLayout, lineCount, suppressedCount } = useMemo(() => {
+    if (validLower.length === 0) return { lineTraces: [], lineLayout: {}, lineCount: 0, suppressedCount: 0 }
     const lines = anomalousZeemanLines(n, l, loN, loL, Z, B)
     const nm = lines.map(c => c.dE > 0 ? HC_NM_AZ / c.dE : null)
 
@@ -1148,7 +1148,9 @@ function AnomalousZeemanSection({
       },
     }
 
-    return { lineTraces: traces, lineLayout: layout, lineCount: lines.length }
+    const visibleCount  = lines.filter(l => l.dE > 0).length
+    const suppressedCount = lines.length - visibleCount
+    return { lineTraces: traces, lineLayout: layout, lineCount: visibleCount, suppressedCount }
   }, [n, l, loN, loL, Z, B, validLower.length])
 
   const hasLower = validLower.length > 0
@@ -1216,13 +1218,22 @@ function AnomalousZeemanSection({
                   ))}
                 </select>
                 <span style={{ fontSize: '0.8rem', color: '#06d6a0', fontFamily: 'monospace' }}>
-                  {lineCount} lines
+                  {lineCount} line{lineCount !== 1 ? 's' : ''} visible
                   {B > 0 ? ` (vs 3 for normal Zeeman)` : ` (merge to 1 at B=0)`}
                 </span>
+                {suppressedCount > 0 && (
+                  <span style={{ fontSize: '0.78rem', color: '#f77f00', fontFamily: 'monospace' }}>
+                    · {suppressedCount} suppressed (B·g_J·μ_B·m_J &gt; ΔE₀)
+                  </span>
+                )}
               </div>
 
               <Plot data={lineTraces as never} layout={lineLayout as never}
                 config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+
+              <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginTop: 4 }}>
+                Line positions only — relative intensities (Clebsch–Gordan weights) not shown.
+              </div>
 
               {lowerJ !== null && B > 0 && (
                 <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4, fontFamily: 'monospace' }}>

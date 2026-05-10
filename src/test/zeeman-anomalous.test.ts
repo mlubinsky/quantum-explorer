@@ -252,4 +252,19 @@ describe('anomalousZeemanLines', () => {
     expect(offsets).toContain(4 / 3)
     expect(offsets).toContain(5 / 3)
   })
+  it('2p→1s at B=0.3 a.u.: all 10 lines have positive photon energy', () => {
+    const lines = anomalousZeemanLines(2, 1, 1, 0, 1, 0.3)
+    expect(lines).toHaveLength(10)
+    for (const l of lines) expect(l.dE).toBeGreaterThan(0)
+  })
+  it('high-n small-gap (5g→4f) at B=0.3 a.u.: some lines have negative dE — must be filtered in UI', () => {
+    const lines = anomalousZeemanLines(5, 4, 4, 3, 1, 0.3)
+    const negative = lines.filter(l => l.dE <= 0)
+    expect(negative.length).toBeGreaterThan(0)
+  })
+  it('lineCount (positive dE only) < totalAllowed for high-n at large B', () => {
+    const lines = anomalousZeemanLines(5, 4, 4, 3, 1, 0.3)
+    const visible = lines.filter(l => l.dE > 0).length
+    expect(visible).toBeLessThan(lines.length)
+  })
 })
