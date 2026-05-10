@@ -28,9 +28,9 @@ export function kpP(alpha: number, a: number): number {
  * Returns 1 + P at E = 0 (L'Hôpital limit, sin(u)/u → 1 as u → 0).
  */
 export function kpRHS(E: number, P: number, a: number): number {
-  if (E <= 0) return 1 + P
+  if (E < 0) return NaN          // formula undefined for negative energies
   const ka = a * Math.sqrt(2 * E)
-  if (ka < 1e-12) return 1 + P
+  if (ka < 1e-12) return 1 + P  // L'Hôpital limit at E → 0+
   return Math.cos(ka) + P * Math.sin(ka) / ka
 }
 

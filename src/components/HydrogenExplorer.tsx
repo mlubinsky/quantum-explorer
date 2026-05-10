@@ -881,22 +881,29 @@ function ZeemanSection({
     if (validLower.length === 0) return { tripletTraces: [], tripletLayout: {}, tripletReadout: [] }
 
     const triplet = zeemanTriplet(n, loN, Z, B)
-    const nm = triplet.map(c => HC_NM_ZEEMAN / c.dE)
+    // dE can be ≤ 0 for the σ− component when B·μ_B > dE0 (e.g. high-n transitions at large B)
+    const nm = triplet.map(c => c.dE > 0 ? HC_NM_ZEEMAN / c.dE : null)
 
     const barWidth = Math.max(0.6, MU_B * B * HC_NM_ZEEMAN / (triplet[1].dE ** 2) * 0.5)
 
-    const traces = triplet.map((c, i) => ({
-      x: [nm[i]],
-      y: [1],
-      type: 'bar' as const,
-      name: POL_LABEL[c.pol],
-      marker: { color: POL_COLOR[c.pol], line: { color: POL_COLOR[c.pol], width: 1 } },
-      width: [barWidth],
-      hovertemplate: `${POL_LABEL[c.pol]}<br>λ = %{x:.2f} nm<br>ΔE = ${c.dE.toFixed(5)} Eh<extra></extra>`,
-    }))
+    const traces = triplet
+      .filter((_, i) => nm[i] !== null)
+      .map(c => {
+        const origIdx = triplet.indexOf(c)
+        return {
+          x: [nm[origIdx]],
+          y: [1],
+          type: 'bar' as const,
+          name: POL_LABEL[c.pol],
+          marker: { color: POL_COLOR[c.pol], line: { color: POL_COLOR[c.pol], width: 1 } },
+          width: [barWidth],
+          hovertemplate: `${POL_LABEL[c.pol]}<br>λ = %{x:.2f} nm<br>ΔE = ${c.dE.toFixed(5)} Eh<extra></extra>`,
+        }
+      })
 
     const λ0 = HC_NM_ZEEMAN / (hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z))
-    const Δλ = Math.abs(nm[0] - nm[1])
+    const validNm = nm.filter((v): v is number => v !== null)
+    const Δλ = validNm.length >= 2 ? Math.abs(validNm[0] - validNm[validNm.length - 1]) : 1.5
     const rangeHalf = Math.max(Δλ * 3, 1.5)
     const layout = {
       ...darkLayout({ height: 220, margin: { l: 50, r: 20, t: 38, b: 52 } }),
@@ -989,16 +996,21 @@ function ZeemanSection({
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginTop: 6,
                 fontSize: '0.8rem', fontFamily: 'monospace' }}>
                 {tripletReadout.map(r => (
-                  <span key={r.pol} style={{ color: POL_COLOR[r.pol] }}>
-                    {POL_LABEL[r.pol]}: <strong>{r.nm.toFixed(2)} nm</strong>
+                  <span key={r.pol} style={{ color: r.nm !== null ? POL_COLOR[r.pol] : '#555' }}>
+                    {POL_LABEL[r.pol]}: {r.nm !== null
+                      ? <strong>{r.nm.toFixed(2)} nm</strong>
+                      : <strong style={{ color: '#666' }}>N/A (B·μ_B &gt; ΔE₀)</strong>}
                     <span style={{ color: '#777', marginLeft: 4 }}>({r.dE.toFixed(4)} Eh)</span>
                   </span>
                 ))}
               </div>
-              {B > 0 && tripletReadout.length === 3 && (
+              {B > 0 && tripletReadout.length === 3 && tripletReadout[1].nm !== null && (
                 <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4 }}>
-                  Splitting: Δλ = ±{Math.abs(tripletReadout[0].nm - tripletReadout[1].nm).toFixed(3)} nm
-                  from π line  ·  μ<sub>B</sub>B = {(MU_B * B).toFixed(4)} Eh
+                  {tripletReadout[0].nm !== null && tripletReadout[2].nm !== null
+                    ? <>Splitting: Δλ = ±{Math.abs(tripletReadout[0].nm - tripletReadout[1].nm).toFixed(3)} nm
+                      from π line  · </>
+                    : <>σ± suppressed (B·μ_B &gt; ΔE₀)  · </>}
+                  μ<sub>B</sub>B = {(MU_B * B).toFixed(4)} Eh
                 </div>
               )}
             </div>

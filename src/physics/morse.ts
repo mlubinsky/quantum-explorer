@@ -51,9 +51,9 @@ export function morseOmega(De: number, alpha: number): number {
   return alpha * Math.sqrt(2 * De)
 }
 
-/** Number of bound states = ⌊λ − ½⌋ + 1 */
+/** Number of bound states = ⌊λ − ½⌋ + 1; clamped to 0 for very shallow wells (λ < 0.5) */
 export function morseNBound(De: number, alpha: number): number {
-  return Math.floor(morseLambda(De, alpha) - 0.5) + 1
+  return Math.max(0, Math.floor(morseLambda(De, alpha) - 0.5) + 1)
 }
 
 /** Exact eigenvalue E_n = −α²(λ − n − ½)²/2 */
