@@ -6,15 +6,40 @@
 }
 
 .app-header {
-  padding: 1.5rem 2rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.75rem 2rem;
   border-bottom: 1px solid #222;
 }
 
 .app-header h1 {
-  margin: 0 0 0.25rem;
-  font-size: 1.6rem;
+  margin: 0;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #fff;
+  white-space: nowrap;
+}
+
+.module-select {
+  padding: 0.35rem 0.7rem;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.module-select:focus {
+  border-color: #4361ee;
+}
+
+.module-select option,
+.module-select optgroup {
+  background: #1a1a1a;
+  color: #e0e0e0;
 }
 
 .module-strip {
@@ -40,35 +65,6 @@
   color: inherit;
 }
 
-.module-nav {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  border-bottom: 1px solid #222;
-  flex-wrap: wrap;
-}
-
-.module-btn {
-  padding: 0.35rem 0.9rem;
-  background: #1a1a1a;
-  color: #aaa;
-  border: 1px solid #333;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background 0.15s, color 0.15s;
-}
-
-.module-btn:hover {
-  background: #252525;
-  color: #ddd;
-}
-
-.module-btn.active {
-  background: #4361ee;
-  color: #fff;
-  border-color: #4361ee;
-}
 
 .app-main {
   padding: 1.5rem 2rem;

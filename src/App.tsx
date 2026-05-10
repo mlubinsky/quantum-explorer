@@ -12,14 +12,29 @@ import './App.css'
 
 type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring'
 
-const MODULES: { id: Module; label: string }[] = [
-  { id: 'stationary',     label: 'Stationary States' },
-  { id: 'time-evolution', label: 'Time Evolution' },
-  { id: 'free-particle',  label: 'Free Particle' },
-  { id: 'tunnelling',     label: 'Scattering' },
-  { id: 'spin',           label: 'Spin-½ / Bloch Sphere' },
-  { id: 'hydrogen',       label: 'Hydrogen Atom' },
-  { id: 'ring',           label: 'Ring & A-B' },
+const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }[] = [
+  {
+    label: 'Single Particle — 1D',
+    modules: [
+      { id: 'stationary',     label: 'Stationary States' },
+      { id: 'time-evolution', label: 'Time Evolution' },
+      { id: 'free-particle',  label: 'Free Particle' },
+      { id: 'tunnelling',     label: 'Scattering' },
+    ],
+  },
+  {
+    label: 'Atoms & Fields',
+    modules: [
+      { id: 'hydrogen', label: 'Hydrogen Atom' },
+      { id: 'ring',     label: 'Ring & A-B' },
+    ],
+  },
+  {
+    label: 'Quantum Information',
+    modules: [
+      { id: 'spin', label: 'Spin-½ / Bloch Sphere' },
+    ],
+  },
 ]
 
 const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
@@ -61,19 +76,21 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1>Quantum Explorer</h1>
+        <select
+          className="module-select"
+          value={active}
+          onChange={e => setActive(e.target.value as Module)}
+          aria-label="Select module"
+        >
+          {MODULE_GROUPS.map(g => (
+            <optgroup key={g.label} label={g.label}>
+              {g.modules.map(m => (
+                <option key={m.id} value={m.id}>{m.label}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
       </header>
-
-      <nav className="module-nav">
-        {MODULES.map(m => (
-          <button
-            key={m.id}
-            className={`module-btn${active === m.id ? ' active' : ''}`}
-            onClick={() => setActive(m.id)}
-          >
-            {m.label}
-          </button>
-        ))}
-      </nav>
 
       <div className="module-strip">
         <div className="module-strip-eq"><InlineMath math={info.eq} /></div>

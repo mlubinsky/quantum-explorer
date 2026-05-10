@@ -1,7 +1,9 @@
 # Quantum Explorer
 
 An interactive quantum mechanics explorer that runs entirely in the browser —
-no backend, no installation.
+no backend, no installation. Modules are selected from a grouped dropdown
+(`<optgroup>` categories) so the navigation scales to many modules without
+layout changes.
 
 Every feature uses an **exact analytical solution**. Eigenvalues, expectation
 values, and time evolution are closed-form; a small number of expectation values

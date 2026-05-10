@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509l] — 2026-05-09
+
+### Changed
+- **Navigation: tab buttons → grouped `<select>` dropdown** — replaced the horizontal
+  button bar (which would overflow as module count grows) with a native `<select>`
+  using `<optgroup>` categories in the header. The title and selector now share one
+  row. Categories: *Single Particle — 1D* (Stationary, Time Evolution, Free Particle,
+  Scattering), *Atoms & Fields* (Hydrogen, Ring & A-B), *Quantum Information* (Spin-½).
+  Scales to many more modules without layout changes; keyboard-accessible out of the box.
+
 ## [0.2026.0509k] — 2026-05-09
 
 ### Fixed
