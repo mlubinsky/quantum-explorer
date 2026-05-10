@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Morse potential** — 6th sub-tab in the Scattering module
+  - `src/physics/morse.ts`: `morseV`, `morseLambda`, `morseOmega`, `morseNBound`,
+    `morseEnergy`, `morseTurningPoints`, `laguerreAssoc`, `morsePsi`, `morseProb` — all exact
+  - `specs/morse.md`: physics spec (TDD-first)
+  - Potential V(x) = De(e^{−2αx} − 2e^{−αx}): asymmetric well, finite depth De, repulsive wall
+  - Exact eigenvalues E_n = −α²(λ−n−½)²/2; N = ⌊λ−½⌋+1 bound states
+  - Exact wavefunctions via associated Laguerre polynomials L_n^k(z); Lanczos Γ-function
+  - **Potential diagram**: V(x) curve, per-level horizontal bars at classical turning-point width,
+    dissociation line, |ψ_n|² overlay scaled within adjacent gap
+  - **Wavefunction viewer**: signed ψ_n(x) and |ψ_n|², turning-point dashed lines, node count
+  - **Anharmonicity table**: ΔE_n spacing, ΔE_n/ω_e ratio (1 → HO; approaches 0 near dissociation)
+  - D_e slider (1–20 a.u.), α slider (0.2–2.0), n button selector; λ, ω_e, N_bound readout
+  - 29 unit tests (normalization ≈ 1, orthogonality ≈ 0, n nodes, turning-point V check); 494 total
 - **Kronig-Penney model** — 5th sub-tab in the Scattering module
   - `src/physics/kronigPenney.ts`: `kpP`, `kpRHS`, `kpAllowed`, `kpBlochKa`, `kpZoneBoundaries` — all exact, no numerics
   - `specs/kronig-penney.md`: physics spec (TDD-first)

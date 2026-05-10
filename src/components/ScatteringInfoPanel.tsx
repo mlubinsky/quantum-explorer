@@ -6,6 +6,7 @@ export type ScatteringInfoTopic =
   | 'deltaTvsE' | 'deltaWavefunction' | 'deltaPotential'
   | 'ptTvsE' | 'ptWavefunction' | 'ptPotential'
   | 'kpDispersion' | 'kpBandStructure' | 'kpBands'
+  | 'morsePotential' | 'morseWavefunction' | 'morseAnharmonicity'
 
 export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
   return (
@@ -22,9 +23,12 @@ export function ScatteringInfoPanel({ topic }: { topic: ScatteringInfoTopic }) {
       {topic === 'ptTvsE'            && <PtTvsESection />}
       {topic === 'ptWavefunction'    && <PtWavefunctionSection />}
       {topic === 'ptPotential'       && <PtPotentialSection />}
-      {topic === 'kpDispersion'      && <KpDispersionSection />}
-      {topic === 'kpBandStructure'   && <KpBandStructureSection />}
-      {topic === 'kpBands'           && <KpBandsSection />}
+      {topic === 'kpDispersion'        && <KpDispersionSection />}
+      {topic === 'kpBandStructure'     && <KpBandStructureSection />}
+      {topic === 'kpBands'             && <KpBandsSection />}
+      {topic === 'morsePotential'      && <MorsePotentialSection />}
+      {topic === 'morseWavefunction'   && <MorseWavefunctionSection />}
+      {topic === 'morseAnharmonicity'  && <MorseAnharmonicitySection />}
     </div>
   )
 }
@@ -657,5 +661,90 @@ function KpBandsSection() {
       <p>A periodic lattice Bragg-reflects waves at <InlineMath math="k = n\pi/a" />, splitting the free-particle parabola into allowed bands with forbidden gaps. In the delta-function KP model, complete stop-bands arise from constructive/destructive Bragg interference — the same delta barrier that gives <InlineMath math="T = k^2/(k^2+\alpha^2)" /> individually now blocks all propagation within a gap energy range.</p>
       <p>Higher bands are wider: the relative effect of each barrier shrinks as <InlineMath math="\Delta E/E \sim \alpha/\sqrt{E}" /> at large E.</p>
     </section>
+  )
+}
+
+// ── Morse topics ───────────────────────────────────────────────────────────────
+
+function MorsePotentialSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Morse potential</h4>
+        <BlockMath math="V(x) = D_e\!\left(e^{-2\alpha x} - 2\,e^{-\alpha x}\right)" />
+        <p style={{ margin: '4px 0' }}>
+          <InlineMath math="V_{\min} = -D_e" /> at <InlineMath math="x = 0" /> (equilibrium);{' '}
+          <InlineMath math="V \to 0" /> as <InlineMath math="x \to +\infty" /> (dissociation);{' '}
+          <InlineMath math="V \to +\infty" /> as <InlineMath math="x \to -\infty" /> (repulsive wall).
+        </p>
+        <p style={{ margin: '4px 0' }}>Key parameters:</p>
+        <BlockMath math="\lambda = \frac{\sqrt{2D_e}}{\alpha},\quad \omega_e = \alpha\sqrt{2D_e} = \alpha^2\lambda" />
+        <p style={{ margin: '4px 0', color: '#aaa', fontSize: '0.87em' }}>
+          <InlineMath math="\lambda" /> is the dimensionless well depth; <InlineMath math="\omega_e" /> is the harmonic
+          frequency at the minimum. Number of bound states: <InlineMath math="N = \lfloor \lambda - \tfrac{1}{2}\rfloor + 1" />.
+        </p>
+      </section>
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Exact eigenvalues</h4>
+        <BlockMath math="E_n = -\frac{\alpha^2}{2}\!\left(\lambda - n - \tfrac{1}{2}\right)^2,\quad n = 0, 1, \ldots, \lfloor\lambda - \tfrac{1}{2}\rfloor" />
+        <p style={{ margin: '4px 0', color: '#aaa', fontSize: '0.87em' }}>
+          All <InlineMath math="E_n < 0" /> (bound). At <InlineMath math="n = n_{\max}" />,{' '}
+          <InlineMath math="E_{n_{\max}} \to 0" /> as <InlineMath math="n_{\max} \to \lambda - \tfrac{1}{2}" />{' '}
+          (dissociation threshold).
+        </p>
+      </section>
+    </>
+  )
+}
+
+function MorseWavefunctionSection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Exact wavefunctions</h4>
+        <BlockMath math="\psi_n(x) = N_n\, z^{\lambda - n - \frac{1}{2}}\, e^{-z/2}\, L_n^{(k)}(z)" />
+        <p style={{ margin: '4px 0 8px' }}>
+          where <InlineMath math="z = 2\lambda\,e^{-\alpha x}" />, <InlineMath math="k = 2\lambda - 2n - 1" />,
+          and <InlineMath math="L_n^{(k)}" /> is the associated Laguerre polynomial.
+        </p>
+        <p style={{ margin: '4px 0' }}>Normalization constant:</p>
+        <BlockMath math="N_n = \sqrt{\frac{\alpha\,k\,n!}{\Gamma(2\lambda - n)}}" />
+        <p style={{ margin: '4px 0', color: '#aaa', fontSize: '0.87em' }}>
+          <InlineMath math="\psi_n" /> has exactly <InlineMath math="n" /> nodes. The classical turning points
+          follow from <InlineMath math="V(x) = E_n" />:
+        </p>
+        <BlockMath math="x_{\text{left}} = -\frac{\ln(1+\beta)}{\alpha},\quad x_{\text{right}} = -\frac{\ln(1-\beta)}{\alpha},\quad \beta = \sqrt{1 + E_n/D_e}" />
+      </section>
+    </>
+  )
+}
+
+function MorseAnharmonicitySection() {
+  return (
+    <>
+      <section style={{ marginBottom: '1rem' }}>
+        <h4 style={{ margin: '0 0 6px' }}>Anharmonic level spacing</h4>
+        <BlockMath math="\Delta E_n = E_{n+1} - E_n = \alpha^2(\lambda - n - 1)" />
+        <p style={{ margin: '4px 0' }}>
+          The harmonic oscillator has constant spacing <InlineMath math="\omega_e = \alpha^2\lambda" />.
+          The Morse spacing decreases linearly:{' '}
+          <InlineMath math="\Delta E_n = \omega_e - \alpha^2(n+1)" />.
+        </p>
+        <p style={{ margin: '4px 0' }}>
+          The last gap closes as <InlineMath math="n \to n_{\max}" />, signalling approach to dissociation.
+          The <InlineMath math="\Delta E_n / \omega_e" /> column shows the anharmonic ratio; it equals 1
+          for the harmonic oscillator and falls toward 0 near dissociation.
+        </p>
+      </section>
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Comparison to harmonic oscillator</h4>
+        <p style={{ margin: '4px 0', color: '#aaa', fontSize: '0.87em' }}>
+          For small <InlineMath math="\alpha" /> (wide, shallow well) with fixed <InlineMath math="\omega_e" />,
+          the Morse levels approach the HO ladder <InlineMath math="-D_e + \omega_e(n+\tfrac{1}{2})" />.
+          The first anharmonic correction to the spacing is <InlineMath math="-\alpha^2" /> per level,
+          which grows as the well gets steeper or the energy approaches the dissociation limit.
+        </p>
+      </section>
+    </>
   )
 }

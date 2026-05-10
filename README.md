@@ -71,7 +71,7 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Analytic norm = 1 — exact flat 1.000 (no PDE solver, no drift)
 
 ### Scattering
-Five sub-tabs covering zero-range, reflectionless, periodic, and extended potentials.
+Six sub-tabs covering zero-range, reflectionless, periodic, diatomic, and extended potentials.
 
 **Pöschl-Teller potential** V(x) = −N(N+1)α²/2 · sech²(αx) — reflectionless well
 - T = 1 for all E > 0 (R = 0 exactly) for integer N — the defining reflectionless property
@@ -96,6 +96,13 @@ Five sub-tabs covering zero-range, reflectionless, periodic, and extended potent
 - Total reflection for E < V₀ (T = 0 exactly); T rises monotonically for E > V₀
 - Wavefunction: standing-wave pattern left of step, evanescent decay right for E < V₀
 - Penetration depth δ = 1/κ annotated; live readout T, R, T+R, δ
+
+**Morse potential** V(x) = De(e^{−2αx} − 2e^{−αx}) — diatomic molecule bond
+- Exact eigenvalues E_n = −α²(λ−n−½)²/2; N = ⌊λ−½⌋+1 bound states (λ = √(2De)/α)
+- Exact wavefunctions via associated Laguerre polynomials L_n^k(z), Γ-function normalization
+- Anharmonic level spacing ΔE_n = ω_e − α²(n+1): decreasing toward dissociation threshold
+- Potential diagram with per-level bars, |ψ_n|² overlay, dissociation line at E = 0
+- Wavefunction viewer: signed ψ_n, |ψ_n|², classical turning-point markers, node count
 
 **Kronig-Penney model** V(x) = α·a · Σ δ(x−na) — periodic delta-function lattice
 - Exact dispersion: cos(Ka) = f(ka), f(u) = cos(u) + P·sin(u)/u, P = αa
@@ -212,7 +219,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (465 passing) |
+| Vitest | Unit tests (494 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

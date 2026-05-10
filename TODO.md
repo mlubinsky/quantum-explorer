@@ -159,7 +159,9 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] **Kronig-Penney model** — exact band structure and band gaps; delta-function periodic
       potential; dispersion f(ka) = cos(ka) + P·sin(ka)/(ka); band/gap coloring; reduced
       Brillouin zone E(Ka/π) scatter; zone-boundary table; 24 unit tests; 465 total
-- [ ] **Morse potential** — finite bound states, diatomic vibration (Laguerre polynomials)
+- [x] **Morse potential** — finite bound states; V(x)=De(e^{-2αx}-2e^{-αx}); exact eigenvalues
+      E_n=-α²(λ-n-½)²/2; Laguerre-polynomial wavefunctions; turning points; potential + level
+      diagram; wavefunction viewer; anharmonicity table ΔE_n/ω_e; 29 unit tests; 494 total
 - [ ] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
       alongside exact results in the Scattering module; educational contrast, highlights
       where WKB fails (near turning points, near resonances)
