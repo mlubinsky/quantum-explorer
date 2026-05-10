@@ -10,7 +10,7 @@ import {
   iswProb, iswExpectX, iswExpectP, iswExpectX2, iswExpectP2, iswRevivalPeriod,
   hoCoherentProb, hoCoherentExpectX, hoCoherentExpectP,
   hoCoherentDeltaX, hoCoherentDeltaP, hoCoherentRePsi, hoCoherentImPsi,
-  hoSqueezedProb, hoSqueezedDeltaX, hoSqueezedDeltaP, hoSqueezedSigmaX,
+  hoSqueezedProb, hoSqueezedDeltaX, hoSqueezedDeltaP,
   hoSqueezedRePsi, hoSqueezedImPsi,
   squeezedFockDist,
 } from '../physics/timeEvolution'

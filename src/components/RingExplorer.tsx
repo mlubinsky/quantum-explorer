@@ -41,7 +41,7 @@ function bandColor(n: number) {
 // ── Energy level diagram ───────────────────────────────────────────────────
 
 function EnergyDiagram({
-  phi, R, n: selectedN, onPhiChange,
+  phi, R, n: _n, onPhiChange,
 }: {
   phi: number; R: number; n: number; onPhiChange: (p: number) => void
 }) {
@@ -128,7 +128,7 @@ function EnergyDiagram({
         }}
         config={{ displayModeBar: false, responsive: true }}
         style={{ width: '100%' }}
-        onClick={(e) => {
+        onClick={(e: { points?: Array<{ x?: unknown }> }) => {
           const pt = e.points?.[0]
           if (pt?.x != null) onPhiChange(pt.x as number)
         }}

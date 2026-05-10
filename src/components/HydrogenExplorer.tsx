@@ -5,7 +5,6 @@ const Plot = (_Plot as any).default ?? _Plot
 
 import { HelpButton, HelpModal } from './HelpModal'
 import { ParameterSlider } from './ParameterSlider'
-import { InlineMath } from './KatexMath'
 import {
   hydrogenEnergy, meanRadius, radialNodes,
   radialWavefunction, radialDensity, orbitalDensity2D,

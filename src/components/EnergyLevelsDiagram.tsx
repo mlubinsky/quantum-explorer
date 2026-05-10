@@ -3,7 +3,7 @@ import _Plot from 'react-plotly.js'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Plot = (_Plot as any).default ?? _Plot
 
-import { iswEnergy, iswEigenstate } from '../physics/isw'
+import { iswEnergy } from '../physics/isw'
 import { hoEnergy, hoTurningPoint, hoPotential } from '../physics/harmonic'
 import { HARTREE_TO_EV } from '../utils/units'
 import { HelpButton, HelpModal } from './HelpModal'

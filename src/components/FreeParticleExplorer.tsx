@@ -7,7 +7,7 @@ import { HelpButton, HelpModal } from './HelpModal'
 import { ParameterSlider } from './ParameterSlider'
 import { FreeParticleInfoPanel } from './FreeParticleInfoPanel'
 import {
-  fpSigma, fpSpreadingTime, fpProb, fpExpectX, fpDeltaX, fpDeltaP, fpMomentumDist,
+  fpSigma, fpSpreadingTime, fpProb, fpDeltaX, fpDeltaP, fpMomentumDist,
   fpRePsi, fpImPsi,
 } from '../physics/freeParticle'
 
@@ -81,8 +81,8 @@ export function FreeParticleExplorer() {
   const [showHelpExpect,   setShowHelpExpect]   = useState(false)
   const [showHelpNorm,     setShowHelpNorm]     = useState(false)
 
-  const rafRef    = useRef<number>()
-  const lastTsRef = useRef<number>()
+  const rafRef    = useRef<number | undefined>(undefined)
+  const lastTsRef = useRef<number | undefined>(undefined)
   const histRef   = useRef<{ t: number; expectX: number; deltaX: number; deltaXdP: number }[]>([])
 
   const t0   = fpSpreadingTime(sigma0)

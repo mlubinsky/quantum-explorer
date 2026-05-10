@@ -8,7 +8,7 @@ import { EnergyLevelsDiagram } from './EnergyLevelsDiagram'
 import { MomentumPlot } from './MomentumPlot'
 import { MatrixPanel } from './MatrixPanel'
 import { iswEnergy, iswSigmaX, iswEigenstate } from '../physics/isw'
-import { hoEnergy, hoSigmaX, hoTurningPoint, hoEigenstate, hoWavefunction } from '../physics/harmonic'
+import { hoEnergy, hoSigmaX, hoTurningPoint, hoWavefunction } from '../physics/harmonic'
 
 type Potential = 'isw' | 'ho'
 
