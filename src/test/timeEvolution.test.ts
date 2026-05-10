@@ -1,11 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import {
-  iswPsi,
   iswProb,
   iswExpectX,
   iswExpectP,
   iswExpectX2,
-  iswExpectP2,
   iswRevivalPeriod,
   hoCoherentProb,
   hoCoherentExpectX,
@@ -14,7 +12,6 @@ import {
 } from '../physics/timeEvolution'
 
 const L = 10
-const TWO_PI = 2 * Math.PI
 
 // ── ISW ──────────────────────────────────────────────────────────────────────
 

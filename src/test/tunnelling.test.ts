@@ -254,8 +254,7 @@ describe('scatteringAmplitudes (internal)', () => {
 
   it('V0=0: r = 0, t = e^{−ikL}', () => {
     const E = 3, V0 = 0, L = 2
-    const _k = Math.sqrt(2 * E)
-    const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
+const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
     expect(rRe).toBeCloseTo(0, 10)
     expect(rIm).toBeCloseTo(0, 10)
     expect(tRe*tRe + tIm*tIm).toBeCloseTo(1, 10)

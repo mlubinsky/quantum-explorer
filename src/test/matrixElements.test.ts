@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { buildH, buildX, buildP, heisenbergRe, heisenbergReFromIm } from '../utils/matrixElements'
 import { iswEigenstate, iswEnergy } from '../physics/isw'
-import { hoEnergy, hoWavefunction, hoTurningPoint } from '../physics/harmonic'
+import { hoWavefunction, hoTurningPoint } from '../physics/harmonic'
 
 // Build a small ISW basis (n=1..4, L=10) for all matrix tests
 const L = 10
@@ -112,8 +112,7 @@ describe('HO matrix elements on common grid', () => {
   const xMax = hoTurningPoint(nLevels - 1, omega) * 1.8 + 1.5
   const hoGrid = Array.from({ length: nPoints }, (_, i) => -xMax + (2 * xMax * i) / (nPoints - 1))
   const hoDx = hoGrid[1] - hoGrid[0]
-  const _hoEnergies = Array.from({ length: nLevels }, (_, i) => hoEnergy(i, omega))
-  const hoWavefunctions = Array.from({ length: nLevels }, (_, i) => hoGrid.map(x => hoWavefunction(i, x, omega)))
+const hoWavefunctions = Array.from({ length: nLevels }, (_, i) => hoGrid.map(x => hoWavefunction(i, x, omega)))
 
   it('⟨ψₙ|x|ψₙ⟩ = 0 for all n (HO symmetry: ⟨x⟩ = 0)', () => {
     const X = buildX(hoWavefunctions, hoGrid, hoDx)

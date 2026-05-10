@@ -127,8 +127,8 @@ export function TimeEvolutionExplorer() {
   const [showHelpNorm,     setShowHelpNorm]     = useState(false)
   const [showHelpMomentum, setShowHelpMomentum] = useState(false)
 
-  const rafRef    = useRef<number>()
-  const lastTsRef = useRef<number>()
+  const rafRef    = useRef<number | undefined>(undefined)
+  const lastTsRef = useRef<number | undefined>(undefined)
 
   const tMax   = subMode === 'isw' ? 2 * iswRevivalPeriod(L) : 4 * Math.PI / omega
   const tScale = SPEEDS[speedIdx] * 0.1
