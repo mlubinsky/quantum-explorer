@@ -139,9 +139,11 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
       only; the Re/Im toggle in the UI has nothing to display. Add exact complex ψ for the
       coherent state: `ψ_α(x,t) = (ω/π)^{1/4} exp(−ω(x−⟨x⟩)²/2 + i⟨p⟩x − i·phase)`.
       Implemented: `hoCoherentRePsi`, `hoCoherentImPsi`, `hoSqueezedRePsi`, `hoSqueezedImPsi`.
-- [ ] **Squeezed-state Fock decomposition shows wrong distribution** — the UI renders a Poisson
-      distribution based only on `|α|`, ignoring the squeeze parameter `r`. Replace with
-      `squeezedFockDist` (already implemented and correct) or derive the exact formula.
+- [x] **Squeezed-state Fock decomposition** — wired `squeezedFockDist` into UI; nMax raised to
+      32 (captures tail at r=2 where ⟨n⟩≈13, spread≈19); normalised weights sum exactly to 1;
+      amber truncation warning shown when captured < 99%; axis label corrected to P(n) for HO
+      modes; section header now reads "Fock distribution P(n)" vs "Energy decomposition |cₙ|²"
+      for ISW.
 - [x] **`groundStateN` silent branch at half-integer φ** — added `isDegenerateGS` and
       `degenerateGSPair`; energy diagram highlights both bands and shows a callout;
       readout shows `k, k+1 (degenerate)` in amber.

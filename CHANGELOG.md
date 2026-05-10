@@ -5,6 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509m] — 2026-05-09
+
+### Fixed
+- **Squeezed-state Fock decomposition** — three issues resolved:
+  1. `nMax` raised from 16 → 32; at `r=2` (max slider) ⟨n⟩≈13 with spread≈19 so 16 bins
+     silently missed the tail; 32 bins capture >99% for all accessible `r` values
+  2. Weights are normalised to sum exactly to 1 in the UI; an amber warning line appears
+     when the captured fraction falls below 99% ("Showing X% — tail truncated at n=31")
+  3. Y-axis label corrected: ISW keeps `|cₙ|²`; HO coherent shows `P(n)` (Poisson);
+     HO squeezed shows `P(n)` (non-Poisson, r-dependent)
+- **Section header** now dynamic: "Energy decomposition |cₙ|²" for ISW, "Fock distribution
+  P(n) = |⟨n|ψ_α⟩|² — Poisson" for coherent, "Fock distribution P(n) = |⟨n|ψ_sq⟩|²"
+  for squeezed
+
 ## [0.2026.0509l] — 2026-05-09
 
 ### Changed

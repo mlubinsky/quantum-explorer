@@ -255,23 +255,43 @@ export function TimeEvolutionExplorer() {
   const decompData = useMemo(() => {
     if (subMode === 'isw') {
       return {
+        title:   'Energy decomposition |cₙ|²',
+        yLabel:  '|cₙ|²',
         labels:  normCoeffs.map((_, i) => `n=${i + 1}`),
         weights: normCoeffs.map(c => c * c),
+        captured: 1,
       }
     }
-    const nMax = 16
     if (subMode === 'ho-sq') {
-      const weights = squeezedFockDist(alpha, phiAlpha, omega, r, nMax)
-      return { labels: Array.from({ length: nMax }, (_, n) => `n=${n}`), weights }
+      // nMax=32: at r=2, ⟨n⟩=sinh²(2)≈13, spread≈19 — need enough bins to capture tail
+      const nMax = 32
+      const raw = squeezedFockDist(alpha, phiAlpha, omega, r, nMax)
+      const total = raw.reduce((s, w) => s + w, 0)
+      // Normalise so bars sum to 1 even if tail is truncated
+      const weights = total > 0 ? raw.map(w => w / total) : raw
+      return {
+        title:   'Fock distribution P(n) = |⟨n|ψ_sq⟩|²',
+        yLabel:  'P(n)',
+        labels:  Array.from({ length: nMax }, (_, n) => `n=${n}`),
+        weights,
+        captured: total,
+      }
     }
-    // Coherent state: Poisson distribution P(n) = e^{-|α|²} |α|^{2n} / n!
+    // Coherent state: exact Poisson P(n) = e^{-|α|²} |α|^{2n} / n!
+    const nMax = 16
     const exp2 = Math.exp(-alpha * alpha)
     let pow = 1, fac = 1
     const weights = Array.from({ length: nMax }, (_, n) => {
       if (n > 0) { pow *= alpha * alpha; fac *= n }
       return exp2 * pow / fac
     })
-    return { labels: Array.from({ length: nMax }, (_, n) => `n=${n}`), weights }
+    return {
+      title:   'Fock distribution P(n) = |⟨n|ψ_α⟩|² — Poisson',
+      yLabel:  'P(n)',
+      labels:  Array.from({ length: nMax }, (_, n) => `n=${n}`),
+      weights,
+      captured: 1,
+    }
   }, [subMode, normCoeffs, alpha, phiAlpha, omega, r])
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -402,11 +422,20 @@ export function TimeEvolutionExplorer() {
           <div style={detailsStyle}>
             <div style={sectionHeaderStyle}>
               <button style={sectionToggleStyle} onClick={() => setShowDecomp(p => !p)}>
-                {showDecomp ? '▾' : '▸'} Energy decomposition |cₙ|²
+                {showDecomp ? '▾' : '▸'} {decompData.title}
               </button>
               <HelpButton onClick={() => setShowHelpDecomp(true)} />
             </div>
-            {showDecomp && <EnergyDecompPlot labels={decompData.labels} weights={decompData.weights} />}
+            {showDecomp && (
+              <>
+                <EnergyDecompPlot labels={decompData.labels} weights={decompData.weights} yLabel={decompData.yLabel} />
+                {decompData.captured < 0.99 && (
+                  <div style={{ fontSize: '0.75rem', color: '#f77f00', marginTop: '2px' }}>
+                    Showing {(decompData.captured * 100).toFixed(1)}% of distribution (tail truncated at n={decompData.labels.length - 1})
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* Expectation values */}
@@ -603,13 +632,13 @@ function MainWavepacketPlot({ subMode, displayMode, posData, L }: {
   return <Plot data={traces as any} layout={layout as any} config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
 }
 
-function EnergyDecompPlot({ labels, weights }: { labels: string[]; weights: number[] }) {
+function EnergyDecompPlot({ labels, weights, yLabel = '|cₙ|²' }: { labels: string[]; weights: number[]; yLabel?: string }) {
   const traces = [{
     type: 'bar', x: labels, y: weights,
     marker: { color: weights.map((w, i) => `hsl(${220 + i * 15}, 70%, ${40 + w * 40}%)`) },
     hovertemplate: '%{x}: %{y:.3f}<extra></extra>',
   }]
-  const layout = { ...darkLayout({ height: 220 }), xaxis: axis('n'), yaxis: axis('|cₙ|²', { range: [0, 1.05] }), bargap: 0.25 }
+  const layout = { ...darkLayout({ height: 220 }), xaxis: axis('n'), yaxis: axis(yLabel, { range: [0, 1.05] }), bargap: 0.25 }
   return <Plot data={traces as any} layout={layout as any} config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
 }
 
