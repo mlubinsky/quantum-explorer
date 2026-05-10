@@ -209,9 +209,10 @@ These items deepen that into a proper Heisenberg-picture module:
 - [x] **Wigner function** — exact closed-form W(x,p) for Fock states (Laguerre polynomial),
       coherent (Gaussian), squeezed, even/odd cat states, Fock superpositions; 70×70 heatmap;
       marginals; negativity readout
-- [ ] **Wigner function — time animation** — animate W(x,p,t) for HO coherent state (Gaussian
+- [x] **Wigner function — time animation** — animate W(x,p,t) for HO coherent state (Gaussian
       blob rigidly rotating in phase space at ω) and squeezed state (ellipse rotating and
-      breathing at 2ω); Play/Pause/Reset controls; t readout
+      breathing at 2ω); Play/Pause/Stop controls; phase φ_α slider; orbit ellipse trace;
+      moving centroid marker; 5 speed presets; fixed axes; 370 tests
 
 ---
 

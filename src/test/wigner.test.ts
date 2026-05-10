@@ -4,6 +4,8 @@ import {
   wignerFock,
   wignerCoherent,
   wignerSqueezed,
+  wignerCoherentT,
+  wignerSqueezedT,
   wignerCat,
   wignerFockSuper,
   computeWignerGrid,
@@ -221,6 +223,92 @@ describe('wignerFockSuper', () => {
       const psi = (hoWavefunction(0, x, omega) + hoWavefunction(1, x, omega)) / Math.SQRT2
       expect(integral).toBeCloseTo(psi * psi, 1)
     }
+  })
+})
+
+// ── Time-evolved Wigner ───────────────────────────────────────────────────────
+
+describe('wignerCoherentT', () => {
+  it('t=0 matches wignerCoherent at displaced centre', () => {
+    const [alpha, phi, omega] = [1.5, Math.PI / 4, 1]
+    const x0 = alpha * Math.sqrt(2 / omega) * Math.cos(phi)
+    const p0 = -alpha * Math.sqrt(2 * omega) * Math.sin(phi)
+    for (const [x, p] of [[0, 0], [1, -1], [2, 1]]) {
+      expect(wignerCoherentT(x, p, 0, alpha, phi, omega))
+        .toBeCloseTo(wignerCoherent(x, p, x0, p0, omega), 8)
+    }
+  })
+
+  it('integrates to 1 at t = π/(3ω)', () => {
+    const [alpha, omega] = [1.5, 1]
+    const t = Math.PI / 3
+    const N = 150, xMax = 7, pMax = 7
+    const dx = 2 * xMax / N, dp = 2 * pMax / N
+    let sum = 0
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      sum += wignerCoherentT(-xMax + i * dx, -pMax + j * dp, t, alpha, 0, omega) * dx * dp
+    }
+    expect(sum).toBeCloseTo(1, 2)
+  })
+
+  it('is periodic with T = 2π/ω', () => {
+    const [alpha, omega] = [2, 1.5]
+    const T = 2 * Math.PI / omega
+    const [x, p, t0] = [1, 0.5, 0.7]
+    expect(wignerCoherentT(x, p, t0, alpha, 0, omega))
+      .toBeCloseTo(wignerCoherentT(x, p, t0 + T, alpha, 0, omega), 6)
+  })
+})
+
+describe('wignerSqueezedT', () => {
+  it('t=0 matches wignerSqueezed at displaced centre (phiAlpha=0)', () => {
+    const [alpha, omega, r] = [1.5, 1, 0.8]
+    const x0 = alpha * Math.sqrt(2 / omega)
+    for (const [x, p] of [[0, 0], [1.5, -0.5], [2, 1]]) {
+      expect(wignerSqueezedT(x, p, 0, alpha, 0, omega, r))
+        .toBeCloseTo(wignerSqueezed(x, p, x0, 0, omega, r), 8)
+    }
+  })
+
+  it('r=0 reduces to wignerCoherentT', () => {
+    const [alpha, omega, t] = [1.5, 1, 0.9]
+    for (const [x, p] of [[0, 0], [1, 1], [-1, 0.5]]) {
+      expect(wignerSqueezedT(x, p, t, alpha, 0, omega, 0))
+        .toBeCloseTo(wignerCoherentT(x, p, t, alpha, 0, omega), 8)
+    }
+  })
+
+  it('integrates to 1 at t = π/(4ω) (maximum tilt)', () => {
+    const [alpha, omega, r] = [1, 1, 1]
+    const t = Math.PI / (4 * omega)
+    const N = 150, xMax = 7, pMax = 7
+    const dx = 2 * xMax / N, dp = 2 * pMax / N
+    let sum = 0
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      sum += wignerSqueezedT(-xMax + i * dx, -pMax + j * dp, t, alpha, 0, omega, r) * dx * dp
+    }
+    expect(sum).toBeCloseTo(1, 2)
+  })
+
+  it('t=π/(2ω) swaps squeeze axes: narrow ↔ wide', () => {
+    const [omega, r] = [1, 1]
+    // t=0: x is squeezed → W drops faster in x direction than p direction
+    const W0_nearX = wignerSqueezedT(0.1, 0, 0, 0, 0, omega, r)
+    const W0_nearP = wignerSqueezedT(0, 0.1, 0, 0, 0, omega, r)
+    expect(W0_nearX).toBeLessThan(W0_nearP)   // squeezed (narrow) x falls off faster
+    // t=π/(2ω): p is now squeezed → W drops faster in p direction
+    const thalf = Math.PI / (2 * omega)
+    const Wh_nearX = wignerSqueezedT(0.1, 0, thalf, 0, 0, omega, r)
+    const Wh_nearP = wignerSqueezedT(0, 0.1, thalf, 0, 0, omega, r)
+    expect(Wh_nearP).toBeLessThan(Wh_nearX)   // squeezed (narrow) p falls off faster
+  })
+
+  it('is periodic with T = 2π/ω', () => {
+    const [alpha, omega, r] = [1, 1, 0.8]
+    const T = 2 * Math.PI / omega
+    const [x, p, t0] = [0.5, 0.3, 0.4]
+    expect(wignerSqueezedT(x, p, t0, alpha, 0, omega, r))
+      .toBeCloseTo(wignerSqueezedT(x, p, t0 + T, alpha, 0, omega, r), 6)
   })
 })
 

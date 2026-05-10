@@ -72,6 +72,59 @@ export function wignerSqueezed(
   return (1 / Math.PI) * Math.exp(-e2r * omega * dx * dx - dp * dp / (omega * e2r))
 }
 
+// ── Time-evolved HO Wigner functions ─────────────────────────────────────────
+
+/** ⟨x(t)⟩ = |α|√(2/ω) cos(ωt + φ_α) */
+function hoExpectX(t: number, alpha: number, phiAlpha: number, omega: number): number {
+  return alpha * Math.sqrt(2 / omega) * Math.cos(omega * t + phiAlpha)
+}
+
+/** ⟨p(t)⟩ = −|α|√(2ω) sin(ωt + φ_α) */
+function hoExpectP(t: number, alpha: number, phiAlpha: number, omega: number): number {
+  return -alpha * Math.sqrt(2 * omega) * Math.sin(omega * t + phiAlpha)
+}
+
+/**
+ * W for HO coherent state |α e^{iφ}⟩ at time t.
+ * The Gaussian blob rigidly orbits the classical ellipse — no spreading, no distortion.
+ *   W(x,p,t) = (1/π) exp(-ω(x−⟨x⟩)² − (p−⟨p⟩)²/ω)
+ */
+export function wignerCoherentT(
+  x: number, p: number, t: number,
+  alpha: number, phiAlpha: number, omega: number,
+): number {
+  return wignerCoherent(x, p, hoExpectX(t, alpha, phiAlpha, omega), hoExpectP(t, alpha, phiAlpha, omega), omega)
+}
+
+/**
+ * W for displaced squeezed state D(α)S(r)|0⟩ at time t under H = ω(a†a + ½).
+ *
+ * The ellipse centre orbits the classical trajectory while the ellipse itself
+ * rotates at ω and breathes at 2ω:
+ *
+ *   W(x,p,t) = (1/π) exp(-A δx² − C δp²/ω − B δx δp)
+ *
+ *   A = ω[cosh(2r) + sinh(2r)cos(2ωt)]
+ *   C =   cosh(2r) − sinh(2r)cos(2ωt)
+ *   B = 2 sinh(2r) sin(2ωt)         ← cross term (tilt)
+ *
+ * The matrix [[A, B/2],[B/2, C/ω]] has det = AC/ω − (B/2)² = cosh²−sinh² = 1,
+ * so the normalisation ∫∫W = 1 is guaranteed for all t.
+ */
+export function wignerSqueezedT(
+  x: number, p: number, t: number,
+  alpha: number, phiAlpha: number, omega: number, r: number,
+): number {
+  const dx = x - hoExpectX(t, alpha, phiAlpha, omega)
+  const dp = p - hoExpectP(t, alpha, phiAlpha, omega)
+  const ch = Math.cosh(2 * r), sh = Math.sinh(2 * r)
+  const c2 = Math.cos(2 * omega * t), s2 = Math.sin(2 * omega * t)
+  const A = omega * (ch + sh * c2)
+  const C = ch - sh * c2
+  const B = 2 * sh * s2
+  return (1 / Math.PI) * Math.exp(-A * dx * dx - C * dp * dp / omega - B * dx * dp)
+}
+
 // ── Cat state Wigner ─────────────────────────────────────────────────────────
 
 /**

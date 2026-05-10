@@ -149,6 +149,8 @@ Phase-space quasi-probability distribution W(x,p) — the closest quantum analog
 - Marginal plots: ∫W dp = \|ψ(x)\|², ∫W dx = \|φ̃(p)\|², with exact \|ψ\|² overlay for Fock states
 - Negativity readout 𝒩 = ∫\|W<0\|\|W\| dx dp (zero for classical states)
 - Sliders for ω, Fock n, displacement \|α\|, squeeze r
+- **Time animation** for coherent (blob orbits at ω) and squeezed (ellipse rotates/breathes at 2ω):
+  Play/Pause/Stop, 5 speed presets, orbit ellipse trace, moving centroid, phase slider φ_α
 
 ### Ring & Aharonov-Bohm Effect
 Exact solutions for a spinless particle on a 1D ring threaded by magnetic flux Φ.
@@ -188,7 +190,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (362 passing) |
+| Vitest | Unit tests (370 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

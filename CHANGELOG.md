@@ -6,6 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Wigner function — time animation** — coherent and squeezed HO states now animate in phase space
+  - Coherent blob rigidly orbits the classical ellipse at ω without any spreading or distortion
+  - Squeezed ellipse rotates and breathes at 2ω; exact cross-term B = 2sinh(2r)sin(2ωt) preserves det = 1
+  - Play/Pause/Stop controls with 5 speed presets (0.25×–5×); t/T readout; phase slider φ_α
+  - Fixed-axis heatmap (axes set from full orbital envelope — no jump on play/pause)
+  - Orbit ellipse drawn as dashed white trace; moving centroid shown as orange cross marker
+  - Resolution drops to 50×50 during playback, returns to 70×70 on pause for smooth animation
+  - Marginals suppressed during playback to keep frame rate high
+  - 8 new physics tests: `wignerCoherentT` and `wignerSqueezedT` — normalization, classical limit,
+    periodicity, squeeze-axis swap (370 total)
+
+### Added
 - **Two-particle ISW module** — new "Two Particles" group in the dropdown
   - Distinguishable, boson, and fermion statistics with selector
   - 80×80 joint-density heatmap |Ψ(x₁,x₂)|² with dotted x₁=x₂ diagonal annotation
