@@ -233,7 +233,10 @@ These items deepen that into a proper Heisenberg-picture module:
 
 ## Phase 2 — Hydrogen atom (remaining)
 
-- [ ] **Emission spectra** — Lyman / Balmer / Paschen; click transition → wavefunctions
+- [x] **Emission spectra** — Lyman / Balmer / Paschen / Brackett; 4-series SVG spectral display;
+      hover tooltip with λ, ΔE; click line → select + readout card; "View wavefunctions" button;
+      rainbow gradient for Balmer visible lines; Z slider affects all wavelengths (λ ∝ 1/Z²);
+      19 unit tests; 593 total
 - [x] **Zeeman effect (normal)** — level splitting ΔE = μ_B B m_l with B-field slider;
       sublevel fan diagram (energy vs B for all m_l); Lorentz spectral triplet (σ+, π, σ−)
       as bar chart; transition selector; Δm = 0, ±1 labelled; "non-relativistic model" note;

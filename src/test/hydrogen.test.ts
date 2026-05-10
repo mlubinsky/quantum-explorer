@@ -8,6 +8,10 @@ import {
   radialNodes,
   orbitalDensity2D,
   orbitalDensity3D,
+  transitionPhotonEnergy,
+  transitionWavelengthNm,
+  spectralLines,
+  HC_NM,
 } from '../physics/hydrogen'
 
 // Numerical integral ∫₀^∞ f(r) dr via trapezoidal rule on [0, r_max]
@@ -209,5 +213,102 @@ describe('orbitalDensity2D (xz cross-section)', () => {
       const d3d = orbitalDensity3D(n, l, m, x, 0, z, 1)
       expect(d2d).toBeCloseTo(d3d, 10)
     }
+  })
+})
+
+describe('transitionPhotonEnergy', () => {
+  it('2→1 photon energy is positive', () => {
+    expect(transitionPhotonEnergy(2, 1, 1)).toBeGreaterThan(0)
+  })
+  it('E_photon(2→1) = 0.5*(1 - 1/4) = 0.375 Eh', () => {
+    expect(transitionPhotonEnergy(2, 1, 1)).toBeCloseTo(0.375, 10)
+  })
+  it('E_photon(3→2) = 0.5*(1/4 - 1/9) = 5/72 Eh', () => {
+    expect(transitionPhotonEnergy(3, 2, 1)).toBeCloseTo(5 / 72, 10)
+  })
+  it('scales as Z²', () => {
+    expect(transitionPhotonEnergy(2, 1, 2)).toBeCloseTo(4 * transitionPhotonEnergy(2, 1, 1), 10)
+  })
+})
+
+describe('transitionWavelengthNm', () => {
+  it('Lyman-α (2→1) ≈ 121.6 nm', () => {
+    expect(transitionWavelengthNm(2, 1, 1)).toBeCloseTo(121.6, 0)
+  })
+  it('H-α (3→2, Balmer) ≈ 656 nm', () => {
+    expect(transitionWavelengthNm(3, 2, 1)).toBeCloseTo(656.1, 0)
+  })
+  it('H-β (4→2, Balmer) ≈ 486 nm', () => {
+    expect(transitionWavelengthNm(4, 2, 1)).toBeCloseTo(486.0, 0)
+  })
+  it('H-γ (5→2, Balmer) ≈ 434 nm', () => {
+    expect(transitionWavelengthNm(5, 2, 1)).toBeCloseTo(434.0, 0)
+  })
+  it('wavelength scales as 1/Z²', () => {
+    const λ1 = transitionWavelengthNm(3, 2, 1)
+    const λ2 = transitionWavelengthNm(3, 2, 2)
+    expect(λ2).toBeCloseTo(λ1 / 4, 8)
+  })
+  it('ΔE × λ_nm = HC_NM for several lines', () => {
+    const pairs = [[2, 1], [3, 2], [4, 2], [4, 3]] as const
+    for (const [nHi, nLo] of pairs) {
+      const dE = transitionPhotonEnergy(nHi, nLo, 1)
+      const λ  = transitionWavelengthNm(nHi, nLo, 1)
+      expect(dE * λ).toBeCloseTo(HC_NM, 6)
+    }
+  })
+  it('wavelength decreases as nHi increases within Balmer series', () => {
+    const λ32 = transitionWavelengthNm(3, 2, 1)
+    const λ42 = transitionWavelengthNm(4, 2, 1)
+    const λ52 = transitionWavelengthNm(5, 2, 1)
+    expect(λ32).toBeGreaterThan(λ42)
+    expect(λ42).toBeGreaterThan(λ52)
+  })
+})
+
+describe('spectralLines', () => {
+  it('returns 15 lines for Z=1, nMax=6 (5+4+3+2+1)', () => {
+    expect(spectralLines(1, 6)).toHaveLength(15)
+  })
+  it('nHi > nLo for all lines', () => {
+    for (const line of spectralLines(1, 6)) {
+      expect(line.nHi).toBeGreaterThan(line.nLo)
+    }
+  })
+  it('all wavelengths are positive', () => {
+    for (const line of spectralLines(1, 6)) {
+      expect(line.wavelengthNm).toBeGreaterThan(0)
+    }
+  })
+  it('dE_eV ≈ dE_hartree × 27.2114', () => {
+    for (const line of spectralLines(1, 6)) {
+      expect(line.dE_eV).toBeCloseTo(line.dE_hartree * 27.2114, 6)
+    }
+  })
+  it('all Lyman lines are UV (< 122 nm)', () => {
+    const lyman = spectralLines(1, 6).filter(l => l.series === 'Lyman')
+    expect(lyman.length).toBeGreaterThan(0)
+    for (const line of lyman) {
+      expect(line.wavelengthNm).toBeLessThan(122)
+    }
+  })
+  it('H-α (3→2) is in the visible range', () => {
+    const ha = spectralLines(1, 6).find(l => l.nHi === 3 && l.nLo === 2)!
+    expect(ha.wavelengthNm).toBeGreaterThan(380)
+    expect(ha.wavelengthNm).toBeLessThan(700)
+  })
+  it('all Paschen lines (n→3) are in the NIR (> 800 nm)', () => {
+    const paschen = spectralLines(1, 6).filter(l => l.series === 'Paschen')
+    expect(paschen.length).toBeGreaterThan(0)
+    for (const line of paschen) {
+      expect(line.wavelengthNm).toBeGreaterThan(800)
+    }
+  })
+  it('series labels are correct', () => {
+    const lines = spectralLines(1, 6)
+    expect(lines.find(l => l.nLo === 1)?.series).toBe('Lyman')
+    expect(lines.find(l => l.nLo === 2)?.series).toBe('Balmer')
+    expect(lines.find(l => l.nLo === 3)?.series).toBe('Paschen')
+    expect(lines.find(l => l.nLo === 4)?.series).toBe('Brackett')
   })
 })

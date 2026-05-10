@@ -147,6 +147,7 @@ Exact hydrogenic solutions for n = 1–5, l = 0–4, m = −l…l, Z = 1–10.
 - **Normal Zeeman effect** — B-field slider; sublevel fan diagram (energy vs B for all 2l+1 m_l of selected level); Lorentz spectral triplet (σ+, π, σ−) bar chart for any E1 transition; λ and ΔE readout per component; labelled "simplified nonrelativistic model"
 - **Anomalous Zeeman effect** — includes electron spin S=½; Landé g-factor g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); fan diagram for both J=L±½ multiplets (solid/dashed, different slopes); spectral pattern showing up to 10 lines for 2p→1s (vs 3 for normal Zeeman); g_J readout per J term; note on spin doublet in s orbitals
 - **Linear Stark effect (n = 2)** — electric field F along z-axis; exact first-order perturbation theory via parabolic coordinates; ΔE = −(3/2)n(n₁−n₂)F/Z; fan diagram of all 4 n=2 levels vs F (two shifted ±3F/Z, two degenerate m=±1); readout table with parabolic labels and spherical expansions; classical ionisation threshold F_ion = Z³/(16n⁴) marked; Z-scaling demonstrated
+- **Emission spectra** — 4-series SVG spectral display: Lyman (UV), Balmer (rainbow gradient, H-α through H-δ), Paschen (NIR), Brackett (IR); lines at exact wavelength positions; hover tooltip (λ, ΔE, region); click line → readout card + "View wavefunctions" button; all lines scale as 1/Z²
 
 ### Bosons & Fermions — Two-Particle ISW
 Two identical particles in an infinite square well: the role of quantum statistics.
@@ -199,7 +200,6 @@ Every module includes a **?** help button with physics formulas (KaTeX).
 - Delta function potential — one bound state, exact scattering
 - Kronig-Penney model — exact band structure and band gaps
 - Morse potential — finite bound states, diatomic vibration
-- Hydrogen emission spectra / Zeeman effect
 - Single-qubit gates on Bloch sphere
 
 See [TODO.md](TODO.md) for the full roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
@@ -221,7 +221,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (574 passing) |
+| Vitest | Unit tests (593 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

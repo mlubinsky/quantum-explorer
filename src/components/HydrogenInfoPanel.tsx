@@ -10,6 +10,7 @@ export type HydrogenInfoTopic =
   | 'zeeman'
   | 'anomalousZeeman'
   | 'stark'
+  | 'emissionSpectra'
 
 export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'radialDensity')     return <RadialDensitySection />
@@ -20,6 +21,7 @@ export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'zeeman')            return <ZeemanSection />
   if (topic === 'anomalousZeeman')   return <AnomalousZeemanSection />
   if (topic === 'stark')             return <StarkSection />
+  if (topic === 'emissionSpectra')   return <EmissionSpectraSection />
   return <GrotrianSection />
 }
 
@@ -178,6 +180,30 @@ function StarkSection() {
       <p><strong>Field ionisation threshold</strong> (classical barrier suppression):</p>
       <BlockMath math="F_\text{ion} = \frac{Z^3}{16\,n^4} \approx 0.00391\text{ a.u.}\;(n{=}2,\,Z{=}1)" />
       <p>First-order perturbation theory is valid for F ≪ F<sub>ion</sub>. The orange dashed line marks this threshold.</p>
+    </div>
+  )
+}
+
+function EmissionSpectraSection() {
+  return (
+    <div>
+      <p>When an electron drops from level n<sub>Hi</sub> to n<sub>Lo</sub>, a photon is emitted:</p>
+      <BlockMath math="\Delta E = E_{n_\text{Hi}} - E_{n_\text{Lo}} = \frac{Z^2}{2}\!\left(\frac{1}{n_\text{Lo}^2} - \frac{1}{n_\text{Hi}^2}\right)\;\text{Hartree}" />
+      <p>The <strong>Rydberg formula</strong> gives the wavelength:</p>
+      <BlockMath math="\frac{1}{\lambda} = R_\infty Z^2\!\left(\frac{1}{n_\text{Lo}^2} - \frac{1}{n_\text{Hi}^2}\right),\quad \lambda = \frac{hc}{\Delta E}" />
+      <p>In atomic units <InlineMath math="hc = 45.564\;\text{nm·Eh}" />, so <InlineMath math="\lambda\,[\text{nm}] = 45.564\,/\,\Delta E\,[\text{Eh}]" />.
+        Wavelengths scale as <InlineMath math="1/Z^2" /> for hydrogenic ions.</p>
+      <p><strong>Named series</strong> (grouped by lower level n<sub>Lo</sub>):</p>
+      <ul style={{ lineHeight: 1.8, paddingLeft: '1.2rem' }}>
+        <li><strong>Lyman</strong> (→ n=1): UV, 91–122 nm</li>
+        <li><strong>Balmer</strong> (→ n=2): visible, 365–656 nm &mdash;
+          H-α 656 nm (red), H-β 486 nm, H-γ 434 nm, H-δ 410 nm</li>
+        <li><strong>Paschen</strong> (→ n=3): near-IR, 820–1875 nm</li>
+        <li><strong>Brackett</strong> (→ n=4): mid-IR, 1458–4051 nm</li>
+      </ul>
+      <p>The E1 selection rule <InlineMath math="\Delta\ell = \pm 1" /> governs which transitions occur,
+        but since the nonrelativistic hydrogen energy depends only on n (not ℓ), each line in this
+        display represents all allowed ℓ transitions between those two shells.</p>
     </div>
   )
 }

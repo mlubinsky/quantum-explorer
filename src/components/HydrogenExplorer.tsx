@@ -11,7 +11,9 @@ import {
   MU_B, zeemanSublevels, zeemanTriplet,
   landeG, jTerms, anomalousSublevels, anomalousZeemanLines,
   starkN2Sublevels, starkIonizationField,
+  HC_NM, spectralLines,
 } from '../physics/hydrogen'
+import type { SpectralLine } from '../physics/hydrogen'
 import { HydrogenInfoPanel } from './HydrogenInfoPanel'
 import type { HydrogenInfoTopic } from './HydrogenInfoPanel'
 
@@ -43,9 +45,6 @@ const N_RADIAL  = 600
 const N_ORBITAL = 130
 const L_LABELS  = ['s', 'p', 'd', 'f', 'g']
 const SERIES_NAME: Record<number, string> = { 1: 'Lyman', 2: 'Balmer', 3: 'Paschen', 4: 'Brackett' }
-
-// hc in nm·Hartree: λ_nm = HC_NM / ΔE_hartree
-const HC_NM = 45.5640
 
 // ─── Grotrian helpers ──────────────────────────────────────────────────────
 
@@ -513,6 +512,7 @@ export function HydrogenExplorer() {
   const [showZeeman,          setShowZeeman]          = useState(true)
   const [showAnomalousZeeman, setShowAnomalousZeeman] = useState(true)
   const [showStark,           setShowStark]           = useState(true)
+  const [showEmission,        setShowEmission]        = useState(true)
 
   const [B, setB] = useState(0)
   const [zeemanLoN, setZeemanLoN] = useState(1)
@@ -785,6 +785,17 @@ export function HydrogenExplorer() {
           )}
         </div>
 
+        {/* Emission spectra (collapsible) */}
+        <EmissionSpectraSection
+          Z={Z}
+          onSelectN={(newN) => {
+            const newL = Math.min(l, newN - 1)
+            setN(newN); setL(newL); setM(Math.max(-newL, Math.min(newL, m)))
+          }}
+          show={showEmission} onToggle={() => setShowEmission(s => !s)}
+          onHelpClick={() => setHelpTopic('emissionSpectra')}
+        />
+
         {/* Normal Zeeman effect (collapsible) */}
         <ZeemanSection
           n={n} l={l} Z={Z} B={B} onBChange={setB}
@@ -814,8 +825,6 @@ export function HydrogenExplorer() {
 }
 
 // ─── Zeeman section component ─────────────────────────────────────────────────
-
-const HC_NM_ZEEMAN = 45.5640  // hc in nm·Hartree: λ_nm = HC_NM / ΔE_hartree
 
 const POL_COLOR: Record<string, string> = {
   'sigma+': '#ff7070',
@@ -902,9 +911,9 @@ function ZeemanSection({
 
     const triplet = zeemanTriplet(n, loN, Z, B)
     // dE can be ≤ 0 for the σ− component when B·μ_B > dE0 (e.g. high-n transitions at large B)
-    const nm = triplet.map(c => c.dE > 0 ? HC_NM_ZEEMAN / c.dE : null)
+    const nm = triplet.map(c => c.dE > 0 ? HC_NM / c.dE : null)
 
-    const barWidth = Math.max(0.6, MU_B * B * HC_NM_ZEEMAN / (triplet[1].dE ** 2) * 0.5)
+    const barWidth = Math.max(0.6, MU_B * B * HC_NM / (triplet[1].dE ** 2) * 0.5)
 
     const traces = triplet
       .filter((_, i) => nm[i] !== null)
@@ -921,7 +930,7 @@ function ZeemanSection({
         }
       })
 
-    const λ0 = HC_NM_ZEEMAN / (hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z))
+    const λ0 = HC_NM / (hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z))
     const validNm = nm.filter((v): v is number => v !== null)
     const Δλ = validNm.length >= 2 ? Math.abs(validNm[0] - validNm[validNm.length - 1]) : 1.5
     const rangeHalf = Math.max(Δλ * 3, 1.5)
@@ -1043,8 +1052,6 @@ function ZeemanSection({
 
 // ─── Anomalous Zeeman section component ──────────────────────────────────────
 
-const HC_NM_AZ = 45.5640  // hc in nm·Hartree
-
 function AnomalousZeemanSection({
   n, l, Z, B,
   loN, loL,
@@ -1122,16 +1129,16 @@ function AnomalousZeemanSection({
   const { lineTraces, lineLayout, lineCount, suppressedCount } = useMemo(() => {
     if (validLower.length === 0) return { lineTraces: [], lineLayout: {}, lineCount: 0, suppressedCount: 0 }
     const lines = anomalousZeemanLines(n, l, loN, loL, Z, B)
-    const nm = lines.map(c => c.dE > 0 ? HC_NM_AZ / c.dE : null)
+    const nm = lines.map(c => c.dE > 0 ? HC_NM / c.dE : null)
 
     const dE0_val = hydrogenEnergy(n, Z) - hydrogenEnergy(loN, Z)
-    const λ0 = HC_NM_AZ / dE0_val
+    const λ0 = HC_NM / dE0_val
     const validNm = nm.filter((v): v is number => v !== null)
     const spread = validNm.length >= 2 ? Math.max(Math.abs(validNm[0] - validNm[validNm.length - 1]) * 1.6, 2) : 5
     const rangeHalf = Math.max(spread, 2)
 
     // Narrow bar width
-    const barW = Math.max(0.3, MU_B * B * HC_NM_AZ / (dE0_val ** 2) * 0.3)
+    const barW = Math.max(0.3, MU_B * B * HC_NM / (dE0_val ** 2) * 0.3)
 
     const traces = ([1, 0, -1] as const).map(dMJ => {
       const group = lines.map((l, i) => ({ ...l, nm: nm[i] })).filter(x => x.dMJ === dMJ && x.nm !== null)
@@ -1430,6 +1437,206 @@ function StarkSection({
   )
 }
 
+// ─── Emission Spectra section ─────────────────────────────────────────────────
+
+const SERIES_ORDER_EM = ['Lyman', 'Balmer', 'Paschen', 'Brackett'] as const
+const SERIES_PREFIX_EM: Record<string, string> = { Lyman: 'Ly', Balmer: 'H', Paschen: 'Pa', Brackett: 'Br' }
+const GREEK_EM = ['α', 'β', 'γ', 'δ', 'ε', 'ζ']
+
+function lineGreekLabel(line: SpectralLine): string {
+  const prefix = SERIES_PREFIX_EM[line.series] ?? line.series.slice(0, 2)
+  const greek = GREEK_EM[line.nHi - line.nLo - 1] ?? `n=${line.nHi}`
+  return `${prefix}-${greek}`
+}
+
+type EmTip = { texts: string[]; cx: number; cy: number; color: string }
+
+function EmissionSpectraSection({
+  Z, onSelectN, show, onToggle, onHelpClick,
+}: {
+  Z: number; onSelectN: (n: number) => void
+  show: boolean; onToggle: () => void; onHelpClick: () => void
+}) {
+  const [selected, setSelected] = useState<SpectralLine | null>(null)
+  const [tip, setTip] = useState<EmTip | null>(null)
+
+  const allLines = useMemo(() => spectralLines(Z, 6), [Z])
+
+  const SVG_W = 720
+  const ROW_H = 56
+  const PAD_T = 6
+  const LABEL_W = 78
+  const RANGE_W = 98
+  const BAND_X = LABEL_W + 6
+  const BAND_W = SVG_W - BAND_X - RANGE_W - 4
+  const BAND_H = 26
+  const SVG_H = PAD_T + SERIES_ORDER_EM.length * ROW_H + 10
+
+  return (
+    <div style={{ ...sectionStyle, borderBottom: 'none' }}>
+      <button onClick={onToggle} style={collapseStyle}>
+        <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
+        <span style={sectionTitleStyle}>Emission Spectra (n = 2–6)</span>
+        <span onClick={e => e.stopPropagation()}><HelpButton onClick={onHelpClick} /></span>
+      </button>
+
+      {show && (
+        <div>
+          {tip && (
+            <div style={{
+              position: 'fixed', left: tip.cx + 14, top: tip.cy - 14,
+              background: '#1a1a2e', border: '1px solid #555', borderRadius: 5,
+              padding: '5px 10px', fontSize: '0.76rem', color: '#ddd',
+              pointerEvents: 'none', zIndex: 9999, lineHeight: 1.7,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.6)',
+            }}>
+              {tip.texts.map((t, i) => (
+                <div key={i} style={i === 0 ? { fontWeight: 600, color: tip.color } : {}}>{t}</div>
+              ))}
+            </div>
+          )}
+
+          <svg width="100%" viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+            style={{ display: 'block', background: '#0d0d0d', borderRadius: 4 }}>
+            <defs>
+              <linearGradient id="em-vis-grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#6600cc" stopOpacity="0.40" />
+                <stop offset="12%"  stopColor="#0000ee" stopOpacity="0.35" />
+                <stop offset="29%"  stopColor="#0099ff" stopOpacity="0.32" />
+                <stop offset="41%"  stopColor="#00cc44" stopOpacity="0.28" />
+                <stop offset="61%"  stopColor="#cccc00" stopOpacity="0.28" />
+                <stop offset="73%"  stopColor="#ff8800" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#ff1100" stopOpacity="0.40" />
+              </linearGradient>
+            </defs>
+
+            {SERIES_ORDER_EM.map((series, si) => {
+              const sLines = allLines
+                .filter(l => l.series === series)
+                .sort((a, b) => a.wavelengthNm - b.wavelengthNm)
+              if (sLines.length === 0) return null
+
+              const λMin = sLines[0].wavelengthNm
+              const λMax = sLines[sLines.length - 1].wavelengthNm
+              const pad = Math.max((λMax - λMin) * 0.12, 5)
+              const λDispMin = λMin - pad
+              const λDispMax = λMax + pad
+
+              const xOf = (λ: number) =>
+                BAND_X + (λ - λDispMin) / (λDispMax - λDispMin) * BAND_W
+
+              const bandY = PAD_T + si * ROW_H + 20
+              const BG = series === 'Lyman'    ? 'rgba(80,0,160,0.22)'
+                       : series === 'Balmer'   ? 'url(#em-vis-grad)'
+                       : series === 'Paschen'  ? 'rgba(100,20,0,0.20)'
+                       :                        'rgba(80,0,0,0.20)'
+              const regionLabel = series === 'Lyman' ? 'UV'
+                                : series === 'Balmer' ? 'visible'
+                                : 'NIR/IR'
+
+              return (
+                <g key={series}>
+                  <text x={LABEL_W} y={bandY + BAND_H / 2 + 4}
+                    textAnchor="end" fontSize={11} fill="#ccc" fontWeight={600}>
+                    {series}
+                  </text>
+                  <rect x={BAND_X} y={bandY} width={BAND_W} height={BAND_H}
+                    fill={BG} stroke="#222" strokeWidth={0.5} rx={2} />
+                  <text x={BAND_X + BAND_W + 7} y={bandY + 11}
+                    fontSize={8.5} fill="#666" textAnchor="start">
+                    {Math.round(λMin)}–{Math.round(λMax)} nm
+                  </text>
+                  <text x={BAND_X + BAND_W + 7} y={bandY + 22}
+                    fontSize={8} fill="#444" textAnchor="start">
+                    {regionLabel}
+                  </text>
+
+                  {sLines.map(line => {
+                    const x = xOf(line.wavelengthNm)
+                    const isSel = selected?.nHi === line.nHi && selected?.nLo === line.nLo
+                    const lbl = lineGreekLabel(line)
+                    const color = wavelengthToColor(line.wavelengthNm)
+                    const region = line.wavelengthNm < 380 ? 'UV'
+                                 : line.wavelengthNm < 700 ? 'visible' : 'IR'
+                    return (
+                      <g key={`${line.nHi}-${line.nLo}`} style={{ cursor: 'pointer' }}
+                        onClick={() => setSelected(line)}
+                        onMouseEnter={e => setTip({
+                          texts: [
+                            `${lbl}  n=${line.nHi} → n=${line.nLo}`,
+                            `λ = ${line.wavelengthNm.toFixed(1)} nm  (${region})`,
+                            `ΔE = ${line.dE_hartree.toFixed(5)} Eh = ${line.dE_eV.toFixed(3)} eV`,
+                            `${line.series} series  ·  click to select`,
+                          ],
+                          cx: e.clientX, cy: e.clientY, color,
+                        })}
+                        onMouseMove={e => setTip(t => t ? { ...t, cx: e.clientX, cy: e.clientY } : null)}
+                        onMouseLeave={() => setTip(null)}>
+                        <rect x={x - 5} y={bandY - 13} width={10} height={BAND_H + 17} fill="transparent" />
+                        <text x={x} y={bandY - 4} textAnchor="middle" fontSize={7.5}
+                          fill={isSel ? color : '#555'} fontWeight={isSel ? 700 : 400}>
+                          {lbl}
+                        </text>
+                        <line x1={x} y1={bandY} x2={x} y2={bandY + BAND_H}
+                          stroke={color} strokeWidth={isSel ? 3 : 1.8}
+                          strokeOpacity={isSel ? 1 : 0.78} />
+                      </g>
+                    )
+                  })}
+                </g>
+              )
+            })}
+          </svg>
+
+          <div style={{ fontSize: '0.72rem', color: '#555', fontStyle: 'italic', marginTop: 5 }}>
+            Z = {Z}. Hover for λ and ΔE; click to select. Energy depends only on n in this model.
+          </div>
+
+          {selected && (() => {
+            const c = wavelengthToColor(selected.wavelengthNm)
+            const lbl = lineGreekLabel(selected)
+            const region = selected.wavelengthNm < 380 ? 'UV'
+                         : selected.wavelengthNm < 700 ? 'visible light' : 'IR'
+            return (
+              <div style={{
+                background: '#111', border: `1px solid ${c}55`,
+                borderRadius: 6, padding: '10px 14px', marginTop: 8,
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontWeight: 600, fontSize: '0.92rem' }}>
+                    <span style={{ color: c }}>{lbl}</span>
+                    <span style={{ fontWeight: 400, color: '#888', marginLeft: 10 }}>
+                      n = {selected.nHi} → n = {selected.nLo}  ·  {selected.series}  ·  {region}
+                    </span>
+                  </span>
+                  <button onClick={() => setSelected(null)} style={{
+                    background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem',
+                  }}>✕</button>
+                </div>
+                <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap',
+                  fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                  <span>λ = <strong style={{ color: c }}>{selected.wavelengthNm.toFixed(2)} nm</strong></span>
+                  <span>ΔE = <strong>{selected.dE_hartree.toFixed(6)} Eh</strong></span>
+                  <span>= <strong>{selected.dE_eV.toFixed(4)} eV</strong></span>
+                </div>
+                <button
+                  onClick={() => { onSelectN(selected.nHi); setSelected(null) }}
+                  style={{
+                    marginTop: 10, padding: '4px 14px', fontSize: '0.8rem',
+                    background: 'rgba(67,97,238,0.15)', border: '1px solid rgba(67,97,238,0.5)',
+                    borderRadius: 4, color: '#7b9ef0', cursor: 'pointer',
+                  }}>
+                  View n = {selected.nHi} wavefunctions ↑
+                </button>
+              </div>
+            )
+          })()}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function helpTitle(t: HydrogenInfoTopic): string {
@@ -1441,6 +1648,7 @@ function helpTitle(t: HydrogenInfoTopic): string {
   if (t === 'zeeman')             return 'Normal Zeeman Effect'
   if (t === 'anomalousZeeman')    return 'Anomalous Zeeman Effect'
   if (t === 'stark')              return 'Linear Stark Effect (n = 2)'
+  if (t === 'emissionSpectra')    return 'Emission Spectra'
   return 'Energy Level Diagram (Grotrian)'
 }
 

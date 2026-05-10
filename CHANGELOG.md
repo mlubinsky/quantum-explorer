@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Emission Spectra** — new collapsible section in Hydrogen module
+  - `src/physics/hydrogen.ts`: `transitionPhotonEnergy`, `transitionWavelengthNm`, `spectralLines`,
+    `SpectralLine` interface, `HC_NM` constant (exported; replaces three duplicate local constants)
+  - 4-series SVG spectral display: Lyman (UV), Balmer (visible rainbow gradient), Paschen (NIR), Brackett (IR)
+  - Lines at exact wavelength positions within each series range; colored by wavelength via `wavelengthToColor`
+  - Greek-letter line labels: H-α, H-β, H-γ, H-δ; Ly-α, Ly-β; Pa-α, Pa-β; Br-α, Br-β
+  - Hover tooltip: λ (nm), ΔE (Eh + eV), series, UV/visible/IR region
+  - Click to select line → readout card with λ, ΔE, region; "View n = X wavefunctions ↑" button
+    that jumps to the upper state in the quantum number controls
+  - All wavelengths scale as 1/Z² — Z slider in the main controls updates all lines live
+  - KaTeX help modal covering Rydberg formula, hc in atomic units, series table
+  - 19 new unit tests (593 total)
+
 - **Linear Stark Effect (n = 2)** — new collapsible section in Hydrogen module
   - `src/physics/hydrogen.ts`: `starkLinearShift`, `starkN2Sublevels`, `starkIonizationField`,
     `StarkLevel` interface — all exact first-order perturbation theory, no numerics

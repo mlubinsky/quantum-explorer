@@ -329,6 +329,54 @@ export function starkIonizationField(n: number, Z: number): number {
   return Math.pow(Z, 3) / (16 * Math.pow(n, 4))
 }
 
+// ─── Emission Spectra ────────────────────────────────────────────────────────
+
+/** hc in nm·Hartree: λ_nm = HC_NM / ΔE_hartree */
+export const HC_NM = 45.5640
+
+/** Photon energy (Hartree) emitted in nHi → nLo transition. Positive for nHi > nLo. */
+export function transitionPhotonEnergy(nHi: number, nLo: number, Z: number): number {
+  return hydrogenEnergy(nHi, Z) - hydrogenEnergy(nLo, Z)
+}
+
+/** Wavelength in nm for the nHi → nLo emission line. */
+export function transitionWavelengthNm(nHi: number, nLo: number, Z: number): number {
+  return HC_NM / transitionPhotonEnergy(nHi, nLo, Z)
+}
+
+export interface SpectralLine {
+  nHi: number
+  nLo: number
+  wavelengthNm: number
+  dE_hartree: number
+  dE_eV: number
+  series: string
+}
+
+/**
+ * All emission lines for nHi in [nLo+1, nMax] and nLo in [1, min(nMax-1, 5)].
+ * Covers Lyman, Balmer, Paschen, Brackett, and Pfund series.
+ */
+export function spectralLines(Z: number, nMax = 6): SpectralLine[] {
+  const SERIES: Record<number, string> = {
+    1: 'Lyman', 2: 'Balmer', 3: 'Paschen', 4: 'Brackett', 5: 'Pfund',
+  }
+  const result: SpectralLine[] = []
+  for (let nLo = 1; nLo < nMax && nLo <= 5; nLo++) {
+    for (let nHi = nLo + 1; nHi <= nMax; nHi++) {
+      const dE = transitionPhotonEnergy(nHi, nLo, Z)
+      result.push({
+        nHi, nLo,
+        wavelengthNm: HC_NM / dE,
+        dE_hartree: dE,
+        dE_eV: dE * 27.2114,
+        series: SERIES[nLo] ?? `n=${nLo}`,
+      })
+    }
+  }
+  return result
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function factorial(n: number): number {
