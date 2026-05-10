@@ -10,6 +10,7 @@ import {
   angularShape, orbitalDensity3D, rMax as calcRMax,
   MU_B, zeemanSublevels, zeemanTriplet,
   landeG, jTerms, anomalousSublevels, anomalousZeemanLines,
+  starkN2Sublevels, starkIonizationField,
 } from '../physics/hydrogen'
 import { HydrogenInfoPanel } from './HydrogenInfoPanel'
 import type { HydrogenInfoTopic } from './HydrogenInfoPanel'
@@ -511,10 +512,12 @@ export function HydrogenExplorer() {
   const [showGrotrian, setShowGrotrian] = useState(true)
   const [showZeeman,          setShowZeeman]          = useState(true)
   const [showAnomalousZeeman, setShowAnomalousZeeman] = useState(true)
+  const [showStark,           setShowStark]           = useState(true)
 
   const [B, setB] = useState(0)
   const [zeemanLoN, setZeemanLoN] = useState(1)
   const [zeemanLoL, setZeemanLoL] = useState(0)
+  const [F, setF] = useState(0)
 
   const [helpTopic, setHelpTopic] = useState<HydrogenInfoTopic | null>(null)
 
@@ -797,6 +800,13 @@ export function HydrogenExplorer() {
           loN={zeemanLoN} loL={zeemanLoL}
           show={showAnomalousZeeman} onToggle={() => setShowAnomalousZeeman(s => !s)}
           onHelpClick={() => setHelpTopic('anomalousZeeman')}
+        />
+
+        {/* Linear Stark Effect (collapsible) */}
+        <StarkSection
+          Z={Z} F={F} onFChange={setF}
+          show={showStark} onToggle={() => setShowStark(s => !s)}
+          onHelpClick={() => setHelpTopic('stark')}
         />
       </div>
     </>
@@ -1252,6 +1262,168 @@ function AnomalousZeemanSection({
   )
 }
 
+// ─── Linear Stark Effect section component ────────────────────────────────────
+
+const F_MAX = 0.05
+const N_F   = 120
+
+const STARK_COLORS = ['#ff7070', '#aaa', '#aaa', '#70b0ff'] as const
+
+function StarkSection({
+  Z, F, onFChange,
+  show, onToggle, onHelpClick,
+}: {
+  Z: number; F: number; onFChange: (v: number) => void
+  show: boolean; onToggle: () => void; onHelpClick: () => void
+}) {
+  const fIon = starkIonizationField(2, Z)
+
+  const fanTraces = useMemo(() => {
+    const fVals = Array.from({ length: N_F + 1 }, (_, i) => i * F_MAX / N_F)
+    // Compute at f=0 to get stable label ordering (sorted asc by energy at F=0 is all same, so use fixed order)
+    const templateLevels = starkN2Sublevels(0.001, Z)  // tiny F just to get sorted order
+    return templateLevels.map((lv0, idx) => {
+      // trace all F values for this parabolic state
+      const yVals = fVals.map(fv => {
+        const levels = starkN2Sublevels(fv, Z)
+        const match = levels.find(l => l.n1 === lv0.n1 && l.n2 === lv0.n2 && l.m === lv0.m)!
+        return match.energy
+      })
+      const sign = lv0.n1 > lv0.n2 ? '−' : lv0.n1 < lv0.n2 ? '+' : '0'
+      const nameM = lv0.m === 0 ? 'm=0' : lv0.m > 0 ? 'm=+1' : 'm=−1'
+      return {
+        x: fVals,
+        y: yVals,
+        type: 'scatter' as const,
+        mode: 'lines' as const,
+        name: `(n₁=${lv0.n1},n₂=${lv0.n2},${nameM})  ΔE=${sign}3F/Z`,
+        line: { color: STARK_COLORS[idx], width: 2 },
+        hovertemplate: `(n₁=${lv0.n1},n₂=${lv0.n2},m=${lv0.m})<br>F=%{x:.4f} a.u.<br>E=%{y:.6f} Eh<extra></extra>`,
+      }
+    })
+  }, [Z])
+
+  const fanLayout = useMemo(() => {
+    const E2 = hydrogenEnergy(2, Z)
+    const spread = Math.max(3 * F_MAX / Z, 0.01)
+    return {
+      ...darkLayout({ height: 280, margin: { l: 80, r: 20, t: 36, b: 52 } }),
+      xaxis: axis('F (a.u.)'),
+      yaxis: axis('Energy (Eh)', { range: [E2 - spread * 1.3, E2 + spread * 1.3] }),
+      shapes: [
+        // current F line
+        ...(F > 0 ? [{ type: 'line', x0: F, x1: F, y0: 0, y1: 1, yref: 'paper',
+          line: { color: '#888', width: 1, dash: 'dot' } }] : []),
+        // ionization threshold
+        { type: 'line', x0: fIon, x1: fIon, y0: 0, y1: 1, yref: 'paper',
+          line: { color: '#f77f00', width: 1, dash: 'dash' } },
+      ],
+      annotations: [
+        ...(F > 0 ? [{ x: F, y: 1.04, yref: 'paper', text: 'F',
+          showarrow: false, font: { size: 10, color: '#888' }, xanchor: 'center' }] : []),
+        { x: fIon, y: 1.06, yref: 'paper', text: 'F_ion',
+          showarrow: false, font: { size: 9, color: '#f77f00' }, xanchor: 'center' },
+      ],
+      title: {
+        text: 'n = 2 linear Stark splitting — 4 states vs electric field',
+        font: { size: 11, color: '#aaa' }, x: 0.5, xref: 'paper',
+      },
+    }
+  }, [Z, F, fIon])
+
+  const currentLevels = useMemo(() => starkN2Sublevels(F, Z), [F, Z])
+
+  return (
+    <div style={{ ...sectionStyle, borderBottom: 'none' }}>
+      <button onClick={onToggle} style={collapseStyle}>
+        <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
+        <span style={sectionTitleStyle}>
+          Linear Stark Effect (n = 2)
+          {F > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
+            F = {F.toFixed(4)} a.u.
+          </span>}
+        </span>
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={onHelpClick} />
+        </span>
+      </button>
+
+      {show && (
+        <div>
+          {/* F slider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+            <label style={{ ...labelStyle, marginBottom: 0, whiteSpace: 'nowrap' }}>F (a.u.)</label>
+            <input type="range" min={0} max={F_MAX} step={0.001} value={F}
+              onChange={e => onFChange(+e.target.value)}
+              style={{ flex: 1, accentColor: '#4361ee' }} />
+            <span style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: '#e0e0e0', minWidth: 58 }}>
+              {F.toFixed(4)}
+            </span>
+            <button onClick={() => onFChange(0)}
+              style={{ fontSize: '0.74rem', padding: '2px 8px', borderRadius: 4, border: '1px solid #444',
+                background: 'none', color: '#aaa', cursor: 'pointer' }}>reset</button>
+          </div>
+
+          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+            1 a.u. ≈ 5.14 × 10¹¹ V/m. Classical ionization threshold
+            F<sub>ion</sub> = Z³/(16n⁴) ={' '}
+            <span style={{ color: '#f77f00' }}>{fIon.toExponential(2)} a.u.</span>
+            {' '}(orange dashed line). First-order PT valid for F ≪ F<sub>ion</sub>.
+          </div>
+
+          <Plot data={fanTraces as never} layout={fanLayout as never}
+            config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
+
+          {/* Readout table */}
+          <div style={{ marginTop: 8, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse',
+              fontSize: '0.8rem', fontFamily: 'monospace' }}>
+              <thead>
+                <tr style={{ color: '#777', borderBottom: '1px solid #222' }}>
+                  <th style={{ textAlign: 'left', padding: '3px 8px', fontWeight: 500 }}>Parabolic</th>
+                  <th style={{ textAlign: 'left', padding: '3px 8px', fontWeight: 500 }}>Spherical state</th>
+                  <th style={{ textAlign: 'right', padding: '3px 8px', fontWeight: 500 }}>ΔE (Eh)</th>
+                  <th style={{ textAlign: 'right', padding: '3px 8px', fontWeight: 500 }}>E (Eh)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentLevels.map((lv, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid #181818' }}>
+                    <td style={{ padding: '4px 8px',
+                      color: lv.shift < -1e-10 ? '#ff7070' : lv.shift > 1e-10 ? '#70b0ff' : '#aaa' }}>
+                      (n₁={lv.n1}, n₂={lv.n2}, m={lv.m > 0 ? '+' : ''}{lv.m})
+                    </td>
+                    <td style={{ padding: '4px 8px', color: '#ccc' }}>{lv.label}</td>
+                    <td style={{ textAlign: 'right', padding: '4px 8px',
+                      color: lv.shift < -1e-10 ? '#ff7070' : lv.shift > 1e-10 ? '#70b0ff' : '#aaa' }}>
+                      {lv.shift >= 0 ? '+' : ''}{lv.shift.toFixed(6)}
+                    </td>
+                    <td style={{ textAlign: 'right', padding: '4px 8px', color: '#e0e0e0' }}>
+                      {lv.energy.toFixed(6)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {F > 0 && (
+            <div style={{ marginTop: 8, fontSize: '0.8rem', fontFamily: 'monospace', color: '#888' }}>
+              Total splitting: <span style={{ color: '#e0e0e0' }}>{(6 * F / Z).toFixed(6)} Eh</span>
+              {'  ·  '}⟨z⟩ of shifted states: ±{(3 / Z).toFixed(3)} a₀
+              {F > fIon && (
+                <span style={{ color: '#f77f00', marginLeft: 12 }}>
+                  ⚠ F {'>'} F<sub>ion</sub> — barrier suppression; first-order PT not quantitatively reliable
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function helpTitle(t: HydrogenInfoTopic): string {
@@ -1262,6 +1434,7 @@ function helpTitle(t: HydrogenInfoTopic): string {
   if (t === 'isosurface')         return '3D Orbital Isosurface |ψ|²'
   if (t === 'zeeman')             return 'Normal Zeeman Effect'
   if (t === 'anomalousZeeman')    return 'Anomalous Zeeman Effect'
+  if (t === 'stark')              return 'Linear Stark Effect (n = 2)'
   return 'Energy Level Diagram (Grotrian)'
 }
 

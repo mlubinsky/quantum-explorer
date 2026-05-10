@@ -242,9 +242,9 @@ These items deepen that into a proper Heisenberg-picture module:
       g_J = 1 + [J(J+1)+S(S+1)−L(L+1)]/(2J(J+1)); ΔE = g_J μ_B B m_J;
       fan diagram for J=L±½ multiplets; up to 10 spectral lines for 2p→1s;
       50 unit tests; 544 total
-- [ ] **Stark effect (linear)** — first-order Stark splitting of hydrogen n=2 levels
-      under electric field F; exact parabolic-coordinate wavefunctions; ΔE = ±3n a₀ F
-      (in a.u.); show lifted degeneracy in Grotrian diagram with field slider
+- [x] **Stark effect (linear)** — first-order Stark splitting of hydrogen n=2 levels
+      under electric field F; exact parabolic-coordinate wavefunctions; ΔE = ±3F/Z a.u.;
+      fan diagram (4 states vs F), readout table, ionisation threshold; 27 tests; 574 total
 
 ---
 

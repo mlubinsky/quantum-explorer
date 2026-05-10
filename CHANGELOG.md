@@ -6,6 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Linear Stark Effect (n = 2)** — new collapsible section in Hydrogen module
+  - `src/physics/hydrogen.ts`: `starkLinearShift`, `starkN2Sublevels`, `starkIonizationField`,
+    `StarkLevel` interface — all exact first-order perturbation theory, no numerics
+  - Energy shift ΔE = −(3/2)n(n₁−n₂)F/Z from parabolic-coordinate eigenstates; 4 levels for n=2
+  - Fan diagram: 4 energy traces vs F, colour-coded by shift (red = down, grey = unshifted, blue = up)
+  - Orange dashed ionisation-threshold line at F_ion = Z³/(16n⁴)
+  - Readout table: parabolic quantum numbers, spherical expansion, ΔE, total E for current F
+  - In-line warning when F exceeds barrier-suppression threshold
+  - `HydrogenInfoPanel.tsx`: new `'stark'` topic with full derivation (matrix element, parabolic QNs,
+    dipole moment, ionisation field) rendered in KaTeX
+  - `specs/stark.md`: full physics spec
+  - 27 unit tests; 574 total
 - **Anomalous Zeeman effect** — new collapsible section in Hydrogen module
   - `src/physics/hydrogen.ts`: `landeG`, `jTerms`, `mJValues`, `anomalousZeemanEnergy`,
     `anomalousSublevels`, `anomalousAllowed`, `anomalousZeemanLines` — all exact, no numerics

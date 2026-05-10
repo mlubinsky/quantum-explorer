@@ -283,6 +283,50 @@ export function anomalousZeemanLines(
   return lines.sort((a, b) => a.dE - b.dE)
 }
 
+// ─── Linear Stark Effect ────────────────────────────────────────────────────
+
+/**
+ * First-order linear Stark energy shift for a hydrogen-like atom (a.u.).
+ * Uses parabolic quantum numbers n₁, n₂ with n₁+n₂+|m|+1 = n.
+ *   ΔE = −(3/2) n (n₁−n₂) F / Z
+ * Physical meaning: n₁>n₂ → charge displaced downward → lower energy in +z field.
+ */
+export function starkLinearShift(n: number, n1: number, n2: number, F: number, Z: number): number {
+  return -(3 / 2) * n * (n1 - n2) * F / Z
+}
+
+export interface StarkLevel {
+  n1: number; n2: number; m: number
+  shift: number; energy: number
+  label: string
+}
+
+/**
+ * All 4 first-order linear Stark levels for the n=2 hydrogen shell.
+ * Parabolic quantum numbers: n₁+n₂+|m|=1 (so n₁+n₂+|m|+1=2=n).
+ * Returned sorted ascending by energy.
+ */
+export function starkN2Sublevels(F: number, Z: number): StarkLevel[] {
+  const E2 = hydrogenEnergy(2, Z)
+  const configs: [number, number, number, string][] = [
+    [1, 0, 0, '(|2s⟩+|2p₀⟩)/√2'],
+    [0, 1, 0, '(|2s⟩−|2p₀⟩)/√2'],
+    [0, 0,  1, '|2p₊₁⟩'],
+    [0, 0, -1, '|2p₋₁⟩'],
+  ]
+  return configs
+    .map(([n1, n2, m, label]) => {
+      const shift = starkLinearShift(2, n1, n2, F, Z)
+      return { n1, n2, m, shift, energy: E2 + shift, label }
+    })
+    .sort((a, b) => a.energy - b.energy)
+}
+
+/** Classical barrier-suppression ionization field: F_ion = Z³/(16n⁴) (a.u.) */
+export function starkIonizationField(n: number, Z: number): number {
+  return Math.pow(Z, 3) / (16 * Math.pow(n, 4))
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function factorial(n: number): number {

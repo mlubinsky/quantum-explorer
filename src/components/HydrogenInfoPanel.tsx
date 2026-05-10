@@ -9,6 +9,7 @@ export type HydrogenInfoTopic =
   | 'grotrian'
   | 'zeeman'
   | 'anomalousZeeman'
+  | 'stark'
 
 export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'radialDensity')     return <RadialDensitySection />
@@ -18,6 +19,7 @@ export function HydrogenInfoPanel({ topic }: { topic: HydrogenInfoTopic }) {
   if (topic === 'isosurface')        return <IsosurfaceSection />
   if (topic === 'zeeman')            return <ZeemanSection />
   if (topic === 'anomalousZeeman')   return <AnomalousZeemanSection />
+  if (topic === 'stark')             return <StarkSection />
   return <GrotrianSection />
 }
 
@@ -153,6 +155,29 @@ function GrotrianSection() {
         <li>Brackett+ <InlineMath math="n\geq4" />: mid-IR (dark red dashed)</li>
       </ul>
       <p><strong>Click a level</strong> to highlight its allowed decay channels and dim all others. Click the same level again to clear the focus.</p>
+    </div>
+  )
+}
+
+function StarkSection() {
+  return (
+    <div>
+      <p>A uniform electric field <strong>F</strong> along the z-axis perturbs the atom:</p>
+      <BlockMath math="H' = F z \quad\text{(atomic units: }e{=}1,\,a_0{=}1\text{)}" />
+      <p><strong>Why only n = 2?</strong> The n = 1 level has no degenerate partner — its diagonal matrix element ⟨1s|z|1s⟩ = 0 by parity, and there is no other n = 1 state to mix with, so the first non-zero Stark shift is quadratic (polarisability). For n = 2 the accidental degeneracy of |2s⟩ and |2p₀⟩ enables a first-order <em>linear</em> shift.</p>
+      <p><strong>Key matrix element (a.u.):</strong></p>
+      <BlockMath math="\langle 2s\,|\,z\,|\,2p_0\rangle = -\frac{3}{Z}" />
+      <p><strong>First-order energy shifts</strong> (parabolic quantum numbers n₁, n₂, m):</p>
+      <BlockMath math="\Delta E = -\tfrac{3}{2}\,n\,(n_1 - n_2)\,\frac{F}{Z}" />
+      <p>For n = 2 the four states split as follows:</p>
+      <BlockMath math="\Delta E = \begin{cases} -3F/Z & (n_1{=}1,\,n_2{=}0,\,m{=}0)\quad\text{lower}\\[4pt] 0 & (m{=}\pm 1)\quad\text{unshifted}\\[4pt] +3F/Z & (n_1{=}0,\,n_2{=}1,\,m{=}0)\quad\text{upper} \end{cases}" />
+      <p>The <strong>parabolic states</strong> are superpositions of spherical harmonics:</p>
+      <BlockMath math="\frac{|2s\rangle + |2p_0\rangle}{\sqrt{2}}\;\text{(lower)},\qquad \frac{|2s\rangle - |2p_0\rangle}{\sqrt{2}}\;\text{(upper)}" />
+      <p><strong>Induced dipole moment</strong> of each shifted level:</p>
+      <BlockMath math="\langle\mu_z\rangle = -\frac{\partial\Delta E}{\partial F} = \pm\frac{3}{Z}\;a_0" />
+      <p><strong>Field ionisation threshold</strong> (classical barrier suppression):</p>
+      <BlockMath math="F_\text{ion} = \frac{Z^3}{16\,n^4} \approx 0.00391\text{ a.u.}\;(n{=}2,\,Z{=}1)" />
+      <p>First-order perturbation theory is valid for F ≪ F<sub>ion</sub>. The orange dashed line marks this threshold.</p>
     </div>
   )
 }
