@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
 import _Plot from 'react-plotly.js'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Plot = (_Plot as any).default ?? _Plot
 
 import { HelpButton, HelpModal } from './HelpModal'
