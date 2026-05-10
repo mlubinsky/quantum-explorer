@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.2026.0509k] — 2026-05-09
+
+### Fixed
+- **GitHub Actions Node.js 20 deprecation warnings** — set `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true`
+  at job level and bump `node-version` to 22 (LTS)
+- **ESLint exhaustive-deps warnings** — added missing `bhat` to SpinExplorer useEffect deps
+  and `thetas` to RingExplorer useMemo deps (both were safe additions; deps are stable values)
+
 ## [0.2026.0509j] — 2026-05-09
 
 ### Fixed

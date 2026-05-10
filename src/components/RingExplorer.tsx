@@ -311,7 +311,7 @@ function WavepacketAnimation({ phi, R }: { phi: number; R: number }) {
       x: r.map((ri, i) => ri * Math.cos(thetas[i])),
       y: r.map((ri, i) => ri * Math.sin(thetas[i])),
     }
-  }, [coeffs, phi, R]) // thetas is stable (new array each render but same values)
+  }, [coeffs, phi, R, thetas])
 
   const [frame, setFrame] = useState(() => getFrame(0))
 

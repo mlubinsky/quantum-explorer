@@ -69,7 +69,7 @@ export function SpinExplorer() {
     setTrajectory(traj)
     setFrame(0)
     frameRef.current = 0
-  }, [theta, phi, omega, bTheta, bPhi])
+  }, [theta, phi, bhat, omega, bTheta, bPhi])
 
   const tick = useCallback(() => {
     frameRef.current = (frameRef.current + 1) % N_FRAMES
