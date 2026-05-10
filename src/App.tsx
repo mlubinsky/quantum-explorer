@@ -8,10 +8,11 @@ import { ScatteringExplorer } from './components/ScatteringExplorer'
 import { HydrogenExplorer } from './components/HydrogenExplorer'
 import { RingExplorer } from './components/RingExplorer'
 import { WignerExplorer } from './components/WignerExplorer'
+import { TwoParticleExplorer } from './components/TwoParticleExplorer'
 import { InlineMath } from './components/KatexMath'
 import './App.css'
 
-type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner'
+type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner' | 'two-particle'
 
 const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }[] = [
   {
@@ -29,6 +30,12 @@ const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }
     modules: [
       { id: 'hydrogen', label: 'Hydrogen Atom' },
       { id: 'ring',     label: 'Ring & A-B' },
+    ],
+  },
+  {
+    label: 'Two Particles',
+    modules: [
+      { id: 'two-particle', label: 'Bosons & Fermions (ISW)' },
     ],
   },
   {
@@ -72,6 +79,10 @@ const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
     eq: String.raw`W(x,p)=\tfrac{1}{\pi}\!\int_{-\infty}^{\infty}\!\psi^*(x+y)\,\psi(x-y)\,e^{2ipy}\,dy`,
     bc: String.raw`\textstyle\int W\,dp=|\psi(x)|^2,\quad\int W\,dx=|\tilde\psi(p)|^2,\quad\iint W\,dx\,dp=1`,
   },
+  'two-particle': {
+    eq: String.raw`\Psi_{B/F}(x_1,x_2)=\tfrac{\psi_m(x_1)\psi_n(x_2)\pm\psi_n(x_1)\psi_m(x_2)}{\sqrt{2}},\quad m\neq n`,
+    bc: String.raw`E=E_m+E_n,\quad\Psi_F(x,x)=0\ \forall x,\quad|\Psi_B(x,x)|^2=2|\Psi_D(x,x)|^2\ \text{(HBT)}`,
+  },
 }
 
 export default function App() {
@@ -112,6 +123,7 @@ export default function App() {
         {active === 'hydrogen'       && <HydrogenExplorer />}
         {active === 'ring'           && <RingExplorer />}
         {active === 'wigner'         && <WignerExplorer />}
+        {active === 'two-particle'   && <TwoParticleExplorer />}
       </main>
 
       <footer className="app-footer">

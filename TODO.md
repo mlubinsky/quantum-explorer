@@ -191,7 +191,7 @@ These items deepen that into a proper Heisenberg-picture module:
       concurrence C = |⟨ψ|σ_y⊗σ_y|ψ*⟩|; partial trace; reduced density matrix; entanglement
       entropy S = −Tr(ρ_A log ρ_A); heatmap of correlation matrix; separable vs entangled
       indicator. Extends the existing Bell inequality demo.
-- [ ] **Two-particle ISW symmetrization** — exact two-particle wavefunctions
+- [x] **Two-particle ISW symmetrization** — exact two-particle wavefunctions
       ψ_B/F(x₁,x₂) = [ψ_m(x₁)ψ_n(x₂) ± ψ_n(x₁)ψ_m(x₂)]/√2; density heatmap; bosonic
       bunching vs fermionic avoidance; Pauli exclusion (n=m forbidden for fermions);
       Slater determinant visualisation
@@ -206,10 +206,12 @@ These items deepen that into a proper Heisenberg-picture module:
       add a "detector" at x=x₀; click probability P(detector fires); collapse ψ→ projected
       state re-normalised; show post-measurement Gaussian and its subsequent spreading; exact
       for Gaussian projection kernels. Connects time evolution, uncertainty, and measurement.
-- [ ] **Wigner function** — exact closed-form W(x,p) for coherent states (Gaussian in phase
-      space), squeezed states (squeezed Gaussian), and Fock states |n⟩ (Laguerre polynomial
-      expression); animated for coherent/squeezed time evolution; highlight negative regions
-      for Fock states; 128×128 heatmap via Plotly
+- [x] **Wigner function** — exact closed-form W(x,p) for Fock states (Laguerre polynomial),
+      coherent (Gaussian), squeezed, even/odd cat states, Fock superpositions; 70×70 heatmap;
+      marginals; negativity readout
+- [ ] **Wigner function — time animation** — animate W(x,p,t) for HO coherent state (Gaussian
+      blob rigidly rotating in phase space at ω) and squeezed state (ellipse rotating and
+      breathing at 2ω); Play/Pause/Reset controls; t readout
 
 ---
 

@@ -117,6 +117,23 @@ Exact hydrogenic solutions for n = 1–5, l = 0–4, m = −l…l, Z = 1–10.
 - **3D isosurface** — lazy-rendered Plotly isosurface at 10% of peak density; drag to rotate
 - **Grotrian diagram** — n=1..5, Δl=±1 arrows coloured by series (Lyman/Balmer/Paschen/Brackett); clickable levels; series filter buttons; wavelength-accurate arrow colours; λ labels toggle; forbidden transitions toggle; metastable 2s marker; hover tooltips
 
+### Bosons & Fermions — Two-Particle ISW
+Two identical particles in an infinite square well: the role of quantum statistics.
+
+| State | Wavefunction |
+|---|---|
+| Distinguishable | ψₘ(x₁)ψₙ(x₂) |
+| Bosons (m≠n) | \[ψₘ(x₁)ψₙ(x₂) + ψₙ(x₁)ψₘ(x₂)\]/√2 |
+| Fermions (m≠n) | \[ψₘ(x₁)ψₙ(x₂) − ψₙ(x₁)ψₘ(x₂)\]/√2 (Slater det.) |
+
+- 80×80 joint-density heatmap \|Ψ(x₁,x₂)\|² with x₁=x₂ diagonal annotation
+- **Pauli exclusion**: m=n blocked for fermions with a clear warning
+- **Single-particle marginal** ρ(x) — all three statistics overlaid; bosons and
+  fermions are identical (exchange term integrates to zero by orthogonality)
+- **Diagonal density** \|Ψ(x,x)\|²: fermionic exchange hole (always 0),
+  bosonic HBT bunching (2× distinguishable), distinguishable baseline
+- Energy E = Eₘ + Eₙ readout; symmetry label
+
 ### Wigner Function
 Phase-space quasi-probability distribution W(x,p) — the closest quantum analogue of a classical phase-space density.
 
@@ -171,7 +188,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (334 passing) |
+| Vitest | Unit tests (362 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

@@ -6,6 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Two-particle ISW module** — new "Two Particles" group in the dropdown
+  - Distinguishable, boson, and fermion statistics with selector
+  - 80×80 joint-density heatmap |Ψ(x₁,x₂)|² with dotted x₁=x₂ diagonal annotation
+  - Pauli exclusion enforced: fermion m=n is blocked with a clear warning
+  - Collapsible single-particle marginal ρ(x) — all three statistics overlaid; confirms
+    bosons and fermions share the same marginal (exchange vanishes by orthogonality)
+  - Collapsible diagonal |Ψ(x,x)|² — shows fermionic exchange hole (always 0),
+    bosonic HBT bunching (2× distinguishable), and distinguishable baseline on one plot
+  - 25 new unit tests: symmetry, antisymmetry, Pauli exclusion, normalisation (6 cases),
+    marginal identity of bosons/fermions, HBT factor-2, energy formula (362 total)
+
+### Added
 - **Wigner Function module** — new tab in Single Particle — 1D group
   - Closed-form W(x,p) for: Fock |n⟩ (n=0..6), coherent |α⟩, displaced squeezed D(α)S(r)|0⟩,
     even/odd cat states (|α⟩±|−α⟩)/N, and Fock superpositions (|n⟩+|m⟩)/√2
