@@ -10,7 +10,7 @@ values, norms), but never to find eigenvalues or propagate wavefunctions in time
 
 ```bash
 npm run dev      # dev server at http://localhost:5174
-npm test         # vitest run (all tests, currently 250)
+npm test         # vitest run (all tests, currently 593)
 npm run build    # production build
 ```
 
@@ -39,15 +39,36 @@ Wiring a new module into `App.tsx` requires three touches:
 
 ## Existing modules
 
+Modules are grouped in the nav dropdown by category.
+
+### Single Particle — 1D
+
 | Tab label | Key physics |
 |---|---|
-| Stationary States | ISW + HO eigenfunctions, matrix representation |
-| Time Evolution | ISW superposition, HO coherent + squeezed, momentum-space |
+| Stationary States | ISW + HO eigenfunctions, matrix representation (H, X, P heatmaps), Heisenberg picture |
+| Time Evolution | ISW superposition + quantum revival, HO coherent + squeezed states, momentum-space animation |
 | Free Particle | Gaussian wavepacket spreading, exact σ(t) |
-| Scattering | Rectangular barrier (transfer matrix) + step potential |
-| Spin-½ / Bloch Sphere | Larmor precession, Stern-Gerlach, Bell inequality |
-| Hydrogen Atom | Radial/2D/3D orbitals, Grotrian diagram, Z slider |
+| Scattering | 6 sub-tabs: Barrier (transfer matrix), Step, Delta (δ-function, bound state), Pöschl-Teller (reflectionless, N bound states), Kronig-Penney (band structure, Brillouin zone), Morse (anharmonic, Laguerre wavefunctions) |
+| Wigner Function | W(x,p) for Fock, coherent, squeezed, cat (even/odd), Fock superposition states; animated for coherent/squeezed |
+
+### Atoms & Fields
+
+| Tab label | Key physics |
+|---|---|
+| Hydrogen Atom | Radial/2D/3D orbitals, Grotrian diagram, emission spectra (4 series), Z slider, normal Zeeman effect, linear Stark effect (n=2 parabolic splitting) |
 | Ring & A-B | Aharonov-Bohm energy spectrum, persistent current, wavepacket |
+
+### Two Particles
+
+| Tab label | Key physics |
+|---|---|
+| Bosons & Fermions (ISW) | Two-particle 2D density heatmap; distinguishable / bosons / fermions statistics; marginal and diagonal distributions; Pauli exclusion |
+
+### Quantum Information
+
+| Tab label | Key physics |
+|---|---|
+| Spin-½ / Bloch Sphere | Larmor precession, state presets, Robertson uncertainty; Stern-Gerlach measurement tab (Born-rule probabilities, N-shot histogram, measurement history); Bell inequality demo (CHSH, singlet correlation) |
 
 ## After implementing a new feature
 
