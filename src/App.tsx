@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import pkg from '../package.json'
 import { SpinExplorer } from './components/SpinExplorer'
 import { StationaryExplorer } from './components/StationaryExplorer'
@@ -46,6 +46,13 @@ const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }
   },
 ]
 
+const ALL_MODULE_IDS: Module[] = MODULE_GROUPS.flatMap(g => g.modules.map(m => m.id))
+
+function moduleFromHash(): Module {
+  const id = window.location.hash.slice(1)
+  return ALL_MODULE_IDS.includes(id as Module) ? (id as Module) : 'stationary'
+}
+
 const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
   'stationary': {
     eq: String.raw`\hat{H}\psi = E\psi,\quad \hat{H}=-\tfrac{1}{2}\tfrac{d^2}{dx^2}+V(x)`,
@@ -86,8 +93,23 @@ const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
 }
 
 export default function App() {
-  const [active, setActive] = useState<Module>('stationary')
+  const [active, setActive] = useState<Module>(moduleFromHash)
   const info = MODULE_INFO[active]
+
+  // Sync hash → state when user navigates with browser back/forward
+  useEffect(() => {
+    const onPop = () => setActive(moduleFromHash())
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
+  // Sync state → hash (pushState so back/forward works; doesn't trigger popstate)
+  useEffect(() => {
+    const hash = `#${active}`
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', hash)
+    }
+  }, [active])
 
   return (
     <div className="app">
