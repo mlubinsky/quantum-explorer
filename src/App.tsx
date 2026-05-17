@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import pkg from '../package.json'
+import { parseHash } from './physics/urlState'
 import { SpinExplorer } from './components/SpinExplorer'
 import { StationaryExplorer } from './components/StationaryExplorer'
 import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
@@ -49,8 +50,8 @@ const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }
 const ALL_MODULE_IDS: Module[] = MODULE_GROUPS.flatMap(g => g.modules.map(m => m.id))
 
 function moduleFromHash(): Module {
-  const id = window.location.hash.slice(1)
-  return ALL_MODULE_IDS.includes(id as Module) ? (id as Module) : 'stationary'
+  const { moduleId } = parseHash(window.location.hash)
+  return ALL_MODULE_IDS.includes(moduleId as Module) ? (moduleId as Module) : 'stationary'
 }
 
 const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {

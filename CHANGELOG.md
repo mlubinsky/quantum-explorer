@@ -6,6 +6,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **URL state encoding** — key parameters for all 9 modules are encoded in the URL hash as
+  `#module?key=val&…`; any configuration can be bookmarked or shared; params are written via
+  `replaceState` (no extra history entries); switching modules clears params; invalid/missing
+  params silently fall back to defaults. New `src/physics/urlState.ts` with 5 pure utility
+  functions (`parseHash`, `buildHash`, `getNumericParam`, `getIntParam`, `getStringParam`) +
+  2 DOM helpers (`setUrlParam`, `setUrlParams`); 28 unit tests; 621 total.
 - **Feedback FAB** — floating "💬 Feedback" button (bottom-right, fixed) links to GitHub Discussions
 - **README**: removed stale "Planned (Phase 2)" entries for Delta function, Kronig-Penney, and Morse potential (all implemented)
 

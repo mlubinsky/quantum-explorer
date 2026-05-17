@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { parseHash, getIntParam, getStringParam, setUrlParams } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 
@@ -53,11 +54,17 @@ const STAT_COLORS: Record<Statistics, string> = {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
+const STATISTICS = ['distinguishable', 'bosons', 'fermions'] as const
+
 export function TwoParticleExplorer() {
-  const [stat, setStat] = useState<Statistics>('fermions')
-  const [m, setM]       = useState(1)
-  const [n, setN]       = useState(2)
-  const [L, setL]       = useState(10)
+  const [stat, setStat] = useState<Statistics>(() =>
+    getStringParam(parseHash(window.location.hash).params, 'stat', 'fermions', STATISTICS) as Statistics
+  )
+  const [m, setM] = useState(() => getIntParam(parseHash(window.location.hash).params, 'm', 1, 1, 5))
+  const [n, setN] = useState(() => getIntParam(parseHash(window.location.hash).params, 'n', 2, 1, 5))
+  const [L, setL] = useState(10)
+
+  useEffect(() => { setUrlParams({ stat, m, n }) }, [stat, m, n])
 
   const [showMarginal, setShowMarginal] = useState(true)
   const [showDiag,     setShowDiag]     = useState(true)

@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { parseHash, getIntParam, getNumericParam, getStringParam, setUrlParams } from '../physics/urlState'
 import { WavefunctionPlot } from './WavefunctionPlot'
 import { ParameterSlider } from './ParameterSlider'
 import { HelpButton, HelpModal } from './HelpModal'
@@ -16,16 +17,29 @@ const N_LEVELS = 8
 const N_POINTS = 400
 
 export function StationaryExplorer() {
-  const [potential, setPotential] = useState<Potential>('isw')
-  const [nISW, setNISW] = useState(1)
-  const [nHO,  setNHO]  = useState(0)
-  const [L,    setL]    = useState(10)
-  const [omega, setOmega] = useState(1.0)
+  const [potential, setPotential] = useState<Potential>(() => {
+    const p = parseHash(window.location.hash).params
+    return getStringParam(p, 'pot', 'isw', ['isw', 'ho']) as Potential
+  })
+  const [nISW, setNISW] = useState(() => {
+    const p = parseHash(window.location.hash).params
+    return getStringParam(p, 'pot', 'isw', ['isw', 'ho']) === 'isw'
+      ? getIntParam(p, 'n', 1, 1, 8) : 1
+  })
+  const [nHO, setNHO] = useState(() => {
+    const p = parseHash(window.location.hash).params
+    return getStringParam(p, 'pot', 'isw', ['isw', 'ho']) === 'ho'
+      ? getIntParam(p, 'n', 0, 0, 7) : 0
+  })
+  const [L,    setL]    = useState(() => getNumericParam(parseHash(window.location.hash).params, 'L', 10, 1, 20))
+  const [omega, setOmega] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'omega', 1.0, 0.1, 5))
+
+  const n = potential === 'isw' ? nISW : nHO
+  useEffect(() => { setUrlParams({ pot: potential, n, L, omega }) }, [potential, n, L, omega])
   const [showPsi2, setShowPsi2] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showHelpEigen, setShowHelpEigen] = useState(false)
 
-  const n = potential === 'isw' ? nISW : nHO
 
   const energy = potential === 'isw' ? iswEnergy(nISW, L)     : hoEnergy(nHO, omega)
   const sigmaX = potential === 'isw' ? iswSigmaX(nISW, L)     : hoSigmaX(nHO, omega)

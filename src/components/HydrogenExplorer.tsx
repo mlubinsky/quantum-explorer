@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { parseHash, getIntParam, setUrlParams } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 
@@ -500,10 +501,24 @@ function OrbitalIsosurface3D({ n, l, m, Z }: { n: number; l: number; m: number; 
 // ─── Main component ────────────────────────────────────────────────────────
 
 export function HydrogenExplorer() {
-  const [n, setN] = useState(1)
-  const [l, setL] = useState(0)
-  const [m, setM] = useState(0)
-  const [Z, setZ] = useState(1)
+  const [n, setN] = useState(() => {
+    const p = parseHash(window.location.hash).params
+    return getIntParam(p, 'n', 1, 1, 5)
+  })
+  const [l, setL] = useState(() => {
+    const p = parseHash(window.location.hash).params
+    const initN = getIntParam(p, 'n', 1, 1, 5)
+    return Math.min(getIntParam(p, 'l', 0, 0, 4), initN - 1)
+  })
+  const [m, setM] = useState(() => {
+    const p = parseHash(window.location.hash).params
+    const initN = getIntParam(p, 'n', 1, 1, 5)
+    const initL = Math.min(getIntParam(p, 'l', 0, 0, 4), initN - 1)
+    return Math.max(-initL, Math.min(initL, getIntParam(p, 'm', 0, -4, 4)))
+  })
+  const [Z, setZ] = useState(() => getIntParam(parseHash(window.location.hash).params, 'Z', 1, 1, 10))
+
+  useEffect(() => { setUrlParams({ n, l, m, Z }) }, [n, l, m, Z])
 
   const [showRwf,      setShowRwf]      = useState(false)
   const [showOrbital,  setShowOrbital]  = useState(true)

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { parseHash, getStringParam, setUrlParam } from '../physics/urlState'
 import { BarrierExplorer } from './BarrierExplorer'
 import { StepExplorer } from './StepExplorer'
 import { DeltaExplorer } from './DeltaExplorer'
@@ -17,8 +18,14 @@ const TAB_LABELS: Record<ScatteringTab, string> = {
   'morse':         'Morse',
 }
 
+const SCATTERING_TABS = ['barrier', 'step', 'delta', 'poschl-teller', 'kronig-penney', 'morse'] as const
+
 export function ScatteringExplorer() {
-  const [tab, setTab] = useState<ScatteringTab>('barrier')
+  const [tab, setTab] = useState<ScatteringTab>(() =>
+    getStringParam(parseHash(window.location.hash).params, 'tab', 'barrier', SCATTERING_TABS) as ScatteringTab
+  )
+
+  useEffect(() => { setUrlParam('tab', tab) }, [tab])
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { parseHash, getNumericParam, getStringParam, setUrlParams } from '../physics/urlState'
 import { BlochSphere } from './BlochSphere'
 import { ParameterSlider } from './ParameterSlider'
 import { HelpButton, HelpModal } from './HelpModal'
@@ -32,11 +33,17 @@ function formatBeta(re: number, im: number): string {
   return `${reS} ${im < 0 ? '−' : '+'} ${imS}i`
 }
 
+const SPIN_TABS = ['precession', 'measurement', 'bell'] as const
+
 export function SpinExplorer() {
-  const [activeTab,   setActiveTab]   = useState<SpinTab>('precession')
-  const [theta,       setTheta]       = useState(Math.PI / 3)
-  const [phi,         setPhi]         = useState(0)
-  const [omega,       setOmega]       = useState(1.0)
+  const [activeTab, setActiveTab] = useState<SpinTab>(() =>
+    getStringParam(parseHash(window.location.hash).params, 'tab', 'precession', SPIN_TABS) as SpinTab
+  )
+  const [theta, setTheta] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'theta', Math.PI / 3, 0, Math.PI))
+  const [phi,   setPhi]   = useState(() => getNumericParam(parseHash(window.location.hash).params, 'phi', 0, 0, 2 * Math.PI))
+  const [omega, setOmega] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'omega', 1.0, 0.1, 5))
+
+  useEffect(() => { setUrlParams({ tab: activeTab, theta, phi, omega }) }, [activeTab, theta, phi, omega])
   const [bTheta,      setBTheta]      = useState(0)
   const [bPhi,        setBPhi]        = useState(0)
   const [showHelp,    setShowHelp]    = useState(false)

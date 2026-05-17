@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { parseHash, getIntParam, getNumericParam, setUrlParams } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 import { HelpButton, HelpModal } from './HelpModal'
@@ -468,9 +469,11 @@ const labelStyle: React.CSSProperties = {
 // ── Main explorer ─────────────────────────────────────────────────────────
 
 export function RingExplorer() {
-  const [phi, setPhi] = useState(0)
-  const [R, setR] = useState(1.0)
-  const [n, setN] = useState(0)
+  const [phi, setPhi] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'phi', 0, -1, 3))
+  const [R, setR] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'R', 1.0, 0.5, 5))
+  const [n, setN] = useState(() => getIntParam(parseHash(window.location.hash).params, 'n', 0, -4, 4))
+
+  useEffect(() => { setUrlParams({ phi, R, n }) }, [phi, R, n])
 
   return (
     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>

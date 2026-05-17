@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { parseHash, getNumericParam, setUrlParams } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 
@@ -59,9 +60,11 @@ function makeMomGrid(k0: number, sigma0: number): number[] {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export function FreeParticleExplorer() {
-  const [x0, setX0] = useState(0)
-  const [k0, setK0] = useState(1.0)
-  const [sigma0, setSigma0] = useState(1.0)
+  const [x0, setX0] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'x0', 0, -20, 20))
+  const [k0, setK0] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'k0', 1.0, -5, 5))
+  const [sigma0, setSigma0] = useState(() => getNumericParam(parseHash(window.location.hash).params, 's0', 1.0, 0.1, 5))
+
+  useEffect(() => { setUrlParams({ x0, k0, s0: sigma0 }) }, [x0, k0, sigma0])
 
   const [t, setT] = useState(0)
   const [playing, setPlaying] = useState(false)

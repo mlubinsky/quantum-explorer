@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
+import { parseHash, getIntParam, getNumericParam, getStringParam, setUrlParams } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 
@@ -80,14 +81,20 @@ function phaseSpaceRange(
 
 // ── Main component ────────────────────────────────────────────────────────────
 
+const WIGNER_MODES = ['fock', 'coherent', 'squeezed', 'cat-even', 'cat-odd', 'fock-super'] as const
+
 export function WignerExplorer() {
-  const [stateType, setStateType]   = useState<StateType>('fock')
-  const [n, setN]                   = useState(1)
-  const [n2, setN2]                 = useState(2)
-  const [alpha, setAlpha]           = useState(2.0)
-  const [phiAlpha, setPhiAlpha]     = useState(0.0)
-  const [omega, setOmega]           = useState(1.0)
-  const [r, setR]                   = useState(0.8)
+  const [stateType, setStateType] = useState<StateType>(() =>
+    getStringParam(parseHash(window.location.hash).params, 'mode', 'fock', WIGNER_MODES) as StateType
+  )
+  const [n, setN]         = useState(() => getIntParam(parseHash(window.location.hash).params, 'n', 1, 0, 6))
+  const [n2, setN2]       = useState(2)
+  const [alpha, setAlpha] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'alpha', 2.0, 0, 3))
+  const [phiAlpha, setPhiAlpha] = useState(0.0)
+  const [omega, setOmega] = useState(1.0)
+  const [r, setR]         = useState(() => getNumericParam(parseHash(window.location.hash).params, 'r', 0.8, 0, 2))
+
+  useEffect(() => { setUrlParams({ mode: stateType, n, alpha, r }) }, [stateType, n, alpha, r])
 
   // Animation
   const [t, setT]           = useState(0)

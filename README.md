@@ -196,6 +196,9 @@ Exact solutions for a spinless particle on a 1D ring threaded by magnetic flux �
 
 Every module includes a **?** help button with physics formulas (KaTeX).
 
+Key parameters for every module are encoded in the URL hash (`#module?key=val&…`) so any
+configuration can be bookmarked or shared — the URL updates automatically as you adjust sliders.
+
 ### Planned (Phase 2)
 - Single-qubit gates on Bloch sphere
 
@@ -218,7 +221,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (593 passing) |
+| Vitest | Unit tests (621 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

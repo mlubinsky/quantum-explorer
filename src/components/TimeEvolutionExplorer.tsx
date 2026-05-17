@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { parseHash, getStringParam, setUrlParam } from '../physics/urlState'
 import _Plot from 'react-plotly.js'
 const Plot = (_Plot as any).default ?? _Plot
 
@@ -90,8 +91,14 @@ function makeHOMomGrid(omega: number, alpha: number, r = 0): number[] {
 
 // ── Main component ───────────────────────────────────────────────────────────
 
+const SUBMODES = ['isw', 'ho', 'ho-sq'] as const
+
 export function TimeEvolutionExplorer() {
-  const [subMode, setSubMode] = useState<SubMode>('isw')
+  const [subMode, setSubMode] = useState<SubMode>(() =>
+    getStringParam(parseHash(window.location.hash).params, 'mode', 'isw', SUBMODES) as SubMode
+  )
+
+  useEffect(() => { setUrlParam('mode', subMode) }, [subMode])
 
   // ISW state
   const [L, setL] = useState(10)
