@@ -166,3 +166,29 @@
 .help-modal-body .katex {
   color: #e0e0e0;
 }
+
+/* ── Feedback FAB ─────────────────────────────────────────────────────────── */
+.feedback-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  background: #4361ee;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.feedback-fab:hover {
+  background: #3451d1;
+  transform: translateY(-1px);
+}

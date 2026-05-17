@@ -151,6 +151,15 @@ export default function App() {
       <footer className="app-footer">
         Michael Lubinsky &nbsp;·&nbsp; v{pkg.version}
       </footer>
+
+      <a
+        className="feedback-fab"
+        href="https://github.com/mlubinsky/quantum-explorer/discussions/new/choose"
+        target="_blank"
+        rel="noreferrer"
+      >
+        💬 Feedback
+      </a>
     </div>
   )
 }

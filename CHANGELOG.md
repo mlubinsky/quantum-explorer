@@ -6,6 +6,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Feedback FAB** — floating "💬 Feedback" button (bottom-right, fixed) links to GitHub Discussions
+- **README**: removed stale "Planned (Phase 2)" entries for Delta function, Kronig-Penney, and Morse potential (all implemented)
+
 - **Emission Spectra** — new collapsible section in Hydrogen module
   - `src/physics/hydrogen.ts`: `transitionPhotonEnergy`, `transitionWavelengthNm`, `spectralLines`,
     `SpectralLine` interface, `HC_NM` constant (exported; replaces three duplicate local constants)

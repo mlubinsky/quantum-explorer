@@ -197,9 +197,6 @@ Exact solutions for a spinless particle on a 1D ring threaded by magnetic flux �
 Every module includes a **?** help button with physics formulas (KaTeX).
 
 ### Planned (Phase 2)
-- Delta function potential — one bound state, exact scattering
-- Kronig-Penney model — exact band structure and band gaps
-- Morse potential — finite bound states, diatomic vibration
 - Single-qubit gates on Bloch sphere
 
 See [TODO.md](TODO.md) for the full roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
