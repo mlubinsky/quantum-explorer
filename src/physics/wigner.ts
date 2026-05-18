@@ -141,10 +141,12 @@ export function wignerCat(
 ): number {
   const x0 = alpha * Math.sqrt(2 / omega)
   const N2 = 2 * (1 + sign * Math.exp(-2 * alpha * alpha))
-  if (N2 < 1e-10) return 0   // odd cat at alpha≈0: |α⟩−|−α⟩ → |0⟩, N→0
+  const s = omega * x * x + p * p / omega
+  // Odd cat limit as α→0: |α⟩−|−α⟩ ≈ 2α|1⟩, N²≈4α², normalized → |1⟩.
+  // Return W₁ = (1/π)(2s−1)e^{−s} instead of dividing by near-zero N².
+  if (N2 < 1e-10) return (1 / Math.PI) * (2 * s - 1) * Math.exp(-s)
   const Wplus  = wignerCoherent(x, p,  x0, 0, omega)
   const Wminus = wignerCoherent(x, p, -x0, 0, omega)
-  const s = omega * x * x + p * p / omega
   const Wcross = (1 / Math.PI) * Math.exp(-s) * Math.cos(2 * x0 * p)
   return (Wplus + Wminus + sign * 2 * Wcross) / N2
 }

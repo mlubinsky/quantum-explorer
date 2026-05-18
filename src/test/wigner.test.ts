@@ -181,6 +181,30 @@ describe('wignerCat', () => {
     expect(sum).toBeCloseTo(1, 2)
   })
 
+  it('odd cat at alpha=0 returns Fock-1 Wigner function, not zero', () => {
+    // Physical limit: normalized (|α⟩−|−α⟩) → |1⟩ as α→0
+    // W₁(x,p) = (1/π)(2(x²+p²)−1)exp(−(x²+p²)) at ω=1
+    const alpha = 0
+    const omega = 1
+    for (const [x, p] of [[0, 0], [1, 0], [0, 1], [1, 1]] as [number,number][]) {
+      const s = omega * x * x + p * p / omega
+      const w1 = (1 / Math.PI) * (2 * s - 1) * Math.exp(-s)
+      expect(wignerCat(x, p, alpha, omega, -1)).toBeCloseTo(w1, 8)
+    }
+  })
+
+  it('odd cat near alpha=0 integrates to 1 (continuity with Fock-1)', () => {
+    const alpha = 1e-6
+    const N = 200
+    const xMax = 6, pMax = 6
+    const dx = 2 * xMax / N, dp = 2 * pMax / N
+    let sum = 0
+    for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+      sum += wignerCat(-xMax + i * dx, -pMax + j * dp, alpha, 1, -1) * dx * dp
+    }
+    expect(sum).toBeCloseTo(1, 2)
+  })
+
   it('even cat can go negative (interference fringes)', () => {
     const alpha = 2.0
     let hasNeg = false
