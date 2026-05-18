@@ -6,6 +6,7 @@ import { HelpButton, HelpModal } from './HelpModal'
 import { SpinInfoPanel } from './SpinInfoPanel'
 import { SternGerlachPanel } from './SternGerlachPanel'
 import { BellDemo } from './BellDemo'
+import { GatesPanel } from './GatesPanel'
 import { computeTrajectory, blochVector } from '../utils/spinMath'
 import type { Vec3 } from '../utils/spinMath'
 
@@ -14,7 +15,7 @@ const T_MAX    = 4 * Math.PI
 
 const PI = Math.PI
 
-type SpinTab = 'precession' | 'measurement' | 'bell'
+type SpinTab = 'precession' | 'measurement' | 'bell' | 'gates'
 
 const PRESETS: [string, number, number][] = [
   ['|↑⟩',  0,      0       ],
@@ -33,7 +34,7 @@ function formatBeta(re: number, im: number): string {
   return `${reS} ${im < 0 ? '−' : '+'} ${imS}i`
 }
 
-const SPIN_TABS = ['precession', 'measurement', 'bell'] as const
+const SPIN_TABS = ['precession', 'measurement', 'bell', 'gates'] as const
 
 export function SpinExplorer() {
   const [activeTab, setActiveTab] = useState<SpinTab>(() =>
@@ -44,6 +45,11 @@ export function SpinExplorer() {
   const [omega, setOmega] = useState(() => getNumericParam(parseHash(window.location.hash).params, 'omega', 1.0, 0.1, 5))
 
   useEffect(() => { setUrlParams({ tab: activeTab, theta, phi, omega }) }, [activeTab, theta, phi, omega])
+
+  const [gateTheta,      setGateTheta]      = useState(Math.PI / 3)
+  const [gatePhi,        setGatePhi]        = useState(0)
+  const [gateTrajectory, setGateTrajectory] = useState<Vec3[]>([])
+
   const [bTheta,      setBTheta]      = useState(0)
   const [bPhi,        setBPhi]        = useState(0)
   const [showHelp,    setShowHelp]    = useState(false)
@@ -64,9 +70,12 @@ export function SpinExplorer() {
 
   function handleTabChange(tab: SpinTab) {
     setActiveTab(tab)
-    if (tab === 'measurement' || tab === 'bell') {
+    if (tab === 'measurement' || tab === 'bell' || tab === 'gates') {
       setTrajectory([])
       setPlaying(false)
+    }
+    if (tab !== 'gates') {
+      setGateTrajectory([])
     }
   }
 
@@ -123,9 +132,9 @@ export function SpinExplorer() {
         {/* ── Bloch sphere + playback (always visible) ── */}
         <div style={{ flex: '0 0 420px' }}>
           <BlochSphere
-            theta={currentTheta}
-            phi={currentPhi}
-            trajectory={trajectory.slice(0, frame + 1)}
+            theta={activeTab === 'gates' ? gateTheta : currentTheta}
+            phi={activeTab === 'gates' ? gatePhi : currentPhi}
+            trajectory={activeTab === 'gates' ? gateTrajectory : trajectory.slice(0, frame + 1)}
             playing={playing}
             measureAxis={activeTab === 'measurement' ? measureAxis : undefined}
           />
@@ -155,7 +164,7 @@ export function SpinExplorer() {
 
           {/* Tab strip */}
           <div style={{ display: 'flex', gap: 0, marginBottom: '1rem', borderBottom: '1px solid #222' }}>
-            {(['precession', 'measurement', 'bell'] as SpinTab[]).map(tab => (
+            {(['precession', 'measurement', 'bell', 'gates'] as SpinTab[]).map(tab => (
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
@@ -166,7 +175,7 @@ export function SpinExplorer() {
                   marginBottom: -1,
                 }}
               >
-                {tab === 'precession' ? 'Precession' : tab === 'measurement' ? 'Measurement' : 'Bell'}
+                {tab === 'precession' ? 'Precession' : tab === 'measurement' ? 'Measurement' : tab === 'bell' ? 'Bell' : 'Gates'}
               </button>
             ))}
           </div>
@@ -274,6 +283,19 @@ export function SpinExplorer() {
 
           {/* ── Bell tab ── */}
           {activeTab === 'bell' && <BellDemo />}
+
+          {/* ── Gates tab ── */}
+          {activeTab === 'gates' && (
+            <GatesPanel
+              theta={gateTheta}
+              phi={gatePhi}
+              onStateChange={(t, p, trail) => {
+                setGateTheta(t)
+                setGatePhi(p)
+                setGateTrajectory(trail)
+              }}
+            />
+          )}
         </div>
       </div>
     </>

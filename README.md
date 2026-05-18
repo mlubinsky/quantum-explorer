@@ -112,7 +112,7 @@ Six sub-tabs covering zero-range, reflectionless, periodic, diatomic, and extend
 - α slider (0–5), lattice constant a slider (1–8); limits: P=0 free particle, P→∞ tight-binding
 
 ### Spin-½ / Bloch Sphere
-Three sub-tabs.
+Four sub-tabs.
 
 **Precession** — Larmor precession under arbitrary B-field direction
 - Exact Rodrigues rotation — no numerical ODE
@@ -132,6 +132,13 @@ Three sub-tabs.
 - Correlation curve E(θ) = −cos θ vs classical LHV bound |E| ≤ 1
 - CHSH panel with 4 angle sliders; optimal preset (S = 2√2 ≈ 2.828)
 - N-shot simulation with convergence indicator
+
+**Single-qubit gates** — interactive gate pad on the Bloch sphere
+- One-click gates: X, Y, Z (Pauli), H, S, S† (Clifford), T, T†
+- Parametric rotations Rx(θ), Ry(θ), Rz(θ) with angle slider (−2π to 2π)
+- State presets: |↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩
+- Bloch sphere sweeps great-circle arc animation (SLERP) after each gate
+- Gate history strip (max 12) with undo; live ket + Bloch vector readout
 
 ### Hydrogen Atom
 Exact hydrogenic solutions for n = 1–5, l = 0–4, m = −l…l, Z = 1–10.
@@ -214,7 +221,7 @@ Key parameters for every module are encoded in the URL hash (`#module?key=val&�
 configuration can be bookmarked or shared — the URL updates automatically as you adjust sliders.
 
 ### Planned (Phase 2)
-- Single-qubit gates on Bloch sphere
+- ~~Single-qubit gates on Bloch sphere~~ ✓ done
 
 See [TODO.md](TODO.md) for the full roadmap and [CHANGELOG.md](CHANGELOG.md) for release history.
 
@@ -235,7 +242,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (640 passing) |
+| Vitest | Unit tests (705 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

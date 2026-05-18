@@ -6,6 +6,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Single-qubit gates** — new "Gates" tab in Spin-½ / Bloch Sphere module
+  - `src/physics/gates.ts`: 14 pure functions — `blochToQubit`, `qubitToBloch`, `qubitAngles`, `qubitNorm`; fixed gates X, Y, Z, H, S, S†, T, T†; parametric rotations Rx(θ), Ry(θ), Rz(θ); `blochSlerp` for great-circle arc animation
+  - `src/components/GatesPanel.tsx`: state preset strip (|↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩), 3-row gate pad (Pauli / Clifford / T-family), parametric rotation with axis selector + angle slider, gate history (max 12) with undo, state readout (complex ket + Bloch vector)
+  - Bloch sphere animates great-circle arc after each gate via SLERP
+  - 65 new tests; 705 total
 - **Fourier Explorer** — new module (Single Particle — 1D group) with three modes:
   - *Gaussian*: position/momentum Gaussian pair, exact Δx = σ, Δk = 1/(2σ), Δx·Δk = ½
   - *Chirped*: position-dependent local frequency β; exact σ_k = √(1/(4σ²)+β²σ²);
