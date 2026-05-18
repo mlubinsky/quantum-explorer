@@ -7,7 +7,7 @@ import { ParameterSlider } from './ParameterSlider'
 import { ScatteringInfoPanel } from './ScatteringInfoPanel'
 import type { ScatteringInfoTopic } from './ScatteringInfoPanel'
 import {
-  transmissionT, reflectionR, wkbT, resonanceEnergies, scatteringPsiSq,
+  transmissionT, reflectionR, wkbT, resonanceEnergies, scatteringPsiSq, wkbPsiSq,
 } from '../physics/tunnelling'
 
 const PI = Math.PI
@@ -68,13 +68,17 @@ export function BarrierExplorer() {
     [V0, L]
   )
 
-  const { xVals, psiSqVals } = useMemo(() => {
+  const { xVals, psiSqVals, wkbValsPos } = useMemo(() => {
     const k = Math.sqrt(2 * Math.max(E, 1e-6))
     const half = L / 2
     const xL = -half - 6 / k
     const xR =  half + 6 / k
     const xVals = Array.from({ length: N_SPACE }, (_, i) => xL + (xR - xL) * i / (N_SPACE - 1))
-    return { xVals, psiSqVals: xVals.map(x => scatteringPsiSq(x, E, V0, L)) }
+    return {
+      xVals,
+      psiSqVals:  xVals.map(x => scatteringPsiSq(x, E, V0, L)),
+      wkbValsPos: xVals.map(x => wkbPsiSq(x, E, V0, L)),
+    }
   }, [E, V0, L])
 
   const tvsETraces = useMemo(() => [
@@ -123,12 +127,14 @@ export function BarrierExplorer() {
 
   const half = L / 2
   const psiTraces = useMemo(() => [
-    { x: xVals, y: psiSqVals, type: 'scatter', mode: 'lines', name: '|ψ(x)|²',
+    { x: xVals, y: psiSqVals, type: 'scatter', mode: 'lines', name: '|ψ(x)|² exact',
       line: { color: DARK.blue, width: 2 } },
+    { x: xVals, y: wkbValsPos, type: 'scatter', mode: 'lines', name: 'WKB |ψ|²',
+      line: { color: DARK.orange, width: 1.5, dash: 'dash' } },
     { x: [half + 0.5, xVals[xVals.length - 1]], y: [T, T],
       type: 'scatter', mode: 'lines', showlegend: false,
       line: { color: DARK.green, width: 1, dash: 'dot' } },
-  ], [xVals, psiSqVals, half, T])
+  ], [xVals, psiSqVals, wkbValsPos, half, T])
 
   const psiLayout = {
     ...darkLayout({ legend: { x: 0.01, y: 0.98, bgcolor: 'rgba(0,0,0,0.5)', font: { size: 11 } } }),

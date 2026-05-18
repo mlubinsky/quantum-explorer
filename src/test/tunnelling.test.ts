@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   transmissionT, reflectionR, wkbT, resonanceEnergies, scatteringPsiSq,
+  wkbPsiSq,
   _testScatteringAmplitudes,
 } from '../physics/tunnelling'
 
@@ -265,5 +266,136 @@ const { rRe, rIm, tRe, tIm } = _testScatteringAmplitudes(E, V0, L)
     const E_res = V0 + (PI * PI) / (2 * L * L)
     const { rRe, rIm } = _testScatteringAmplitudes(E_res, V0, L)
     expect(rRe*rRe + rIm*rIm).toBeCloseTo(0, 6)
+  })
+})
+
+describe('wkbPsiSq', () => {
+  const V0 = 5, L = 2, half = L / 2
+
+  // ── Left region (always 1) ──────────────────────────────────────────────────
+
+  it('left of barrier (E < V0): returns 1', () => {
+    expect(wkbPsiSq(-half - 1, 1, V0, L)).toBeCloseTo(1, 10)
+    expect(wkbPsiSq(-half - 3, 1, V0, L)).toBeCloseTo(1, 10)
+  })
+
+  it('left of barrier (E > V0): returns 1', () => {
+    expect(wkbPsiSq(-half - 1, 8, V0, L)).toBeCloseTo(1, 10)
+  })
+
+  // ── Right region ────────────────────────────────────────────────────────────
+
+  it('right of barrier (E < V0): returns T_WKB', () => {
+    const E = 1
+    const expected = wkbT(E, V0, L)
+    expect(wkbPsiSq(half + 1, E, V0, L)).toBeCloseTo(expected, 10)
+    expect(wkbPsiSq(half + 5, E, V0, L)).toBeCloseTo(expected, 10)
+  })
+
+  it('right of barrier (E > V0): returns 1', () => {
+    expect(wkbPsiSq(half + 1, 8, V0, L)).toBeCloseTo(1, 10)
+    expect(wkbPsiSq(half + 4, 8, V0, L)).toBeCloseTo(1, 10)
+  })
+
+  // ── Inside barrier, E < V0 ──────────────────────────────────────────────────
+
+  it('inside (E < V0): value at left edge = 1', () => {
+    const E = 1
+    expect(wkbPsiSq(-half, E, V0, L)).toBeCloseTo(1, 10)
+  })
+
+  it('inside (E < V0): value at right edge = T_WKB', () => {
+    const E = 1
+    expect(wkbPsiSq(half, E, V0, L)).toBeCloseTo(wkbT(E, V0, L), 10)
+  })
+
+  it('inside (E < V0): monotonically decreasing', () => {
+    const E = 1
+    const vals = [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].map(x =>
+      wkbPsiSq(x, E, V0, L)
+    )
+    // inside = x in [-1, 1] (half = 1) — values strictly decrease
+    const inside = vals.slice(1, 6)
+    for (let i = 0; i < inside.length - 1; i++) {
+      expect(inside[i]).toBeGreaterThan(inside[i + 1])
+    }
+  })
+
+  it('inside (E < V0): exp decay matches formula', () => {
+    const E = 1
+    const kappa = Math.sqrt(2 * (V0 - E))
+    const x = 0  // midpoint
+    const expected = Math.exp(-2 * kappa * (x + half))
+    expect(wkbPsiSq(x, E, V0, L)).toBeCloseTo(expected, 10)
+  })
+
+  // ── Inside barrier, E > V0 ──────────────────────────────────────────────────
+
+  it('inside (E > V0): constant = k/κ′', () => {
+    const E = 8
+    const k      = Math.sqrt(2 * E)
+    const kPrime = Math.sqrt(2 * (E - V0))
+    const expected = k / kPrime
+    for (const x of [-half, 0, half]) {
+      expect(wkbPsiSq(x, E, V0, L)).toBeCloseTo(expected, 10)
+    }
+  })
+
+  it('inside (E > V0): > 1 when E is close to V0 (slow particle inside)', () => {
+    // k/κ′ = √(E/(E-V0)) > 1 when E is just above V0
+    const E = V0 + 0.1
+    expect(wkbPsiSq(0, E, V0, L)).toBeGreaterThan(1)
+  })
+
+  // ── E = V0 edge case ────────────────────────────────────────────────────────
+
+  it('E = V0: returns 1 everywhere', () => {
+    const E = V0
+    expect(wkbPsiSq(-half - 1, E, V0, L)).toBeCloseTo(1, 10)
+    expect(wkbPsiSq(0,          E, V0, L)).toBeCloseTo(1, 10)
+    expect(wkbPsiSq(half + 1,  E, V0, L)).toBeCloseTo(1, 10)
+  })
+
+  // ── Always positive ─────────────────────────────────────────────────────────
+
+  it('positive everywhere', () => {
+    const E = 1
+    for (const x of [-3, -half, -0.5, 0, 0.5, half, 3]) {
+      expect(wkbPsiSq(x, E, V0, L)).toBeGreaterThan(0)
+    }
+  })
+
+  // ── Continuity at barrier edges for E < V0 ──────────────────────────────────
+
+  it('left edge continuity (E < V0): left side = right side at x = -half', () => {
+    const E = 1, eps = 1e-9
+    const leftSide  = wkbPsiSq(-half - eps, E, V0, L)  // = 1
+    const rightSide = wkbPsiSq(-half + eps, E, V0, L)  // = exp(-2κ̃·eps) ≈ 1
+    expect(leftSide).toBeCloseTo(rightSide, 7)
+  })
+
+  it('right edge continuity (E < V0): inside = outside at x = +half', () => {
+    const E = 1, eps = 1e-9
+    const inside  = wkbPsiSq(half - eps, E, V0, L)
+    const outside = wkbPsiSq(half + eps, E, V0, L)
+    expect(inside).toBeCloseTo(outside, 8)
+  })
+
+  // ── Deep tunnelling ─────────────────────────────────────────────────────────
+
+  it('deep tunnelling (large L): right side ≈ 0', () => {
+    const E = 1
+    expect(wkbPsiSq(10 + 1, E, V0, 10)).toBeCloseTo(0, 4)
+  })
+
+  // ── Flux conservation check (E > V0) ───────────────────────────────────────
+
+  it('flux conservation (E > V0): k·|ψ_left|² = κ′·|ψ_inside|²', () => {
+    const E = 8
+    const k      = Math.sqrt(2 * E)
+    const kPrime = Math.sqrt(2 * (E - V0))
+    const psiLeft   = wkbPsiSq(-half - 1, E, V0, L)  // = 1
+    const psiInside = wkbPsiSq(0,          E, V0, L)  // = k/κ′
+    expect(k * psiLeft).toBeCloseTo(kPrime * psiInside, 10)
   })
 })

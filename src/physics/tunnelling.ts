@@ -327,5 +327,45 @@ function insideCoeffsEvanescent(E: number, V0: number, L: number): EvanescentCoe
   }
 }
 
+/**
+ * WKB approximation for the position-space probability density |ψ_WKB(x)|².
+ *
+ * The "crude WKB" ignores reflections at the barrier edges entirely:
+ * - Left region (x < −L/2):  |ψ|² = 1  (incident wave, no reflection)
+ * - Inside (−L/2 ≤ x ≤ L/2):
+ *     E < V0: exp(−2κ̃(x + L/2))  — exponential decay from left edge
+ *     E > V0: k/κ′               — from probability-flux conservation
+ *     E = V0: 1
+ * - Right region (x > L/2):
+ *     E < V0: T_WKB = exp(−2κ̃L)
+ *     E > V0: 1  (WKB predicts perfect transmission above barrier)
+ *     E = V0: 1
+ */
+export function wkbPsiSq(x: number, E: number, V0: number, L: number): number {
+  const half = L / 2
+
+  if (x < -half) return 1
+
+  const kappaSq = 2 * (E - V0)
+
+  if (x > half) {
+    if (kappaSq < 0) return Math.exp(2 * Math.sqrt(-kappaSq) * (-L))  // T_WKB
+    return 1
+  }
+
+  // Inside barrier
+  if (Math.abs(kappaSq) < 1e-12) return 1
+
+  if (kappaSq < 0) {
+    const kappaTilde = Math.sqrt(-kappaSq)
+    return Math.exp(-2 * kappaTilde * (x + half))
+  }
+
+  // E > V0: flux conservation
+  const k      = Math.sqrt(2 * E)
+  const kPrime = Math.sqrt(kappaSq)
+  return k / kPrime
+}
+
 /** Exported for unit tests only — not part of the public API. */
 export const _testScatteringAmplitudes = scatteringAmplitudes

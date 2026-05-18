@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **WKB wavefunction overlay** — position-space comparison in the Barrier sub-tab
+  - New `wkbPsiSq(x, E, V0, L)` in `tunnelling.ts`: piecewise WKB |ψ|² — left region = 1
+    (no reflection), inside E < V0: exp(−2κ̃(x+L/2)) exponential decay, inside E > V0:
+    k/κ′ from flux conservation, right region: T_WKB (tunnelling) or 1 (above barrier)
+  - Orange dashed "WKB |ψ|²" trace overlaid on the exact blue curve in the wavefunction plot;
+    shows where WKB fails: resonances above barrier, oscillations from internal reflections,
+    and the jump discontinuity at barrier edges vs exact smooth matching
+  - 16 new tests; 747 total
 - **Wavefunction collapse** — Quantum Measurement section in Free Particle Explorer
   - `src/physics/collapse.ts`: `sampleGaussian` (Box-Muller), `bornProbDensityX/K`,
     `collapsePosition`, `collapseMomentum`; `MeasurementEvent` interface

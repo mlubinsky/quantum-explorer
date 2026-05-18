@@ -93,8 +93,9 @@ Six sub-tabs covering zero-range, reflectionless, periodic, diatomic, and extend
 - Potential diagram shows spike direction, E level, and E_b level line
 
 **Rectangular barrier** (T & R via exact transfer matrix)
-- T(E) and R(E) vs E; WKB comparison; resonance markers at E = V₀ + n²π²/2a²
-- Scattering wavefunction |ψ(x)|² with incident, reflected, and transmitted regions
+- T(E) and R(E) vs E; T_WKB dashed overlay; resonance markers at E = V₀ + n²π²/2a²
+- Scattering wavefunction |ψ(x)|² (exact, blue) with WKB |ψ|² overlay (orange dashed)
+  — shows exponential decay vs oscillations inside barrier, WKB jump vs exact smooth matching
 - Potential diagram with energy slider
 
 **Step potential** (single interface, exact)
@@ -247,7 +248,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (731 passing) |
+| Vitest | Unit tests (747 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

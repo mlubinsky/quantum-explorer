@@ -162,7 +162,7 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 - [x] **Morse potential** — finite bound states; V(x)=De(e^{-2αx}-2e^{-αx}); exact eigenvalues
       E_n=-α²(λ-n-½)²/2; Laguerre-polynomial wavefunctions; turning points; potential + level
       diagram; wavefunction viewer; anharmonicity table ΔE_n/ω_e; 29 unit tests; 494 total
-- [ ] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
+- [x] **WKB approximation overlay** — show WKB tunnelling probability and wavefunction
       alongside exact results in the Scattering module; educational contrast, highlights
       where WKB fails (near turning points, near resonances)
 
