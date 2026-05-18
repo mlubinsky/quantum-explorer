@@ -6,6 +6,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Wavefunction collapse** — Quantum Measurement section in Free Particle Explorer
+  - `src/physics/collapse.ts`: `sampleGaussian` (Box-Muller), `bornProbDensityX/K`,
+    `collapsePosition`, `collapseMomentum`; `MeasurementEvent` interface
+  - "Measure x̂" — samples x from |ψ(x,t)|², collapses to new Gaussian of width σ_det;
+    demonstrates fast re-spreading and increased momentum uncertainty
+  - "Measure p̂" — samples k from |φ(k)|², collapses to wide Gaussian σ₀ = 1/(2σ_k_det);
+    demonstrates complement: sharp momentum → slow spreading, large position uncertainty
+  - Adjustable detector resolution slider σ_det ∈ [0.1, 2.0] a₀; HUP always satisfied
+  - Dashed measurement marker on the main plot; scrollable event log (max 8); Clear log button
+  - 26 new tests; 731 total
 - **Single-qubit gates** — new "Gates" tab in Spin-½ / Bloch Sphere module
   - `src/physics/gates.ts`: 14 pure functions — `blochToQubit`, `qubitToBloch`, `qubitAngles`, `qubitNorm`; fixed gates X, Y, Z, H, S, S†, T, T†; parametric rotations Rx(θ), Ry(θ), Rz(θ); `blochSlerp` for great-circle arc animation
   - `src/components/GatesPanel.tsx`: state preset strip (|↑⟩ |↓⟩ |+x⟩ |−x⟩ |+y⟩ |−y⟩), 3-row gate pad (Pauli / Clifford / T-family), parametric rotation with axis selector + angle slider, gate history (max 12) with undo, state readout (complex ket + Bloch vector)

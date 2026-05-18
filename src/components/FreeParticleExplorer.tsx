@@ -8,8 +8,13 @@ import { ParameterSlider } from './ParameterSlider'
 import { FreeParticleInfoPanel } from './FreeParticleInfoPanel'
 import {
   fpSigma, fpSpreadingTime, fpProb, fpDeltaX, fpDeltaP, fpMomentumDist,
-  fpRePsi, fpImPsi,
+  fpRePsi, fpImPsi, fpExpectX,
 } from '../physics/freeParticle'
+import {
+  sampleGaussian, bornProbDensityX, bornProbDensityK,
+  collapsePosition, collapseMomentum,
+} from '../physics/collapse'
+import type { MeasurementEvent } from '../physics/collapse'
 
 type DisplayMode = 'prob' | 're' | 'im'
 
@@ -73,9 +78,15 @@ export function FreeParticleExplorer() {
   const [displayMode, setDisplayMode] = useState<DisplayMode>('prob')
 
   // Collapsible sections
-  const [showMomentum, setShowMomentum] = useState(true)
-  const [showExpect,   setShowExpect]   = useState(true)
-  const [showNorm,     setShowNorm]     = useState(false)
+  const [showMomentum,    setShowMomentum]    = useState(true)
+  const [showExpect,      setShowExpect]      = useState(true)
+  const [showNorm,        setShowNorm]        = useState(false)
+  const [showMeasurement, setShowMeasurement] = useState(true)
+
+  // Measurement state
+  const [sigmaDet,    setSigmaDet]    = useState(0.3)
+  const [measEvents,  setMeasEvents]  = useState<MeasurementEvent[]>([])
+  const [measMarker,  setMeasMarker]  = useState<{ x: number; type: 'position' | 'momentum' } | null>(null)
 
   // Help modals
   const [showHelpMain,     setShowHelpMain]     = useState(false)
@@ -154,6 +165,16 @@ export function FreeParticleExplorer() {
     line: { color: DARK.orange, width: 1.5, dash: 'dash' },
   }
 
+  const measMarkerTrace = measMarker ? {
+    x: [measMarker.x, measMarker.x],
+    y: [-1, Math.max(...mainTrace.y as number[]) * 1.4 || 1],
+    type: 'scatter', mode: 'lines',
+    line: {
+      color: measMarker.type === 'position' ? DARK.red : '#9b5de5',
+      width: 2, dash: 'dot',
+    },
+  } : null
+
   const yLabel = displayMode === 'prob' ? '|ψ(x,t)|²' : displayMode === 're' ? 'Re(ψ)' : 'Im(ψ)'
 
   // Momentum trace (static)
@@ -186,6 +207,31 @@ export function FreeParticleExplorer() {
 
   const vg  = k0
   const vph = k0 / 2
+
+  // ── Measurement handlers ────────────────────────────────────────────────────
+
+  function measureX() {
+    const meanX  = fpExpectX(t, x0, k0)
+    const sigmaX = fpDeltaX(t, sigma0)
+    const xMeas  = sampleGaussian(meanX, sigmaX)
+    const prob   = bornProbDensityX(xMeas, meanX, sigmaX)
+    const next   = collapsePosition(xMeas, k0, sigmaDet)
+    setMeasMarker({ x: xMeas, type: 'position' })
+    setMeasEvents(ev => [...ev, { type: 'position' as const, value: xMeas, tAt: t, prob }].slice(-8))
+    setX0(next.x0); setK0(next.k0); setSigma0(next.sigma0)
+  }
+
+  function measureP() {
+    const sigmaK = fpDeltaP(sigma0)          // Δp = 1/(2σ₀)
+    const sigmaKDet = 1 / (2 * sigmaDet)     // detector momentum resolution
+    const kMeas  = sampleGaussian(k0, sigmaK)
+    const prob   = bornProbDensityK(kMeas, k0, sigmaKDet)
+    const xNow   = fpExpectX(t, x0, k0)
+    const next   = collapseMomentum(xNow, kMeas, sigmaKDet)
+    setMeasMarker({ x: xNow, type: 'momentum' })
+    setMeasEvents(ev => [...ev, { type: 'momentum' as const, value: kMeas, tAt: t, prob }].slice(-8))
+    setX0(next.x0); setK0(next.k0); setSigma0(next.sigma0)
+  }
 
   return (
     <div style={{ display: 'flex', gap: 16, padding: '12px 16px', minHeight: 0 }}>
@@ -302,7 +348,7 @@ export function FreeParticleExplorer() {
             <HelpButton onClick={() => setShowHelpMain(true)} />
           </div>
           <Plot
-            data={[mainTrace, expectTrace] as object[]}
+            data={[mainTrace, expectTrace, ...(measMarkerTrace ? [measMarkerTrace] : [])] as object[]}
             layout={{
               ...darkLayout({ height: 280 }),
               xaxis: axis('x (a.u.)'),
@@ -415,6 +461,93 @@ export function FreeParticleExplorer() {
             />
           )}
         </div>
+
+        {/* Quantum Measurement */}
+        <div style={{ background: DARK.paper, borderRadius: 8, padding: '8px 10px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+            <button
+              onClick={() => setShowMeasurement(p => !p)}
+              style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}
+            >
+              {showMeasurement ? '▾' : '▸'} Quantum Measurement
+            </button>
+          </div>
+          {showMeasurement && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {/* Detector width */}
+              <div>
+                <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 3 }}>
+                  Detector width σ_det = <span style={{ color: '#e0e0e0' }}>{sigmaDet.toFixed(2)} a₀</span>
+                  {'  ·  '}
+                  Δk_det = <span style={{ color: '#e0e0e0' }}>{(1 / (2 * sigmaDet)).toFixed(2)} a₀⁻¹</span>
+                </div>
+                <input
+                  type="range" min={0.1} max={2.0} step={0.05}
+                  value={sigmaDet}
+                  onChange={e => setSigmaDet(Number(e.target.value))}
+                  style={{ width: '100%', accentColor: '#4361ee' }}
+                />
+              </div>
+
+              {/* Physics note */}
+              <div style={{ fontSize: '0.75rem', color: '#555', fontStyle: 'italic', lineHeight: 1.4 }}>
+                Small σ_det → sharp position, fast re-spreading (large Δp).<br />
+                Large σ_det → loose position, slow re-spreading (small Δp).
+              </div>
+
+              {/* Action buttons */}
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => { setPlaying(false); measureX() }}
+                  style={measBtn('#ef233c')}
+                >
+                  Measure x̂
+                </button>
+                <button
+                  onClick={() => { setPlaying(false); measureP() }}
+                  style={measBtn('#9b5de5')}
+                >
+                  Measure p̂
+                </button>
+                <button
+                  onClick={() => { setMeasEvents([]); setMeasMarker(null) }}
+                  style={{ padding: '4px 10px', background: 'transparent', border: '1px solid #333', borderRadius: 4, color: '#666', cursor: 'pointer', fontSize: '0.8rem' }}
+                >
+                  Clear log
+                </button>
+              </div>
+
+              {/* Event log */}
+              {measEvents.length > 0 && (
+                <div style={{ display: 'flex', gap: 5, overflowX: 'auto', paddingBottom: 2, scrollbarWidth: 'thin' }}>
+                  {measEvents.map((ev, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        flexShrink: 0,
+                        background: '#111',
+                        border: `1px solid ${ev.type === 'position' ? '#ef233c55' : '#9b5de555'}`,
+                        borderRadius: 4,
+                        padding: '4px 7px',
+                        fontSize: '0.72rem',
+                        fontFamily: 'monospace',
+                        color: '#ccc',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      <div style={{ color: ev.type === 'position' ? '#ef233c' : '#9b5de5', fontWeight: 700 }}>
+                        {ev.type === 'position' ? 'x̂' : 'p̂'}
+                      </div>
+                      <div>t={ev.tAt.toFixed(2)}</div>
+                      <div>{ev.type === 'position' ? 'x' : 'k'}={ev.value >= 0 ? '+' : ''}{ev.value.toFixed(3)}</div>
+                      <div style={{ color: '#666' }}>ρ={ev.prob.toFixed(3)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── Help modals ──────────────────────────────────────────────────── */}
@@ -440,4 +573,11 @@ export function FreeParticleExplorer() {
       )}
     </div>
   )
+}
+
+function measBtn(color: string): React.CSSProperties {
+  return {
+    padding: '4px 12px', background: color + '22', border: `1px solid ${color}66`,
+    borderRadius: 4, color, cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600,
+  }
 }

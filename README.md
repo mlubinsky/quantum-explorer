@@ -69,6 +69,11 @@ Exact Gaussian wavepacket spreading under V = 0 — a minimum-uncertainty state 
 - Live readout: spreading time t₀ = 2σ₀², group velocity v_g, phase velocity v_ph = k₀/2, σ(t), Δx·Δp
 - Expectation values: ⟨x⟩ grows linearly, ⟨p⟩ constant, Δx grows as σ₀√(1+(t/t₀)²), Δx·Δp ≥ ħ/2
 - Analytic norm = 1 — exact flat 1.000 (no PDE solver, no drift)
+- **Quantum Measurement** — click "Measure x̂" or "Measure p̂" to collapse the wavepacket
+  - Born-rule sampling: x_meas ~ |ψ(x,t)|², k_meas ~ |φ(k)|²
+  - Position collapse: new σ₀ = σ_det (narrow → fast re-spreading, large Δp)
+  - Momentum collapse: new σ₀ = 1/(2σ_k_det) (wide → slow re-spreading, small Δp)
+  - Adjustable detector width σ_det; dashed marker on plot; scrollable event log
 
 ### Scattering
 Six sub-tabs covering zero-range, reflectionless, periodic, diatomic, and extended potentials.
@@ -242,7 +247,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (705 passing) |
+| Vitest | Unit tests (731 passing) |
 
 No Python, no server, no dependencies beyond npm.
 
