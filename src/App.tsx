@@ -10,10 +10,11 @@ import { HydrogenExplorer } from './components/HydrogenExplorer'
 import { RingExplorer } from './components/RingExplorer'
 import { WignerExplorer } from './components/WignerExplorer'
 import { TwoParticleExplorer } from './components/TwoParticleExplorer'
+import { FourierExplorer } from './components/FourierExplorer'
 import { InlineMath } from './components/KatexMath'
 import './App.css'
 
-type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner' | 'two-particle'
+type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner' | 'two-particle' | 'fourier'
 
 const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }[] = [
   {
@@ -24,6 +25,7 @@ const MODULE_GROUPS: { label: string; modules: { id: Module; label: string }[] }
       { id: 'free-particle',  label: 'Free Particle' },
       { id: 'tunnelling',     label: 'Scattering' },
       { id: 'wigner',         label: 'Wigner Function' },
+      { id: 'fourier',        label: 'Fourier Explorer' },
     ],
   },
   {
@@ -91,6 +93,10 @@ const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
     eq: String.raw`\Psi_{B/F}(x_1,x_2)=\tfrac{\psi_m(x_1)\psi_n(x_2)\pm\psi_n(x_1)\psi_m(x_2)}{\sqrt{2}},\quad m\neq n`,
     bc: String.raw`E=E_m+E_n,\quad\Psi_F(x,x)=0\ \forall x,\quad|\Psi_B(x,x)|^2=2|\Psi_D(x,x)|^2\ \text{(HBT)}`,
   },
+  'fourier': {
+    eq: String.raw`\hat\psi(k)=\tfrac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty}\psi(x)\,e^{-ikx}\,dx`,
+    bc: String.raw`\Delta x\,\Delta k\geq\tfrac{1}{2};\quad\sigma_k=\sqrt{\tfrac{1}{4\sigma^2}+\beta^2\sigma^2};\quad|\hat\psi_n(k)|^2\text{ peaks at }k=\pm n\pi/L`,
+  },
 }
 
 export default function App() {
@@ -147,6 +153,7 @@ export default function App() {
         {active === 'ring'           && <RingExplorer />}
         {active === 'wigner'         && <WignerExplorer />}
         {active === 'two-particle'   && <TwoParticleExplorer />}
+        {active === 'fourier'        && <FourierExplorer />}
       </main>
 
       <footer className="app-footer">

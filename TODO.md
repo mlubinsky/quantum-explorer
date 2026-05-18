@@ -204,10 +204,10 @@ These items deepen that into a proper Heisenberg-picture module:
 
 ## Phase 2 — New modules
 
-- [ ] **Interactive Fourier Explorer** — dedicated module; draggable Gaussian wavepacket in
-      position space with live exact Fourier transform in momentum space; phase display;
-      chirped packet (linear phase gradient); uncertainty product Δx·Δk animated; exact
-      for Gaussians and ISW eigenstates
+- [x] **Interactive Fourier Explorer** — three modes: Gaussian (Δx·Δk = ½ exact), Chirped
+      (σ_k = √(1/4σ²+β²σ²), FT broadens live), ISW (Bragg peaks at ±nπ/L, Δk = nπ/L);
+      |ψ|²/Re/Im toggle; Δx, Δk, Δx·Δk readout; URL state; 7 new physics functions;
+      19 unit tests; 640 total
 - [ ] **Position-space wavefunction collapse** — on the Free Particle or Time Evolution tab,
       add a "detector" at x=x₀; click probability P(detector fires); collapse ψ→ projected
       state re-normalised; show post-measurement Gaussian and its subsequent spreading; exact

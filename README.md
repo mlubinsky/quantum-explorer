@@ -166,6 +166,20 @@ Two identical particles in an infinite square well: the role of quantum statisti
   bosonic HBT bunching (2× distinguishable), distinguishable baseline
 - Energy E = Eₘ + Eₙ readout; symmetry label
 
+### Fourier Explorer
+Live position ↔ momentum Fourier pair — move a slider, watch both plots update instantly.
+
+| Mode | What is exact |
+|---|---|
+| Gaussian | Δx = σ, Δk = 1/(2σ), Δx·Δk = ½ (minimum uncertainty) |
+| Chirped | σ_k = √(1/(4σ²)+β²σ²); FT broadens with chirp rate β; Δx·Δk ≥ ½ |
+| ISW eigenstate | Exact |φₙ(k)|²; Bragg peaks at k = ±nπ/L; Δk = nπ/L |
+
+- Sliders: x₀, k₀, σ, chirp rate β, quantum number n, well width L
+- Position plot: |ψ|² with Re ψ / Im ψ overlay toggle; Δx bracket
+- Momentum plot: |φ(k)|² with Δk bracket; Bragg-peak markers for ISW
+- Uncertainty readout: Δx, Δk, Δx·Δk — green ✓ at minimum uncertainty
+
 ### Wigner Function
 Phase-space quasi-probability distribution W(x,p) — the closest quantum analogue of a classical phase-space density.
 
@@ -221,7 +235,7 @@ Then open `http://localhost:5174`.
 | Three.js | Bloch sphere (3D WebGL) |
 | Plotly.js | 2D/3D wavefunction plots |
 | KaTeX | Physics formulas in help panels |
-| Vitest | Unit tests (621 passing) |
+| Vitest | Unit tests (640 passing) |
 
 No Python, no server, no dependencies beyond npm.
 

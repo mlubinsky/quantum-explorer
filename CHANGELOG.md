@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- **Fourier Explorer** — new module (Single Particle — 1D group) with three modes:
+  - *Gaussian*: position/momentum Gaussian pair, exact Δx = σ, Δk = 1/(2σ), Δx·Δk = ½
+  - *Chirped*: position-dependent local frequency β; exact σ_k = √(1/(4σ²)+β²σ²);
+    momentum plot broadens live as β increases; Δx·Δk ≥ ½ shown in readout
+  - *ISW*: exact FT of ψₙ(x); two Bragg peaks at ±nπ/L; Δk = nπ/L exact
+  - Sliders for x₀, k₀, σ, β (chirped), n, L (ISW); |ψ|²/Re ψ/Im ψ toggle
+  - Uncertainty readout (Δx, Δk, Δx·Δk) with min-uncertainty indicator
+  - URL state encoded; ? help modal with full derivations
+  - New `src/physics/fourier.ts`: 7 functions; 19 new tests; 640 total
 - **URL state encoding** — key parameters for all 9 modules are encoded in the URL hash as
   `#module?key=val&…`; any configuration can be bookmarked or shared; params are written via
   `replaceState` (no extra history entries); switching modules clears params; invalid/missing
