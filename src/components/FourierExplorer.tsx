@@ -126,7 +126,7 @@ export function FourierExplorer() {
       ? k.map(ki => chirpedFTMag2(ki, sigma, k0, beta))
       : k.map(ki => fpMomentumDist(ki, k0, sigma))
     return { k, phi2 }
-  }, [mode, x0, k0, sigma, beta, n, L])
+  }, [mode, k0, sigma, beta, n, L])
 
   // ── Position plot ───────────────────────────────────────────────────────────
 
