@@ -171,7 +171,7 @@ no Crank-Nicolson, no matrix diagonalisation, no Python backend. Deploys as a st
 ## Phase 2 — Spin extensions
 
 - [ ] **Two spin-½ particles** — Bell states, entanglement, singlet correlation −cos θ
-- [ ] **Single-qubit gates on Bloch sphere** — X, Y, Z, H, S, T as rotations; compose gates
+- [x] **Single-qubit gates on Bloch sphere** — X, Y, Z, H, S, T as rotations; compose gates
 - [ ] **Heisenberg dimer** — H = J S₁·S₂, exact singlet/triplet eigenvalues
 - [ ] **Spin-1** — 3×3 matrices, m = −1, 0, +1 levels
 
@@ -208,10 +208,16 @@ These items deepen that into a proper Heisenberg-picture module:
       (σ_k = √(1/4σ²+β²σ²), FT broadens live), ISW (Bragg peaks at ±nπ/L, Δk = nπ/L);
       |ψ|²/Re/Im toggle; Δx, Δk, Δx·Δk readout; URL state; 7 new physics functions;
       19 unit tests; 640 total
-- [ ] **Position-space wavefunction collapse** — on the Free Particle or Time Evolution tab,
+- [x] **Position-space wavefunction collapse** — on the Free Particle or Time Evolution tab,
       add a "detector" at x=x₀; click probability P(detector fires); collapse ψ→ projected
       state re-normalised; show post-measurement Gaussian and its subsequent spreading; exact
       for Gaussian projection kernels. Connects time evolution, uncertainty, and measurement.
+- [ ] **Quantum Zeno effect** — extend the collapse module: repeatedly measure position at
+      interval Δt on a free-particle wavepacket using the existing `collapsePosition` machinery;
+      as Δt → 0 the packet stops spreading (frozen by measurement), as Δt → ∞ it spreads
+      freely; slider for measurement frequency + "Run Zeno" button; plot σ(t) with and without
+      repeated measurements; exact for Gaussian collapse. Difficulty: Low — reuses
+      `sampleGaussian` + `collapsePosition`; no new physics functions needed.
 - [x] **Wigner function** — exact closed-form W(x,p) for Fock states (Laguerre polynomial),
       coherent (Gaussian), squeezed, even/odd cat states, Fock superpositions; 70×70 heatmap;
       marginals; negativity readout
