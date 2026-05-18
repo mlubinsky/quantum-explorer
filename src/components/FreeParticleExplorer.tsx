@@ -225,7 +225,7 @@ export function FreeParticleExplorer() {
     const sigmaK = fpDeltaP(sigma0)          // Δp = 1/(2σ₀)
     const sigmaKDet = 1 / (2 * sigmaDet)     // detector momentum resolution
     const kMeas  = sampleGaussian(k0, sigmaK)
-    const prob   = bornProbDensityK(kMeas, k0, sigmaKDet)
+    const prob   = bornProbDensityK(kMeas, k0, sigmaK)
     const xNow   = fpExpectX(t, x0, k0)
     const next   = collapseMomentum(xNow, kMeas, sigmaKDet)
     setMeasMarker({ x: xNow, type: 'momentum' })

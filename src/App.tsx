@@ -111,10 +111,12 @@ export default function App() {
   }, [])
 
   // Sync state → hash (pushState so back/forward works; doesn't trigger popstate)
+  // Only push when the module ID changes — preserves ?param=value query params
+  // written by child components via replaceState.
   useEffect(() => {
-    const hash = `#${active}`
-    if (window.location.hash !== hash) {
-      window.history.pushState(null, '', hash)
+    const { moduleId: currentId } = parseHash(window.location.hash)
+    if (currentId !== active) {
+      window.history.pushState(null, '', `#${active}`)
     }
   }, [active])
 

@@ -267,7 +267,7 @@ export function BlochSphere({ theta, phi, trajectory, measureAxis }: BlochSphere
     arcThetaRef.current = theta
     const arcLine = arcLineRef.current
     if (arcLine) {
-      if (theta < 0.02) {
+      if (theta < 0.02 || theta > Math.PI - 0.02) {
         arcLine.geometry.setFromPoints([])
       } else {
         const north    = new THREE.Vector3(0, 1, 0)

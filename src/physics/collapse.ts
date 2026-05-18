@@ -12,7 +12,7 @@ export function sampleGaussian(
   sigma: number,
   rand: () => number = Math.random,
 ): number {
-  const u1 = rand()
+  const u1 = Math.max(Number.EPSILON, rand())
   const u2 = rand()
   const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
   return mean + sigma * z

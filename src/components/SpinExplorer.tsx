@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { parseHash, getNumericParam, getStringParam, setUrlParams } from '../physics/urlState'
 import { BlochSphere } from './BlochSphere'
 import { ParameterSlider } from './ParameterSlider'
@@ -61,7 +61,7 @@ export function SpinExplorer() {
   const rafRef   = useRef<number>(0)
   const frameRef = useRef(0)
 
-  const bhat: Vec3 = blochVector(bTheta, bPhi)
+  const bhat = useMemo<Vec3>(() => blochVector(bTheta, bPhi), [bTheta, bPhi])
 
   function applyPreset(t: number, p: number) {
     setTheta(t); setPhi(p)
@@ -85,7 +85,7 @@ export function SpinExplorer() {
     setTrajectory(traj)
     setFrame(0)
     frameRef.current = 0
-  }, [theta, phi, bhat, omega, bTheta, bPhi])
+  }, [theta, phi, bhat, omega])
 
   const tick = useCallback(() => {
     frameRef.current = (frameRef.current + 1) % N_FRAMES

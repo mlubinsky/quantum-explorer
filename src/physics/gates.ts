@@ -122,6 +122,18 @@ export function blochSlerp(rOld: Vec3, rNew: Vec3, nPoints: number): Vec3[] {
   }
 
   const sinO = Math.sin(omega)
+
+  // Antipodal guard: sin(π) ≈ 1.2e-16 in float64, making the SLERP weights
+  // blow up at intermediate t. Route through a perpendicular midpoint instead.
+  if (sinO < 1e-6) {
+    const mid = _perpTo(rOld)
+    const n1 = Math.ceil(nPoints / 2)
+    const n2 = nPoints - n1 + 1
+    const first  = blochSlerp(rOld, mid, n1)
+    const second = blochSlerp(mid, rNew, n2)
+    return [...first, ...second.slice(1)]
+  }
+
   return Array.from({ length: nPoints }, (_, i) => {
     const t = i / (nPoints - 1)
     const w0 = Math.sin((1 - t) * omega) / sinO
@@ -132,4 +144,20 @@ export function blochSlerp(rOld: Vec3, rNew: Vec3, nPoints: number): Vec3[] {
       rz: w0 * rOld.rz + w1 * rNew.rz,
     }
   })
+}
+
+function _perpTo(v: Vec3): Vec3 {
+  // Unit vector perpendicular to v — pick the axis least aligned with v to
+  // avoid near-zero cross-product magnitude.
+  const ax = Math.abs(v.rx), ay = Math.abs(v.ry), az = Math.abs(v.rz)
+  let p: Vec3
+  if (ax <= ay && ax <= az) {
+    p = { rx: 0, ry: -v.rz, rz: v.ry }
+  } else if (ay <= az) {
+    p = { rx: v.rz, ry: 0, rz: -v.rx }
+  } else {
+    p = { rx: -v.ry, ry: v.rx, rz: 0 }
+  }
+  const len = Math.sqrt(p.rx * p.rx + p.ry * p.ry + p.rz * p.rz)
+  return { rx: p.rx / len, ry: p.ry / len, rz: p.rz / len }
 }

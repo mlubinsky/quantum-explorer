@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **Spin ½ infinite update loop** — `bhat` Bloch vector was recreated each render, triggering
+  an infinite `useEffect` → `setTrajectory` → re-render cycle; wrapped in `useMemo`
+- **Gate trail antipodal crash** — `blochSlerp` divided by `sin(ω)` which is ~0 for X|↑⟩→|↓⟩;
+  added `sinO < 1e-6` guard that routes through a perpendicular midpoint via `_perpTo`
+- **Bloch sphere south-pole arc NaN** — θ arc code only guarded `theta < 0.02`, not `theta > π−0.02`;
+  added the missing south-pole guard, preventing `NaN` geometry at |↓⟩
+- **Hydrogen nested buttons** — `<button>` elements contained `<HelpButton>` (also a `<button>`),
+  invalid HTML; replaced with a flex wrapper `<div>` separating the toggle button and HelpButton
+- **Hash URL params stripped on navigation** — `App.tsx` always rewrote the hash to bare `#module`,
+  discarding `?param=value` params written by child components; now only pushes when the module ID
+  in the current hash differs from the active module
+- **Wrong Born density displayed for momentum measurement** — `FreeParticleExplorer` logged
+  `bornProbDensityK(kMeas, k0, sigmaKDet)` (detector resolution) instead of the wavepacket width
+  `sigmaK`; corrected to `bornProbDensityK(kMeas, k0, sigmaK)`
+- **Odd cat Wigner NaN at α=0** — `wignerCat` divided by `N2 = 2(1−e^{−2α²}) ≈ 0` for odd cat
+  at small α; added `if (N2 < 1e-10) return 0` early-exit guard
+- **Gaussian sampler potential infinity** — `sampleGaussian` called `Math.log(rand())` without
+  guarding `rand() = 0`; changed to `Math.max(Number.EPSILON, rand())`
+
 ### Added
 - **WKB wavefunction overlay** — position-space comparison in the Barrier sub-tab
   - New `wkbPsiSq(x, E, V0, L)` in `tunnelling.ts`: piecewise WKB |ψ|² — left region = 1
