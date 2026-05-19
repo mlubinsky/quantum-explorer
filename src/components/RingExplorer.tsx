@@ -476,6 +476,13 @@ export function RingExplorer() {
   useEffect(() => { setUrlParams({ phi, R, n }) }, [phi, R, n])
 
   return (
+    <div>
+      <p style={{ margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5 }}>
+        A spinless particle on a 1D ring of radius <em>R</em> threaded by magnetic flux Φ.{' '}
+        <strong style={{ color: '#c8c8d8' }}>A-B = Aharonov–Bohm effect</strong>: the vector
+        potential shifts every energy level by the dimensionless flux φ = Φ/Φ₀, producing a
+        persistent current — even though <strong>B = 0</strong> at the ring itself.
+      </p>
     <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
       {/* Left panel: controls + readout */}
       <div style={{ width: 230, flexShrink: 0 }}>
@@ -523,6 +530,7 @@ export function RingExplorer() {
         <CurrentPlot phi={phi} R={R} n={n} />
         <WavepacketAnimation phi={phi} R={R} />
       </div>
+    </div>
     </div>
   )
 }
