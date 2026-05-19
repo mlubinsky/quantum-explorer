@@ -1,12 +1,23 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export type RingInfoTopic = 'energy' | 'current' | 'wavefunction' | 'wavepacket'
 
+const RING_LINKS = [
+  { label: 'Aharonov–Bohm effect — Wikipedia', url: 'https://en.wikipedia.org/wiki/Aharonov%E2%80%93Bohm_effect' },
+  { label: 'Persistent current — Wikipedia', url: 'https://en.wikipedia.org/wiki/Persistent_current' },
+]
+
 export function RingInfoPanel({ topic }: { topic: RingInfoTopic }) {
-  if (topic === 'energy')      return <EnergySection />
-  if (topic === 'current')     return <CurrentSection />
-  if (topic === 'wavefunction') return <WavefunctionSection />
-  return <WavepacketSection />
+  return (
+    <>
+      {topic === 'energy'       && <EnergySection />}
+      {topic === 'current'      && <CurrentSection />}
+      {topic === 'wavefunction' && <WavefunctionSection />}
+      {topic === 'wavepacket'   && <WavepacketSection />}
+      <WikiRefs links={RING_LINKS} />
+    </>
+  )
 }
 
 function EnergySection() {

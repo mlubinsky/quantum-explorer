@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function WignerInfoPanel() {
   return (
@@ -50,6 +51,10 @@ export function WignerInfoPanel() {
         Zero for classical states (coherent, squeezed). Positive for all non-classical
         states (Fock <InlineMath math="n\ge1" />, cat, superposition).
       </p>
+      <WikiRefs links={[
+        { label: 'Wigner quasiprobability distribution — Wikipedia', url: 'https://en.wikipedia.org/wiki/Wigner_quasiprobability_distribution' },
+        { label: 'Optical phase space — Wikipedia', url: 'https://en.wikipedia.org/wiki/Optical_phase_space' },
+      ]} />
     </div>
   )
 }

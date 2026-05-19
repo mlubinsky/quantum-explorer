@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function TwoParticleInfoPanel() {
   return (
@@ -47,6 +48,10 @@ export function TwoParticleInfoPanel() {
 
       <h4 style={{ marginBottom: '0.3rem' }}>Total energy</h4>
       <BlockMath math="E=E_m+E_n=\frac{(m^2+n^2)\pi^2}{2L^2}" />
+      <WikiRefs links={[
+        { label: 'Identical particles — Wikipedia', url: 'https://en.wikipedia.org/wiki/Identical_particles' },
+        { label: 'Hanbury Brown and Twiss effect — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hanbury_Brown_and_Twiss_effect' },
+      ]} />
     </div>
   )
 }

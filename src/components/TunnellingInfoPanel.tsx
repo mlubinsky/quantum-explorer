@@ -1,14 +1,23 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export type TunnellingInfoTopic = 'tvsE' | 'wavefunction' | 'potential'
 
+const TUNNELLING_LINKS = [
+  { label: 'Transfer-matrix method — Wikipedia', url: 'https://en.wikipedia.org/wiki/Transfer-matrix_method_(optics)' },
+  { label: 'WKB approximation — Wikipedia', url: 'https://en.wikipedia.org/wiki/WKB_approximation' },
+]
+
 export function TunnellingInfoPanel({ topic }: { topic: TunnellingInfoTopic }) {
   return (
-    <div style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
-      {topic === 'tvsE'        && <TvsESection />}
-      {topic === 'wavefunction' && <WavefunctionSection />}
-      {topic === 'potential'   && <PotentialSection />}
-    </div>
+    <>
+      <div style={{ fontSize: '0.9rem', lineHeight: 1.55 }}>
+        {topic === 'tvsE'        && <TvsESection />}
+        {topic === 'wavefunction' && <WavefunctionSection />}
+        {topic === 'potential'   && <PotentialSection />}
+      </div>
+      <WikiRefs links={TUNNELLING_LINKS} />
+    </>
   )
 }
 

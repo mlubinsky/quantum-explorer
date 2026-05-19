@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function MomentumInfoPanel() {
   return (
@@ -74,6 +75,10 @@ export function MomentumInfoPanel() {
         </ul>
       </section>
 
+      <WikiRefs links={[
+        { label: 'Position and momentum space — Wikipedia', url: 'https://en.wikipedia.org/wiki/Position_and_momentum_space' },
+        { label: 'Momentum operator — Wikipedia', url: 'https://en.wikipedia.org/wiki/Momentum_operator' },
+      ]} />
     </div>
   )
 }

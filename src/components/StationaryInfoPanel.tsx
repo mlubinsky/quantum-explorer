@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function StationaryInfoPanel() {
   return (
@@ -51,6 +52,10 @@ export function StationaryInfoPanel() {
         </ul>
       </section>
 
+      <WikiRefs links={[
+        { label: 'Particle in a box — Wikipedia', url: 'https://en.wikipedia.org/wiki/Particle_in_a_box' },
+        { label: 'Quantum harmonic oscillator — Wikipedia', url: 'https://en.wikipedia.org/wiki/Quantum_harmonic_oscillator' },
+      ]} />
     </div>
   )
 }

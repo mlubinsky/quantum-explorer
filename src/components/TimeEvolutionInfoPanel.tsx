@@ -1,15 +1,26 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 type Topic = 'modes' | 'main' | 'decomp' | 'expect' | 'norm' | 'momentum'
 type SubMode = 'isw' | 'ho' | 'ho-sq'
 
+const TIME_EVOLUTION_LINKS = [
+  { label: 'Coherent state — Wikipedia', url: 'https://en.wikipedia.org/wiki/Coherent_state' },
+  { label: 'Quantum revival — Wikipedia', url: 'https://en.wikipedia.org/wiki/Quantum_revival' },
+]
+
 export function TimeEvolutionInfoPanel({ topic, subMode }: { topic: Topic; subMode: SubMode }) {
-  if (topic === 'modes')    return <ModesInfo />
-  if (topic === 'main')     return <MainInfo subMode={subMode} />
-  if (topic === 'decomp')   return <DecompInfo subMode={subMode} />
-  if (topic === 'expect')   return <ExpectInfo subMode={subMode} />
-  if (topic === 'momentum') return <MomentumInfo subMode={subMode} />
-  return <NormInfo />
+  return (
+    <>
+      {topic === 'modes'    && <ModesInfo />}
+      {topic === 'main'     && <MainInfo subMode={subMode} />}
+      {topic === 'decomp'   && <DecompInfo subMode={subMode} />}
+      {topic === 'expect'   && <ExpectInfo subMode={subMode} />}
+      {topic === 'momentum' && <MomentumInfo subMode={subMode} />}
+      {topic === 'norm'     && <NormInfo />}
+      <WikiRefs links={TIME_EVOLUTION_LINKS} />
+    </>
+  )
 }
 
 function ModesInfo() {

@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export type ScatteringInfoTopic =
   | 'tvsE' | 'wavefunction' | 'potential'
@@ -79,6 +80,10 @@ function BarrierTvsESection() {
           For <InlineMath math="\tilde\kappa L \gtrsim 3" /> the two agree within a few percent.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Rectangular potential barrier — Wikipedia', url: 'https://en.wikipedia.org/wiki/Rectangular_potential_barrier' },
+        { label: 'Quantum tunnelling — Wikipedia', url: 'https://en.wikipedia.org/wiki/Quantum_tunnelling' },
+      ]} />
     </>
   )
 }
@@ -114,6 +119,10 @@ function BarrierWavefunctionSection() {
           a finite probability to appear on the far side (tunnelling).
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Rectangular potential barrier — Wikipedia', url: 'https://en.wikipedia.org/wiki/Rectangular_potential_barrier' },
+        { label: 'Quantum tunnelling — Wikipedia', url: 'https://en.wikipedia.org/wiki/Quantum_tunnelling' },
+      ]} />
     </>
   )
 }
@@ -166,6 +175,10 @@ function BarrierPotentialSection() {
           ħ = m = 1. 1 a.u. energy = 27.2 eV. 1 a.u. length = 0.529 Å.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Rectangular potential barrier — Wikipedia', url: 'https://en.wikipedia.org/wiki/Rectangular_potential_barrier' },
+        { label: 'Quantum tunnelling — Wikipedia', url: 'https://en.wikipedia.org/wiki/Quantum_tunnelling' },
+      ]} />
     </>
   )
 }
@@ -216,6 +229,10 @@ function StepTvsESection() {
           E &lt; V₀ are purely quantum effects.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Step potential (Schrödinger) — Wikipedia', url: 'https://en.wikipedia.org/wiki/Solution_of_Schr%C3%B6dinger_equation_for_a_step_potential' },
+        { label: 'Evanescent field — Wikipedia', url: 'https://en.wikipedia.org/wiki/Evanescent_field' },
+      ]} />
     </>
   )
 }
@@ -252,6 +269,10 @@ function StepWavefunctionSection() {
           and therefore no net probability current.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Step potential (Schrödinger) — Wikipedia', url: 'https://en.wikipedia.org/wiki/Solution_of_Schr%C3%B6dinger_equation_for_a_step_potential' },
+        { label: 'Evanescent field — Wikipedia', url: 'https://en.wikipedia.org/wiki/Evanescent_field' },
+      ]} />
     </>
   )
 }
@@ -296,6 +317,10 @@ function StepPotentialSection() {
           <li>Watch the evanescent tail shrink as E increases toward V₀ from below.</li>
         </ul>
       </section>
+      <WikiRefs links={[
+        { label: 'Step potential (Schrödinger) — Wikipedia', url: 'https://en.wikipedia.org/wiki/Solution_of_Schr%C3%B6dinger_equation_for_a_step_potential' },
+        { label: 'Evanescent field — Wikipedia', url: 'https://en.wikipedia.org/wiki/Evanescent_field' },
+      ]} />
     </>
   )
 }
@@ -357,6 +382,10 @@ function DeltaTvsESection() {
           </tbody>
         </table>
       </section>
+      <WikiRefs links={[
+        { label: 'Delta function potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Delta_function_potential' },
+        { label: 'Bound state — Wikipedia', url: 'https://en.wikipedia.org/wiki/Bound_state' },
+      ]} />
     </>
   )
 }
@@ -403,6 +432,10 @@ function DeltaWavefunctionSection() {
           same <InlineMath math="|r|" /> but different phase.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Delta function potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Delta_function_potential' },
+        { label: 'Bound state — Wikipedia', url: 'https://en.wikipedia.org/wiki/Bound_state' },
+      ]} />
     </>
   )
 }
@@ -447,6 +480,10 @@ function DeltaPotentialSection() {
           The delta is the maximally concentrated well — one bound state, infinitely sharp.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Delta function potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Delta_function_potential' },
+        { label: 'Bound state — Wikipedia', url: 'https://en.wikipedia.org/wiki/Bound_state' },
+      ]} />
     </>
   )
 }
@@ -497,6 +534,10 @@ function PtTvsESection() {
           simultaneously.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Pöschl–Teller potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/P%C3%B6schl%E2%80%93Teller_potential' },
+        { label: 'Reflectionless potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Reflectionless_potential' },
+      ]} />
     </>
   )
 }
@@ -551,6 +592,10 @@ function PtWavefunctionSection() {
           and the number of states simultaneously.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Pöschl–Teller potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/P%C3%B6schl%E2%80%93Teller_potential' },
+        { label: 'Reflectionless potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Reflectionless_potential' },
+      ]} />
     </>
   )
 }
@@ -610,6 +655,10 @@ function PtPotentialSection() {
           </tbody>
         </table>
       </section>
+      <WikiRefs links={[
+        { label: 'Pöschl–Teller potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/P%C3%B6schl%E2%80%93Teller_potential' },
+        { label: 'Reflectionless potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Reflectionless_potential' },
+      ]} />
     </>
   )
 }
@@ -633,6 +682,10 @@ function KpDispersionSection() {
         <p><strong>P = 0</strong>: free particle (<InlineMath math="f=\cos ka \in [-1,1]" />, no gaps).</p>
         <p><strong>P → ∞</strong>: bands collapse, full spectrum forbidden except at <InlineMath math="ka=n\pi" />.</p>
       </section>
+      <WikiRefs links={[
+        { label: 'Kronig–Penney model — Wikipedia', url: 'https://en.wikipedia.org/wiki/Particle_in_a_one-dimensional_lattice' },
+        { label: 'Electronic band structure — Wikipedia', url: 'https://en.wikipedia.org/wiki/Electronic_band_structure' },
+      ]} />
     </>
   )
 }
@@ -650,17 +703,27 @@ function KpBandStructureSection() {
         <BlockMath math="E_n = \frac{(n\pi/a)^2}{2}, \quad n=1,2,3,\ldots" />
         <p>At <InlineMath math="E_n" />, <InlineMath math="f=\pm 1" /> exactly. Gaps open symmetrically around these energies; gap width grows with P.</p>
       </section>
+      <WikiRefs links={[
+        { label: 'Kronig–Penney model — Wikipedia', url: 'https://en.wikipedia.org/wiki/Particle_in_a_one-dimensional_lattice' },
+        { label: 'Electronic band structure — Wikipedia', url: 'https://en.wikipedia.org/wiki/Electronic_band_structure' },
+      ]} />
     </>
   )
 }
 
 function KpBandsSection() {
   return (
-    <section>
-      <h4 style={{ margin: '0 0 6px' }}>Physical picture</h4>
-      <p>A periodic lattice Bragg-reflects waves at <InlineMath math="k = n\pi/a" />, splitting the free-particle parabola into allowed bands with forbidden gaps. In the delta-function KP model, complete stop-bands arise from constructive/destructive Bragg interference — the same delta barrier that gives <InlineMath math="T = k^2/(k^2+\alpha^2)" /> individually now blocks all propagation within a gap energy range.</p>
-      <p>Higher bands are wider: the relative effect of each barrier shrinks as <InlineMath math="\Delta E/E \sim \alpha/\sqrt{E}" /> at large E.</p>
-    </section>
+    <>
+      <section>
+        <h4 style={{ margin: '0 0 6px' }}>Physical picture</h4>
+        <p>A periodic lattice Bragg-reflects waves at <InlineMath math="k = n\pi/a" />, splitting the free-particle parabola into allowed bands with forbidden gaps. In the delta-function KP model, complete stop-bands arise from constructive/destructive Bragg interference — the same delta barrier that gives <InlineMath math="T = k^2/(k^2+\alpha^2)" /> individually now blocks all propagation within a gap energy range.</p>
+        <p>Higher bands are wider: the relative effect of each barrier shrinks as <InlineMath math="\Delta E/E \sim \alpha/\sqrt{E}" /> at large E.</p>
+      </section>
+      <WikiRefs links={[
+        { label: 'Kronig–Penney model — Wikipedia', url: 'https://en.wikipedia.org/wiki/Particle_in_a_one-dimensional_lattice' },
+        { label: 'Electronic band structure — Wikipedia', url: 'https://en.wikipedia.org/wiki/Electronic_band_structure' },
+      ]} />
+    </>
   )
 }
 
@@ -693,6 +756,10 @@ function MorsePotentialSection() {
           (dissociation threshold).
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Morse potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Morse_potential' },
+        { label: 'Anharmonicity — Wikipedia', url: 'https://en.wikipedia.org/wiki/Anharmonicity' },
+      ]} />
     </>
   )
 }
@@ -715,6 +782,10 @@ function MorseWavefunctionSection() {
         </p>
         <BlockMath math="x_{\text{left}} = -\frac{\ln(1+\beta)}{\alpha},\quad x_{\text{right}} = -\frac{\ln(1-\beta)}{\alpha},\quad \beta = \sqrt{1 + E_n/D_e}" />
       </section>
+      <WikiRefs links={[
+        { label: 'Morse potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Morse_potential' },
+        { label: 'Anharmonicity — Wikipedia', url: 'https://en.wikipedia.org/wiki/Anharmonicity' },
+      ]} />
     </>
   )
 }
@@ -745,6 +816,10 @@ function MorseAnharmonicitySection() {
           which grows as the well gets steeper or the energy approaches the dissociation limit.
         </p>
       </section>
+      <WikiRefs links={[
+        { label: 'Morse potential — Wikipedia', url: 'https://en.wikipedia.org/wiki/Morse_potential' },
+        { label: 'Anharmonicity — Wikipedia', url: 'https://en.wikipedia.org/wiki/Anharmonicity' },
+      ]} />
     </>
   )
 }

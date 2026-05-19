@@ -1,12 +1,23 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 type Topic = 'main' | 'momentum' | 'expect' | 'norm'
 
+const FREE_PARTICLE_LINKS = [
+  { label: 'Wave packet — Wikipedia', url: 'https://en.wikipedia.org/wiki/Wave_packet' },
+  { label: 'Uncertainty principle — Wikipedia', url: 'https://en.wikipedia.org/wiki/Uncertainty_principle' },
+]
+
 export function FreeParticleInfoPanel({ topic }: { topic: Topic }) {
-  if (topic === 'main')     return <MainInfo />
-  if (topic === 'momentum') return <MomentumInfo />
-  if (topic === 'expect')   return <ExpectInfo />
-  return <NormInfo />
+  return (
+    <>
+      {topic === 'main'     && <MainInfo />}
+      {topic === 'momentum' && <MomentumInfo />}
+      {topic === 'expect'   && <ExpectInfo />}
+      {topic === 'norm'     && <NormInfo />}
+      <WikiRefs links={FREE_PARTICLE_LINKS} />
+    </>
+  )
 }
 
 function MainInfo() {

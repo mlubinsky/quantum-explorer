@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function FourierInfoPanel() {
   return (
@@ -40,6 +41,10 @@ export function FourierInfoPanel() {
         <InlineMath math={String.raw`\langle k^2\rangle=2E_n=(n\pi/L)^2`} />:
       </p>
       <BlockMath math={String.raw`\Delta k=\frac{n\pi}{L},\quad\Delta x\,\Delta k>\frac{1}{2}`} />
+      <WikiRefs links={[
+        { label: 'Fourier transform — Wikipedia', url: 'https://en.wikipedia.org/wiki/Fourier_transform' },
+        { label: 'Uncertainty principle — Wikipedia', url: 'https://en.wikipedia.org/wiki/Uncertainty_principle' },
+      ]} />
     </div>
   )
 }

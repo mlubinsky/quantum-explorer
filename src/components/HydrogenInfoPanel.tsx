@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export type HydrogenInfoTopic =
   | 'radialDensity'
@@ -33,6 +34,10 @@ function RadialDensitySection() {
       <p><strong>Mean radius (exact):</strong></p>
       <BlockMath math="\langle r \rangle_{nl} = \frac{3n^2 - l(l+1)}{2Z}" />
       <p>Radial nodes: <InlineMath math="n - l - 1" /> zeros of <InlineMath math="R_{nl}" /> on <InlineMath math="(0,\infty)" />.</p>
+      <WikiRefs links={[
+        { label: 'Hydrogen atom — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hydrogen_atom' },
+        { label: 'Hydrogen-like atom — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hydrogen-like_atom' },
+      ]} />
     </div>
   )
 }
@@ -45,6 +50,10 @@ function RadialWavefunctionSection() {
       <BlockMath math="N_{nl} = \sqrt{\left(\frac{2Z}{n}\right)^{\!3}\!\frac{(n-l-1)!}{2n\,(n+l)!}}" />
       <p>The associated Laguerre polynomials <InlineMath math="L_k^\alpha" /> are computed by exact three-term recurrence. First few (Z = 1):</p>
       <BlockMath math="R_{10}=2e^{-r},\quad R_{20}=\tfrac{1}{2\sqrt{2}}(2-r)e^{-r/2},\quad R_{21}=\tfrac{r}{\sqrt{24}}e^{-r/2}" />
+      <WikiRefs links={[
+        { label: 'Hydrogen atom — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hydrogen_atom' },
+        { label: 'Hydrogen-like atom — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hydrogen-like_atom' },
+      ]} />
     </div>
   )
 }
@@ -56,6 +65,10 @@ function Orbital2DSection() {
       <BlockMath math="|\psi_{nlm}(x,z)|^2 = |R_{nl}(r)|^2\cdot|\Theta_{lm}(\theta)|^2" />
       <p>where <InlineMath math="r = \sqrt{x^2+z^2}" />, <InlineMath math="\theta" /> is the polar angle from z, and <InlineMath math="\Theta_{lm}" /> is the normalised polar factor of the real spherical harmonic, computed from associated Legendre polynomials.</p>
       <p>The colour scale (Viridis, 0–1) is normalised to the maximum of each state.</p>
+      <WikiRefs links={[
+        { label: 'Atomic orbital — Wikipedia', url: 'https://en.wikipedia.org/wiki/Atomic_orbital' },
+        { label: 'Spherical harmonics — Wikipedia', url: 'https://en.wikipedia.org/wiki/Spherical_harmonics' },
+      ]} />
     </div>
   )
 }
@@ -78,6 +91,10 @@ function AngularShapeSection() {
         <li><InlineMath math="l=1, |m|=1" /> (p<sub>x</sub> or p<sub>y</sub>): two lobes along x — same shape, different plane</li>
         <li><InlineMath math="l=2, m=0" /> (d<sub>z²</sub>): double lobe + ring</li>
       </ul>
+      <WikiRefs links={[
+        { label: 'Atomic orbital — Wikipedia', url: 'https://en.wikipedia.org/wiki/Atomic_orbital' },
+        { label: 'Spherical harmonics — Wikipedia', url: 'https://en.wikipedia.org/wiki/Spherical_harmonics' },
+      ]} />
     </div>
   )
 }
@@ -89,6 +106,10 @@ function IsosurfaceSection() {
       <BlockMath math="|\psi_{nlm}(x,y,z)|^2 = |R_{nl}(r)|^2\cdot|Y_l^m(\theta,\phi)|^2" />
       <p>Real spherical harmonics are used, with the φ-factor <InlineMath math="\cos(|m|\phi)" /> for <InlineMath math="m>0" /> and <InlineMath math="\sin(|m|\phi)" /> for <InlineMath math="m<0" />. Drag to rotate; scroll to zoom.</p>
       <p>Computed on a uniform 3D grid using the same exact normalised functions as the 2D cross-section.</p>
+      <WikiRefs links={[
+        { label: 'Atomic orbital — Wikipedia', url: 'https://en.wikipedia.org/wiki/Atomic_orbital' },
+        { label: 'Spherical harmonics — Wikipedia', url: 'https://en.wikipedia.org/wiki/Spherical_harmonics' },
+      ]} />
     </div>
   )
 }
@@ -121,6 +142,9 @@ function ZeemanSection() {
         <em>Simplified nonrelativistic model — orbital angular momentum only, spin ignored.
         The anomalous Zeeman effect (which requires spin and the Landé g-factor) is not shown here.</em>
       </p>
+      <WikiRefs links={[
+        { label: 'Zeeman effect — Wikipedia', url: 'https://en.wikipedia.org/wiki/Zeeman_effect' },
+      ]} />
     </div>
   )
 }
@@ -139,6 +163,9 @@ function AnomalousZeemanSection() {
       <p><strong>Selection rules:</strong></p>
       <BlockMath math="\Delta L = \pm 1,\quad \Delta J = 0,\pm 1\;(J{=}0\not\to J{=}0),\quad |\Delta m_J|\le 1" />
       <p>Fine-structure splitting (spin-orbit) is much smaller than the displayed B range and is omitted — all J terms are degenerate at B=0 in this view.</p>
+      <WikiRefs links={[
+        { label: 'Zeeman effect — Wikipedia', url: 'https://en.wikipedia.org/wiki/Zeeman_effect' },
+      ]} />
     </div>
   )
 }
@@ -180,6 +207,9 @@ function StarkSection() {
       <p><strong>Field ionisation threshold</strong> (classical barrier suppression):</p>
       <BlockMath math="F_\text{ion} = \frac{Z^3}{16\,n^4} \approx 0.00391\text{ a.u.}\;(n{=}2,\,Z{=}1)" />
       <p>First-order perturbation theory is valid for F ≪ F<sub>ion</sub>. The orange dashed line marks this threshold.</p>
+      <WikiRefs links={[
+        { label: 'Stark effect — Wikipedia', url: 'https://en.wikipedia.org/wiki/Stark_effect' },
+      ]} />
     </div>
   )
 }
@@ -204,6 +234,10 @@ function EmissionSpectraSection() {
       <p>The E1 selection rule <InlineMath math="\Delta\ell = \pm 1" /> governs which transitions occur,
         but since the nonrelativistic hydrogen energy depends only on n (not ℓ), each line in this
         display represents all allowed ℓ transitions between those two shells.</p>
+      <WikiRefs links={[
+        { label: 'Hydrogen spectral series — Wikipedia', url: 'https://en.wikipedia.org/wiki/Hydrogen_spectral_series' },
+        { label: 'Grotrian diagram — Wikipedia', url: 'https://en.wikipedia.org/wiki/Grotrian_diagram' },
+      ]} />
     </div>
   )
 }

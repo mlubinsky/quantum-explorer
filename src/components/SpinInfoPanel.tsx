@@ -1,4 +1,5 @@
 import { BlockMath, InlineMath } from './KatexMath'
+import { WikiRefs } from './WikiRefs'
 
 export function SpinInfoPanel() {
   return (
@@ -115,6 +116,10 @@ export function SpinInfoPanel() {
         </ul>
       </section>
 
+      <WikiRefs links={[
+        { label: 'Bloch sphere — Wikipedia', url: 'https://en.wikipedia.org/wiki/Bloch_sphere' },
+        { label: "Bell's theorem — Wikipedia", url: "https://en.wikipedia.org/wiki/Bell%27s_theorem" },
+      ]} />
     </div>
   )
 }
