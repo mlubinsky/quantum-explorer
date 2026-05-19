@@ -199,7 +199,9 @@ export function TwoParticleExplorer() {
         Two identical particles in an infinite square well. Bosons (symmetric ψ) can bunch together;
         fermions (antisymmetric ψ) obey the{' '}
         <strong style={subtitleEmStyle}>Pauli exclusion principle</strong> — the diagonal x₁ = x₂ is
-        strictly forbidden. Compare 2D probability densities for distinguishable, boson, and fermion statistics.
+        strictly forbidden. Compare 2D probability densities for distinguishable, boson, and fermion statistics.{' '}
+        <strong style={subtitleEmStyle}>HBT (Hanbury Brown–Twiss)</strong>: boson bunching means
+        |Ψ_B(x,x)|² = 2|Ψ_D(x,x)|² — twice the on-diagonal density of distinguishable particles.
       </p>
 
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
