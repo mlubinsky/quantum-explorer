@@ -477,7 +477,7 @@ export function RingExplorer() {
 
   return (
     <div>
-      <p style={{ margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5 }}>
+      <p style={{ margin: '0 0 1rem', fontSize: '0.85rem', color: '#c8c8d8', lineHeight: 1.5 }}>
         A spinless particle on a 1D ring of radius <em>R</em> threaded by magnetic flux Φ.{' '}
         <strong style={{ color: '#c8c8d8' }}>A-B = Aharonov–Bohm effect</strong>: the vector
         potential shifts every energy level by the dimensionless flux φ = Φ/Φ₀, producing a

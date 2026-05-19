@@ -347,6 +347,6 @@ function toggleBtn(active: boolean): React.CSSProperties {
 }
 
 const subtitleStyle: React.CSSProperties = {
-  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#c8c8d8', lineHeight: 1.5,
 }
 const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }
