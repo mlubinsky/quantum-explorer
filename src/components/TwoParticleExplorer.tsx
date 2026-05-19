@@ -195,6 +195,13 @@ export function TwoParticleExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        Two identical particles in an infinite square well. Bosons (symmetric ψ) can bunch together;
+        fermions (antisymmetric ψ) obey the{' '}
+        <strong style={subtitleEmStyle}>Pauli exclusion principle</strong> — the diagonal x₁ = x₂ is
+        strictly forbidden. Compare 2D probability densities for distinguishable, boson, and fermion statistics.
+      </p>
+
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
 
         {/* ── Controls ── */}
@@ -338,3 +345,8 @@ function toggleBtn(active: boolean): React.CSSProperties {
     color: active ? '#4361ee' : '#666',
   }
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

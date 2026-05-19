@@ -127,6 +127,12 @@ export function SpinExplorer() {
           <SpinInfoPanel />
         </HelpModal>
       )}
+      <p style={subtitleStyle}>
+        A spin-½ state |ψ⟩ = α|↑⟩ + β|↓⟩ maps to a point on the{' '}
+        <strong style={subtitleEmStyle}>Bloch sphere</strong>. Tabs: Larmor precession in a magnetic
+        field, Stern-Gerlach measurement (Born rule, N-shot histogram), Bell inequality (CHSH), and
+        single-qubit gate sequences.
+      </p>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
 
         {/* ── Bloch sphere + playback (always visible) ── */}
@@ -329,3 +335,8 @@ const robertsonStyle: React.CSSProperties = {
   background: '#161616', borderRadius: 5, padding: '5px 10px',
   fontSize: '0.82rem', color: '#e0e0e0', marginBottom: '0.25rem',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

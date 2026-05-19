@@ -283,6 +283,12 @@ export function WignerExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        W(x,p) is a <strong style={subtitleEmStyle}>quasi-probability distribution</strong> in phase space.
+        Unlike classical probability it can go <strong style={subtitleEmStyle}>negative</strong> — a signature of
+        quantum interference. Supports Fock, coherent, squeezed, even/odd cat, and Fock-superposition states.
+      </p>
+
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
 
         {/* ── Controls ── */}
@@ -467,3 +473,8 @@ const ctrlBtn: React.CSSProperties = {
   padding: '0.25rem 0.55rem', border: '1px solid #333', borderRadius: 4,
   cursor: 'pointer', fontSize: '0.85rem', background: '#1a1a1a', color: '#ccc',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

@@ -253,6 +253,13 @@ export function DeltaExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        V(x) = −g δ(x): the{' '}
+        <strong style={subtitleEmStyle}>Dirac delta potential</strong>. Supports exactly one bound state
+        for any g &gt; 0 (E = −g²/2 in atomic units). Above threshold, transmission T(E) has a
+        Lorentzian shape. The simplest model with both bound-state and scattering physics.
+      </p>
+
       <div style={{ maxWidth: 780 }}>
 
         {/* Controls */}
@@ -412,3 +419,8 @@ const collapseStyle: React.CSSProperties = {
   background: 'none', border: 'none', cursor: 'pointer',
   color: '#e0e0e0', padding: '0.25rem 0', marginBottom: '0.5rem', textAlign: 'left',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

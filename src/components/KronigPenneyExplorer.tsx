@@ -215,6 +215,13 @@ export function KronigPenneyExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        A 1D periodic array of rectangular barriers solved by the exact{' '}
+        <strong style={subtitleEmStyle}>transfer-matrix method</strong>. Shows the origin of{' '}
+        <strong style={subtitleEmStyle}>energy bands and forbidden gaps</strong> in crystalline solids.
+        Explore the Brillouin zone, band edges, and effective mass as barrier height and width vary.
+      </p>
+
       <div style={{ maxWidth: 780 }}>
 
         {/* Controls */}
@@ -374,3 +381,8 @@ const thStyle: React.CSSProperties = {
 const tdStyle: React.CSSProperties = {
   padding: '4px 8px',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

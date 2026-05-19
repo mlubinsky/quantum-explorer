@@ -201,6 +201,13 @@ export function StepExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        A sharp potential step V = V₀ for x &gt; 0. For E &gt; V₀:{' '}
+        <strong style={subtitleEmStyle}>partial reflection despite no classical barrier</strong> — pure wave
+        impedance mismatch. For E &lt; V₀: total reflection with an evanescent tail penetrating the
+        forbidden region, the precursor to tunneling.
+      </p>
+
       <div style={{ maxWidth: 780 }}>
         {/* Controls */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1.5rem' }}>
@@ -320,3 +327,8 @@ const collapseStyle: React.CSSProperties = {
   background: 'none', border: 'none', cursor: 'pointer',
   color: '#e0e0e0', padding: '0.25rem 0', marginBottom: '0.5rem', textAlign: 'left',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

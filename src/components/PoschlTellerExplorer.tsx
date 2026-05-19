@@ -185,6 +185,13 @@ export function PoschlTellerExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        V(x) = −V₀/cosh²(x/a) — an exactly solvable well with a{' '}
+        <strong style={subtitleEmStyle}>finite number of bound states</strong> and{' '}
+        <strong style={subtitleEmStyle}>perfect transmission</strong> (T = 1) for all E &gt; 0.
+        The reflectionless property makes it a key model in soliton theory and inverse-scattering methods.
+      </p>
+
       <div style={{ maxWidth: 780 }}>
 
         {/* Controls */}
@@ -303,3 +310,8 @@ const collapseStyle: React.CSSProperties = {
   background: 'none', border: 'none', cursor: 'pointer',
   color: '#e0e0e0', padding: '0.25rem 0', marginBottom: '0.5rem', textAlign: 'left',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }

@@ -200,6 +200,13 @@ export function MorseExplorer() {
         </HelpModal>
       )}
 
+      <p style={subtitleStyle}>
+        V(r) = Dₑ(1 − e^(−a(r−rₑ)))² — an exactly solvable{' '}
+        <strong style={subtitleEmStyle}>anharmonic</strong> model for molecular vibrations. Unlike the harmonic
+        oscillator it has a <strong style={subtitleEmStyle}>finite number of bound states</strong> and dissociates
+        at V = Dₑ. Wavefunctions are generalized Laguerre polynomials.
+      </p>
+
       <div style={{ maxWidth: 780 }}>
 
         {/* Controls */}
@@ -369,3 +376,8 @@ const thStyle: React.CSSProperties = {
 const tdStyle: React.CSSProperties = {
   padding: '4px 8px', color: '#aaa',
 }
+
+const subtitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem', fontSize: '0.85rem', color: '#aaa', lineHeight: 1.5,
+}
+const subtitleEmStyle: React.CSSProperties = { color: '#c8c8d8' }
