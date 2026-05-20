@@ -974,7 +974,7 @@ function ZeemanSection({
           <span style={sectionTitleStyle}>
             Normal Zeeman Effect
             {B > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
-              B = {B.toFixed(3)} a.u.
+              B (magnetic field) = {B.toFixed(3)} a.u.
             </span>}
           </span>
         </button>
@@ -1195,7 +1195,7 @@ function AnomalousZeemanSection({
           <span style={sectionTitleStyle}>
             Anomalous Zeeman Effect
             {B > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
-              B = {B.toFixed(3)} a.u.
+              B (magnetic field) = {B.toFixed(3)} a.u.
             </span>}
           </span>
         </button>
@@ -1369,7 +1369,7 @@ function StarkSection({
           <span style={sectionTitleStyle}>
             Linear Stark Effect (n = 2)
             {F > 0 && <span style={{ fontWeight: 400, color: '#06d6a0', marginLeft: 8, fontSize: '0.82rem' }}>
-              F = {F.toFixed(4)} a.u.
+              F (electric field) = {F.toFixed(4)} a.u.
             </span>}
           </span>
         </button>
