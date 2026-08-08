@@ -5,7 +5,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+- **Per-module code-splitting** — `App.tsx` now imports every `*Explorer` component via
+  `React.lazy()` + `Suspense` instead of eagerly at the top of the file; `vite.config.ts` adds
+  `manualChunks` to isolate `plotly.js-dist-min`/`react-plotly.js` into `vendor-plotly` and
+  `three` into `vendor-three`. Shrinks the main entry chunk from 6.0 MB to ~450 KB — Three.js
+  (used only by the Bloch sphere) and Plotly no longer load until a module that needs them is
+  opened
+
 ### Fixed
+- **Ring & A-B module-strip mixed gauge conventions** — `App.tsx` MODULE_INFO showed a Hamiltonian
+  with flux baked into the kinetic term (`-i d/dφ − Φ/Φ₀`) next to a twisted boundary condition
+  `ψ(φ+2π)=e^{i2πΦ/Φ0}ψ(φ)`, double-counting the flux across two mutually inconsistent gauges;
+  corrected the boundary condition to the plain periodic `ψ(φ+2π)=ψ(φ), n∈ℤ` that matches the
+  gauge actually implemented in `ring.ts`
 - **Spin ½ infinite update loop** — `bhat` Bloch vector was recreated each render, triggering
   an infinite `useEffect` → `setTrajectory` → re-render cycle; wrapped in `useMemo`
 - **Gate trail antipodal crash** — `blochSlerp` divided by `sin(ω)` which is ~0 for X|↑⟩→|↓⟩;

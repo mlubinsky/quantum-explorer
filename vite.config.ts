@@ -8,6 +8,16 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('plotly.js-dist-min') || id.includes('react-plotly.js')) return 'vendor-plotly'
+          if (id.includes('/node_modules/three/')) return 'vendor-three'
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,

@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import pkg from '../package.json'
 import { parseHash } from './physics/urlState'
-import { SpinExplorer } from './components/SpinExplorer'
-import { StationaryExplorer } from './components/StationaryExplorer'
-import { TimeEvolutionExplorer } from './components/TimeEvolutionExplorer'
-import { FreeParticleExplorer } from './components/FreeParticleExplorer'
-import { ScatteringExplorer } from './components/ScatteringExplorer'
-import { HydrogenExplorer } from './components/HydrogenExplorer'
-import { RingExplorer } from './components/RingExplorer'
-import { WignerExplorer } from './components/WignerExplorer'
-import { TwoParticleExplorer } from './components/TwoParticleExplorer'
-import { FourierExplorer } from './components/FourierExplorer'
 import { InlineMath } from './components/KatexMath'
 import './App.css'
+
+const SpinExplorer = lazy(() => import('./components/SpinExplorer').then(m => ({ default: m.SpinExplorer })))
+const StationaryExplorer = lazy(() => import('./components/StationaryExplorer').then(m => ({ default: m.StationaryExplorer })))
+const TimeEvolutionExplorer = lazy(() => import('./components/TimeEvolutionExplorer').then(m => ({ default: m.TimeEvolutionExplorer })))
+const FreeParticleExplorer = lazy(() => import('./components/FreeParticleExplorer').then(m => ({ default: m.FreeParticleExplorer })))
+const ScatteringExplorer = lazy(() => import('./components/ScatteringExplorer').then(m => ({ default: m.ScatteringExplorer })))
+const HydrogenExplorer = lazy(() => import('./components/HydrogenExplorer').then(m => ({ default: m.HydrogenExplorer })))
+const RingExplorer = lazy(() => import('./components/RingExplorer').then(m => ({ default: m.RingExplorer })))
+const WignerExplorer = lazy(() => import('./components/WignerExplorer').then(m => ({ default: m.WignerExplorer })))
+const TwoParticleExplorer = lazy(() => import('./components/TwoParticleExplorer').then(m => ({ default: m.TwoParticleExplorer })))
+const FourierExplorer = lazy(() => import('./components/FourierExplorer').then(m => ({ default: m.FourierExplorer })))
 
 type Module = 'stationary' | 'time-evolution' | 'free-particle' | 'tunnelling' | 'spin' | 'hydrogen' | 'ring' | 'wigner' | 'two-particle' | 'fourier'
 
@@ -83,7 +84,7 @@ const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
   },
   'ring': {
     eq: String.raw`\hat{H}=\tfrac{1}{2}\!\left(-i\tfrac{d}{d\phi}-\tfrac{\Phi}{\Phi_0}\right)^{\!2},\quad\Phi_0=2\pi\ \text{(a.u.)}`,
-    bc: String.raw`\psi(\phi+2\pi)=e^{\,i2\pi\Phi/\Phi_0}\,\psi(\phi)`,
+    bc: String.raw`\psi(\phi+2\pi)=\psi(\phi),\quad n\in\mathbb{Z}`,
   },
   'wigner': {
     eq: String.raw`W(x,p)=\tfrac{1}{\pi}\!\int_{-\infty}^{\infty}\!\psi^*(x+y)\,\psi(x-y)\,e^{2ipy}\,dy`,
@@ -146,16 +147,18 @@ export default function App() {
       </div>
 
       <main className="app-main">
-        {active === 'stationary'     && <StationaryExplorer />}
-        {active === 'time-evolution' && <TimeEvolutionExplorer />}
-        {active === 'free-particle'  && <FreeParticleExplorer />}
-        {active === 'tunnelling'     && <ScatteringExplorer />}
-        {active === 'spin'           && <SpinExplorer />}
-        {active === 'hydrogen'       && <HydrogenExplorer />}
-        {active === 'ring'           && <RingExplorer />}
-        {active === 'wigner'         && <WignerExplorer />}
-        {active === 'two-particle'   && <TwoParticleExplorer />}
-        {active === 'fourier'        && <FourierExplorer />}
+        <Suspense fallback={<div className="module-loading">Loading…</div>}>
+          {active === 'stationary'     && <StationaryExplorer />}
+          {active === 'time-evolution' && <TimeEvolutionExplorer />}
+          {active === 'free-particle'  && <FreeParticleExplorer />}
+          {active === 'tunnelling'     && <ScatteringExplorer />}
+          {active === 'spin'           && <SpinExplorer />}
+          {active === 'hydrogen'       && <HydrogenExplorer />}
+          {active === 'ring'           && <RingExplorer />}
+          {active === 'wigner'         && <WignerExplorer />}
+          {active === 'two-particle'   && <TwoParticleExplorer />}
+          {active === 'fourier'        && <FourierExplorer />}
+        </Suspense>
       </main>
 
       <footer className="app-footer">
