@@ -1,7 +1,7 @@
 {
   "name": "quantum-explorer",
   "private": true,
-  "version": "0.2026.0506l",
+  "version": "2026.08.08-2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --project tsconfig.app.json --noEmit",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepare": "sh scripts/install-hooks.sh"
   },
   "dependencies": {
     "katex": "^0.16.45",
