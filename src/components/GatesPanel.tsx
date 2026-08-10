@@ -7,6 +7,8 @@ import {
 } from '../physics/gates'
 import type { Qubit } from '../physics/gates'
 import type { Vec3 as SpinVec3 } from '../utils/spinMath'
+import { HelpButton, HelpModal } from './HelpModal'
+import { GatesInfoPanel } from './GatesInfoPanel'
 
 const PI = Math.PI
 
@@ -43,6 +45,7 @@ function formatComplex(re: number, im: number): string {
 }
 
 export function GatesPanel({ theta, phi, onStateChange }: GatesPanelProps) {
+  const [showHelp, setShowHelp] = useState(false)
   const [history, setHistory] = useState<[Qubit, string][]>([])
   const [rotAxis, setRotAxis] = useState<RotAxis>('Rz')
   const [rotAngle, setRotAngle] = useState(PI / 2)
@@ -83,6 +86,17 @@ export function GatesPanel({ theta, phi, onStateChange }: GatesPanelProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+
+      {showHelp && (
+        <HelpModal title="Single-Qubit Gates — Physics Reference" onClose={() => setShowHelp(false)}>
+          <GatesInfoPanel />
+        </HelpModal>
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>Single-Qubit Gates</span>
+        <HelpButton onClick={() => setShowHelp(true)} />
+      </div>
 
       {/* State preset strip */}
       <div>

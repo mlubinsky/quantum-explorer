@@ -714,7 +714,7 @@ function NormPlot({ hist }: { hist: { t: number }[] }) {
 
 const detailsStyle: React.CSSProperties = { borderTop: '1px solid #222', paddingTop: '0.75rem' }
 const sectionHeaderStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem',
+  display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem',
 }
 const sectionToggleStyle: React.CSSProperties = {
   background: 'none', border: 'none', cursor: 'pointer', userSelect: 'none',

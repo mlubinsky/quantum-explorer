@@ -1695,13 +1695,13 @@ const sectionHeaderStyle: React.CSSProperties = {
   display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem',
 }
 const sectionTitleStyle: React.CSSProperties = {
-  fontWeight: 600, fontSize: '0.9rem', flex: 1,
+  fontWeight: 600, fontSize: '0.9rem',
 }
 const collapseStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: 0, flex: 1,
+  display: 'flex', alignItems: 'center', gap: 0,
   background: 'none', border: 'none', cursor: 'pointer',
   color: '#e0e0e0', padding: '0.25rem 0', textAlign: 'left',
 }
 const collapseRowStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', marginBottom: '0.5rem',
+  display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem',
 }

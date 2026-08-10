@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { buildH, buildX, buildP, heisenbergRe, heisenbergReFromIm } from '../utils/matrixElements'
 import { MatrixHeatmap } from './MatrixHeatmap'
+import { HelpButton, HelpModal } from './HelpModal'
+import { MatrixInfoPanel } from './MatrixInfoPanel'
 
 type Operator = 'H' | 'X' | 'P'
 type View = 'static' | 'animated'
@@ -29,6 +31,7 @@ const btnOpActive: React.CSSProperties = { ...btnOp, background: '#4361ee', colo
 export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels }: Props) {
   const N = energies.length
 
+  const [showHelp, setShowHelp] = useState(false)
   const [operator, setOperator] = useState<Operator>('X')
   const [view, setView] = useState<View>('static')
   const [playing, setPlaying] = useState(false)
@@ -86,6 +89,19 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels }: Prop
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+
+      {showHelp && (
+        <HelpModal title="Matrix Representation — Physics Reference" onClose={() => setShowHelp(false)}>
+          <MatrixInfoPanel />
+        </HelpModal>
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>
+          Matrix representation (Heisenberg picture)
+        </span>
+        <HelpButton onClick={() => setShowHelp(true)} />
+      </div>
 
       {/* Operator + view selectors */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>

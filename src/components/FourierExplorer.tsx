@@ -263,7 +263,7 @@ export function FourierExplorer() {
         {/* ── Controls ── */}
         <div style={{ width: 230, flexShrink: 0 }}>
           <div style={{ background: '#12122a', border: '1px solid #222', borderRadius: 6, padding: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
               <span style={{ color: '#e0e0e0', fontWeight: 700, fontSize: '0.9rem' }}>Controls</span>
               <HelpButton onClick={() => setShowHelp(true)} />
             </div>

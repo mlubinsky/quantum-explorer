@@ -329,7 +329,7 @@ export function FreeParticleExplorer() {
 
         {/* Main wavepacket plot */}
         <div style={{ background: DARK.paper, borderRadius: 8, padding: '6px 6px 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: 2 }}>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
               {(['prob', 're', 'im'] as DisplayMode[]).map(m => (
                 <button
@@ -361,7 +361,7 @@ export function FreeParticleExplorer() {
 
         {/* Momentum distribution */}
         <div style={{ background: DARK.paper, borderRadius: 8, padding: '6px 6px 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: 2 }}>
             <button
               onClick={() => setShowMomentum(p => !p)}
               style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}
@@ -391,7 +391,7 @@ export function FreeParticleExplorer() {
 
         {/* Expectation values */}
         <div style={{ background: DARK.paper, borderRadius: 8, padding: '6px 6px 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: 2 }}>
             <button
               onClick={() => setShowExpect(p => !p)}
               style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}
@@ -439,7 +439,7 @@ export function FreeParticleExplorer() {
 
         {/* Norm history */}
         <div style={{ background: DARK.paper, borderRadius: 8, padding: '6px 6px 0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: 2 }}>
             <button
               onClick={() => setShowNorm(p => !p)}
               style={{ background: 'none', border: 'none', color: '#ccc', cursor: 'pointer', fontSize: '0.85rem', padding: 0 }}

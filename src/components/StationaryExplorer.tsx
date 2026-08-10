@@ -85,6 +85,7 @@ export function StationaryExplorer() {
         <div style={{ flex: '0 0 240px', minWidth: 200 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
             <h3 style={{ margin: 0, fontSize: '1rem' }}>Stationary States</h3>
+            <HelpButton onClick={() => setShowHelp(true)} />
           </div>
 
           {/* Potential selector */}

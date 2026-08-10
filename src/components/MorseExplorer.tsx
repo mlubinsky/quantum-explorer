@@ -359,14 +359,14 @@ const sectionStyle: React.CSSProperties = {
 }
 
 const collapseStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: 4,
+  display: 'flex', alignItems: 'center', gap: '0.5rem',
   width: '100%', background: 'none', border: 'none',
   cursor: 'pointer', padding: '0.3rem 0', marginBottom: '0.5rem',
   textAlign: 'left',
 }
 
 const titleStyle: React.CSSProperties = {
-  flex: 1, fontSize: '0.9rem', fontWeight: 600, color: '#c0c0c0',
+  fontSize: '0.9rem', fontWeight: 600, color: '#c0c0c0',
 }
 
 const thStyle: React.CSSProperties = {

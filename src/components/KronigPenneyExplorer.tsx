@@ -364,13 +364,13 @@ const sectionStyle: React.CSSProperties = {
 }
 
 const collapseStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: 0, width: '100%',
+  display: 'flex', alignItems: 'center', gap: '0.5rem', width: '100%',
   background: 'none', border: 'none', cursor: 'pointer',
   color: '#e0e0e0', padding: '0.25rem 0', marginBottom: '0.5rem', textAlign: 'left',
 }
 
 const titleStyle: React.CSSProperties = {
-  fontWeight: 600, fontSize: '0.9rem', flex: 1,
+  fontWeight: 600, fontSize: '0.9rem',
 }
 
 const thStyle: React.CSSProperties = {
