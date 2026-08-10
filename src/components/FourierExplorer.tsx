@@ -292,7 +292,7 @@ export function FourierExplorer() {
             {/* Display toggle (position plot) */}
             {mode !== 'isw' && (
               <div style={{ marginTop: '0.75rem' }}>
-                <div style={{ color: '#666', fontSize: '0.75rem', marginBottom: '0.3rem' }}>Position display</div>
+                <div style={{ color: '#fff', fontSize: '0.75rem', marginBottom: '0.3rem' }}>Position display</div>
                 <div style={{ display: 'flex', gap: '0.3rem' }}>
                   {displayBtn('prob', '|ψ|²')}
                   {displayBtn('re',   'Re ψ')}
@@ -303,7 +303,7 @@ export function FourierExplorer() {
 
             {/* Uncertainty readout */}
             <div style={{ marginTop: '1rem', padding: '0.6rem', background: '#0d0d1a', borderRadius: 4, fontSize: '0.8rem' }}>
-              <div style={{ color: '#888', marginBottom: '0.4rem', fontWeight: 600 }}>Uncertainty</div>
+              <div style={{ color: '#fff', marginBottom: '0.4rem', fontWeight: 600 }}>Uncertainty</div>
               <div style={{ color: '#ccc' }}>Δx = <span style={{ color: DARK.blue }}>{deltaX.toFixed(3)}</span> a₀</div>
               <div style={{ color: '#ccc' }}>Δk = <span style={{ color: DARK.green }}>{deltaK.toFixed(3)}</span> a₀⁻¹</div>
               <div style={{ color: '#ccc', marginTop: '0.3rem', borderTop: '1px solid #222', paddingTop: '0.3rem' }}>

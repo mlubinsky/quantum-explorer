@@ -372,7 +372,7 @@ export function FreeParticleExplorer() {
           </div>
           {showMomentum && (
             <>
-              <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: 4, paddingLeft: 2 }}>
+              <div style={{ fontSize: '0.75rem', color: '#fff', marginBottom: 4, paddingLeft: 2 }}>
                 Time-independent — does not change during animation
               </div>
               <Plot
@@ -476,7 +476,7 @@ export function FreeParticleExplorer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Detector width */}
               <div>
-                <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 3 }}>
+                <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: 3 }}>
                   Detector width σ_det = <span style={{ color: '#e0e0e0' }}>{sigmaDet.toFixed(2)} a₀</span>
                   {'  ·  '}
                   Δk_det = <span style={{ color: '#e0e0e0' }}>{(1 / (2 * sigmaDet)).toFixed(2)} a₀⁻¹</span>
@@ -490,7 +490,7 @@ export function FreeParticleExplorer() {
               </div>
 
               {/* Physics note */}
-              <div style={{ fontSize: '0.75rem', color: '#555', fontStyle: 'italic', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.75rem', color: '#fff', fontStyle: 'italic', lineHeight: 1.4 }}>
                 Small σ_det → sharp position, fast re-spreading (large Δp).<br />
                 Large σ_det → loose position, slow re-spreading (small Δp).
               </div>
@@ -511,7 +511,7 @@ export function FreeParticleExplorer() {
                 </button>
                 <button
                   onClick={() => { setMeasEvents([]); setMeasMarker(null) }}
-                  style={{ padding: '4px 10px', background: 'transparent', border: '1px solid #333', borderRadius: 4, color: '#666', cursor: 'pointer', fontSize: '0.8rem' }}
+                  style={{ padding: '4px 10px', background: 'transparent', border: '1px solid #333', borderRadius: 4, color: '#fff', cursor: 'pointer', fontSize: '0.8rem' }}
                 >
                   Clear log
                 </button>
@@ -540,7 +540,7 @@ export function FreeParticleExplorer() {
                       </div>
                       <div>t={ev.tAt.toFixed(2)}</div>
                       <div>{ev.type === 'position' ? 'x' : 'k'}={ev.value >= 0 ? '+' : ''}{ev.value.toFixed(3)}</div>
-                      <div style={{ color: '#666' }}>ρ={ev.prob.toFixed(3)}</div>
+                      <div style={{ color: '#fff' }}>ρ={ev.prob.toFixed(3)}</div>
                     </div>
                   ))}
                 </div>

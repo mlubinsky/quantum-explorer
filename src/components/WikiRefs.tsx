@@ -4,7 +4,7 @@ export function WikiRefs({ links }: { links: WikiLink[] }) {
   return (
     <div style={{ marginTop: '1.5rem', paddingTop: '0.6rem', borderTop: '1px solid #2a2a2a' }}>
       <span style={{
-        fontSize: '0.72rem', color: '#555', fontWeight: 700,
+        fontSize: '0.72rem', color: '#fff', fontWeight: 700,
         textTransform: 'uppercase', letterSpacing: '0.06em',
       }}>
         References

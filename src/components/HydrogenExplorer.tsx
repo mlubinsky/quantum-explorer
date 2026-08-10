@@ -194,7 +194,7 @@ function GrotrianDiagram({
 
       {/* Series filter */}
       <div style={{ display: 'flex', gap: 6, marginBottom: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-        <span style={{ fontSize: '0.78rem', color: '#888' }}>Series:</span>
+        <span style={{ fontSize: '0.78rem', color: '#fff' }}>Series:</span>
         {[1, 2, 3, 4].map(nLo => {
           const active = focusSeries === nLo
           return (
@@ -381,13 +381,13 @@ function GrotrianDiagram({
 
       {/* Legend */}
       <div style={{ marginTop: 8, fontSize: '0.76rem', color: '#aaa' }}>
-        <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 5 }}>
+        <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginBottom: 5 }}>
           Simplified nonrelativistic model: E depends only on n, so all same-n sublevels are
           degenerate (columns show allowed ℓ values, not distinct energies). E1 selection rule
           shown is Δℓ = ±1 only; Δm is not displayed.
         </div>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center', marginBottom: 5 }}>
-          <span style={{ color: '#666', fontStyle: 'italic' }}>Levels:</span>
+          <span style={{ color: '#fff', fontStyle: 'italic' }}>Levels:</span>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <svg width="18" height="8"><line x1="0" y1="4" x2="18" y2="4" stroke="#4a9eff" strokeWidth="2.5"/></svg>
             current orbital
@@ -406,7 +406,7 @@ function GrotrianDiagram({
           </span>
         </div>
         <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-          <span style={{ color: '#666', fontStyle: 'italic', flexShrink: 0 }}>Arrows:</span>
+          <span style={{ color: '#fff', fontStyle: 'italic', flexShrink: 0 }}>Arrows:</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <svg width="22" height="8" style={{ flexShrink: 0 }}>
@@ -460,7 +460,7 @@ function OrbitalIsosurface3D({ n, l, m, Z }: { n: number; l: number; m: number; 
   }, [n, l, m, Z])
 
   const maxVal = Math.max(...ivals)
-  if (maxVal < 1e-30) return <p style={{ color: '#555', fontSize: '0.85rem' }}>No density to display.</p>
+  if (maxVal < 1e-30) return <p style={{ color: '#fff', fontSize: '0.85rem' }}>No density to display.</p>
 
   const trace = {
     type: 'isosurface' as const,
@@ -690,7 +690,7 @@ export function HydrogenExplorer() {
               <span style={{ marginRight: 6 }}>{!orbAndAngCollapsed ? '▾' : '▸'}</span>
               <span style={sectionTitleStyle}>
                 Orbital cross-section |ψ(x,z)|²
-                <span style={{ fontWeight: 400, color: '#777', marginLeft: 8, fontSize: '0.82rem' }}>
+                <span style={{ fontWeight: 400, color: '#fff', marginLeft: 8, fontSize: '0.82rem' }}>
                   + angular shape |Y|²
                 </span>
               </span>
@@ -1027,14 +1027,14 @@ function ZeemanSection({
                 background: 'none', color: '#aaa', cursor: 'pointer' }}>reset</button>
           </div>
 
-          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+          <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginBottom: 10 }}>
             B in atomic units; 1 a.u. ≈ 2.35 × 10⁵ T. Slider is scaled for visual clarity.
             Simplified nonrelativistic model — orbital angular momentum only.
           </div>
 
           {/* Fan diagram */}
           {l === 0 ? (
-            <div style={{ color: '#888', fontSize: '0.85rem', padding: '8px 0' }}>
+            <div style={{ color: '#fff', fontSize: '0.85rem', padding: '8px 0' }}>
               ℓ = 0 (s orbital): no splitting — only m<sub>l</sub> = 0 sublevel.
               Select ℓ ≥ 1 to see degeneracy lifting.
             </div>
@@ -1045,7 +1045,7 @@ function ZeemanSection({
 
           {/* Transition selector + triplet */}
           {!hasLower ? (
-            <div style={{ color: '#888', fontSize: '0.85rem', padding: '6px 0' }}>
+            <div style={{ color: '#fff', fontSize: '0.85rem', padding: '6px 0' }}>
               No E1 transition available from {n}{L_LABELS[l]} — select n ≥ 2 with ℓ ≥ 1 to show the spectral triplet.
             </div>
           ) : (
@@ -1079,7 +1079,7 @@ function ZeemanSection({
                 ))}
               </div>
               {B > 0 && tripletReadout.length === 3 && tripletReadout[1].nm !== null && (
-                <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4 }}>
+                <div style={{ fontSize: '0.78rem', color: '#fff', marginTop: 4 }}>
                   {tripletReadout[0].nm !== null && tripletReadout[2].nm !== null
                     ? <>Splitting: Δλ = ±{Math.abs(tripletReadout[0].nm - tripletReadout[1].nm).toFixed(3)} nm
                       from π line  · </>
@@ -1240,7 +1240,7 @@ function AnomalousZeemanSection({
 
       {show && (
         <div>
-          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+          <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginBottom: 10 }}>
             Includes electron spin S=½. Uses Landé g-factor g<sub>J</sub> — slopes differ per J term.
             Shares the B slider above. Fine-structure splitting ignored (all J terms degenerate at B=0).
           </div>
@@ -1254,7 +1254,7 @@ function AnomalousZeemanSection({
                 </strong>
               </span>
             ))}
-            <span style={{ color: '#555', fontSize: '0.75rem' }}>
+            <span style={{ color: '#fff', fontSize: '0.75rem' }}>
               (normal Zeeman: g<sub>l</sub> = 1 for all m<sub>l</sub>)
             </span>
           </div>
@@ -1272,7 +1272,7 @@ function AnomalousZeemanSection({
 
           {/* Spectral lines */}
           {!hasLower ? (
-            <div style={{ color: '#888', fontSize: '0.85rem', padding: '6px 0' }}>
+            <div style={{ color: '#fff', fontSize: '0.85rem', padding: '6px 0' }}>
               No E1 transition from {n}{L_LABELS[l]} — select n≥2 with ℓ≥1 to see the spectral pattern.
             </div>
           ) : (
@@ -1299,12 +1299,12 @@ function AnomalousZeemanSection({
               <Plot data={lineTraces as never} layout={lineLayout as never}
                 config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
 
-              <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginTop: 4 }}>
+              <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginTop: 4 }}>
                 Line positions only — relative intensities (Clebsch–Gordan weights) not shown.
               </div>
 
               {lowerJ !== null && B > 0 && (
-                <div style={{ fontSize: '0.78rem', color: '#888', marginTop: 4, fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '0.78rem', color: '#fff', marginTop: 4, fontFamily: 'monospace' }}>
                   g<sub>J</sub> = {landeG(upperJ, l, 0.5).toFixed(4)} (J={upperJ})
                   {' · '}
                   g<sub>J</sub> = {landeG(lowerJ, l, 0.5).toFixed(4)} (J={lowerJ})
@@ -1434,7 +1434,7 @@ function StarkSection({
                 background: 'none', color: '#aaa', cursor: 'pointer' }}>reset</button>
           </div>
 
-          <div style={{ fontSize: '0.72rem', color: '#666', fontStyle: 'italic', marginBottom: 10 }}>
+          <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginBottom: 10 }}>
             1 a.u. ≈ 5.14 × 10¹¹ V/m. Classical ionization threshold
             F<sub>ion</sub> = Z³/(16n⁴) ={' '}
             <span style={{ color: '#f77f00' }}>{fIon.toExponential(2)} a.u.</span>
@@ -1449,7 +1449,7 @@ function StarkSection({
             <table style={{ width: '100%', borderCollapse: 'collapse',
               fontSize: '0.8rem', fontFamily: 'monospace' }}>
               <thead>
-                <tr style={{ color: '#777', borderBottom: '1px solid #222' }}>
+                <tr style={{ color: '#fff', borderBottom: '1px solid #222' }}>
                   <th style={{ textAlign: 'left', padding: '3px 8px', fontWeight: 500 }}>Parabolic</th>
                   <th style={{ textAlign: 'left', padding: '3px 8px', fontWeight: 500 }}>Spherical state</th>
                   <th style={{ textAlign: 'right', padding: '3px 8px', fontWeight: 500 }}>ΔE (Eh)</th>
@@ -1478,7 +1478,7 @@ function StarkSection({
           </div>
 
           {F > 0 && (
-            <div style={{ marginTop: 8, fontSize: '0.8rem', fontFamily: 'monospace', color: '#888' }}>
+            <div style={{ marginTop: 8, fontSize: '0.8rem', fontFamily: 'monospace', color: '#fff' }}>
               Total splitting: <span style={{ color: '#e0e0e0' }}>{(6 * F / Z).toFixed(6)} Eh</span>
               {'  ·  '}⟨z⟩ of shifted states: ±{(3 / Z).toFixed(3)} a₀
               {F > fIon && (
@@ -1653,7 +1653,7 @@ function EmissionSpectraSection({
             })}
           </svg>
 
-          <div style={{ fontSize: '0.72rem', color: '#555', fontStyle: 'italic', marginTop: 5 }}>
+          <div style={{ fontSize: '0.72rem', color: '#fff', fontStyle: 'italic', marginTop: 5 }}>
             Z = {Z}. Hover for λ and ΔE; click to select. Energy depends only on n in this model.
           </div>
 
@@ -1670,12 +1670,12 @@ function EmissionSpectraSection({
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                   <span style={{ fontWeight: 600, fontSize: '0.92rem' }}>
                     <span style={{ color: c }}>{lbl}</span>
-                    <span style={{ fontWeight: 400, color: '#888', marginLeft: 10 }}>
+                    <span style={{ fontWeight: 400, color: '#fff', marginLeft: 10 }}>
                       n = {selected.nHi} → n = {selected.nLo}  ·  {selected.series}  ·  {region}
                     </span>
                   </span>
                   <button onClick={() => setSelected(null)} style={{
-                    background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '1rem',
+                    background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1rem',
                   }}>✕</button>
                 </div>
                 <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap',

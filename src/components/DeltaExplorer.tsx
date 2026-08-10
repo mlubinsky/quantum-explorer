@@ -265,7 +265,7 @@ export function DeltaExplorer() {
         {/* Controls */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 1.5rem', marginBottom: '0.75rem' }}>
           <div>
-            <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: '0.35rem' }}>
+            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.35rem' }}>
               Potential type
             </div>
             <div style={{ display: 'flex', gap: 6, marginBottom: '0.7rem' }}>

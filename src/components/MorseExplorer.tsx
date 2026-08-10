@@ -260,7 +260,7 @@ export function MorseExplorer() {
           </div>
           {showPot && (
             <>
-              <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.74rem', color: '#fff', fontStyle: 'italic', marginBottom: 4 }}>
                 Cyan: V(x) · Colored bars: E_n levels (turning-point width) · Gold: |ψ_n|² overlay for selected n
               </div>
               <Plot data={potTraces as never} layout={potLayout as never}
@@ -286,7 +286,7 @@ export function MorseExplorer() {
           </div>
           {showPsi && (
             <>
-              <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.74rem', color: '#fff', fontStyle: 'italic', marginBottom: 4 }}>
                 Cyan: ψ_n(x) (signed) · Green: |ψ_n|² · Dashed verticals: classical turning points
               </div>
               <Plot data={psiTraces as never} layout={psiLayout as never}
@@ -388,7 +388,7 @@ const titleStyle: React.CSSProperties = {
 }
 
 const thStyle: React.CSSProperties = {
-  textAlign: 'left', padding: '4px 8px', color: '#666', fontWeight: 600,
+  textAlign: 'left', padding: '4px 8px', color: '#fff', fontWeight: 600,
 }
 
 const tdStyle: React.CSSProperties = {

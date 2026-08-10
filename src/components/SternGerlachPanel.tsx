@@ -79,10 +79,10 @@ function Histogram({ plus, minus, pExact }: { plus: number; minus: number; pExac
         </div>
         <span style={{ width: 50, fontSize: '0.78rem', color: '#aaa', textAlign: 'right' }}>{minus}</span>
       </div>
-      <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 4 }}>
+      <div style={{ fontSize: '0.75rem', color: '#fff', marginTop: 4 }}>
         exact P(+½) = {(pExact * 100).toFixed(2)}% · observed {total > 0 ? ((plus / total) * 100).toFixed(1) : '—'}% · N = {total}
       </div>
-      <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 2, fontStyle: 'italic' }}>
+      <div style={{ fontSize: '0.75rem', color: '#fff', marginTop: 2, fontStyle: 'italic' }}>
         Same |ψ⟩ each trial — quantum randomness is irreducible, not hidden-variable ignorance.
       </div>
     </div>
@@ -109,9 +109,9 @@ function MeasurementHistory({ history, onClear }: { history: MeasurementRecord[]
       <div style={{ maxHeight: 140, overflowY: 'auto', fontSize: '0.78rem', color: '#ccc' }}>
         {history.map((rec, i) => (
           <div key={i} style={{ display: 'flex', gap: 6, marginBottom: 2 }}>
-            <span style={{ color: '#555', minWidth: 18 }}>{i + 1}.</span>
+            <span style={{ color: '#fff', minWidth: 18 }}>{i + 1}.</span>
             <span>along <strong>{rec.axisLabel}</strong></span>
-            <span style={{ color: '#666' }}>(P(+½)={( rec.pPlus * 100).toFixed(0)}%)</span>
+            <span style={{ color: '#fff' }}>(P(+½)={( rec.pPlus * 100).toFixed(0)}%)</span>
             <span style={{ color: rec.outcome === '+' ? '#4361ee' : '#ef233c', fontWeight: 700 }}>
               → {rec.outcome === '+' ? '+½' : '−½'}
             </span>
@@ -251,13 +251,13 @@ export function SternGerlachPanel({ theta, phi, onCollapse, onAxisChange }: Prop
 
       {/* Locked prep state */}
       <div>
-        <div style={{ fontSize: '0.75rem', color: '#888', fontStyle: 'italic', marginBottom: 5 }}>
+        <div style={{ fontSize: '0.75rem', color: '#fff', fontStyle: 'italic', marginBottom: 5 }}>
           Identical preparation — measure the same state N times
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 4 }}>
           <button onClick={handleLockPrep} style={runBtnStyle}>Lock |ψ⟩ as prep state</button>
           {prepState && (
-            <span style={{ fontSize: '0.75rem', color: '#888' }}>
+            <span style={{ fontSize: '0.75rem', color: '#fff' }}>
               θ={prepState.theta.toFixed(3)}, φ={prepState.phi.toFixed(3)}
             </span>
           )}
@@ -270,7 +270,7 @@ export function SternGerlachPanel({ theta, phi, onCollapse, onAxisChange }: Prop
         {prepResult && (
           <>
             <Histogram {...prepResult} />
-            <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 4, fontStyle: 'italic' }}>
+            <div style={{ fontSize: '0.75rem', color: '#fff', marginTop: 4, fontStyle: 'italic' }}>
               Starting from the same prepared state each time — P(+½) converges to the exact value as N grows.
             </div>
           </>
@@ -297,7 +297,7 @@ const runBtnStyle: React.CSSProperties = {
 }
 
 const clearBtnStyle: React.CSSProperties = {
-  padding: '0.15rem 0.5rem', background: 'none', color: '#555',
+  padding: '0.15rem 0.5rem', background: 'none', color: '#fff',
   border: '1px solid #333', borderRadius: 3, cursor: 'pointer', fontSize: '0.75rem',
 }
 
@@ -307,7 +307,7 @@ const nInputStyle: React.CSSProperties = {
 }
 
 const noteStyle: React.CSSProperties = {
-  margin: '4px 0 0', fontSize: '0.75rem', color: '#888',
+  margin: '4px 0 0', fontSize: '0.75rem', color: '#fff',
   background: '#111', borderLeft: '2px solid #333',
   padding: '4px 8px', borderRadius: '0 4px 4px 0',
 }

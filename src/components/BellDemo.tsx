@@ -197,7 +197,7 @@ export function BellDemo() {
           <span style={titleStyle}>CHSH inequality</span>
           <HelpButton onClick={() => setHelpTopic('chsh')} />
         </div>
-        <p style={{ margin: '0 0 0.6rem', fontSize: '0.82rem', color: '#777', fontStyle: 'italic' }}>
+        <p style={{ margin: '0 0 0.6rem', fontSize: '0.82rem', color: '#fff', fontStyle: 'italic' }}>
           Coplanar analyzer settings (all four angles in one plane). Real Bell tests
           can use any 3D orientations; the CHSH maximum 2√2 is achieved in-plane.
         </p>
@@ -249,16 +249,16 @@ export function BellDemo() {
         {/* S value display */}
         <div style={{ ...sValueBoxStyle, borderColor: sViolates ? DARK.green : '#444' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: 6 }}>
-            <span style={{ fontSize: '1.1rem', fontWeight: 700, color: sViolates ? DARK.green : '#888' }}>
+            <span style={{ fontSize: '1.1rem', fontWeight: 700, color: sViolates ? DARK.green : '#fff' }}>
               S = {sValue.toFixed(4)}
             </span>
             {sViolates
               ? <span style={{ color: DARK.green, fontWeight: 600, fontSize: '0.85rem' }}>✓ Quantum violation (S &gt; 2)</span>
-              : <span style={{ color: '#888', fontSize: '0.85rem' }}>No violation (S ≤ 2)</span>
+              : <span style={{ color: '#fff', fontSize: '0.85rem' }}>No violation (S ≤ 2)</span>
             }
           </div>
           <SBar value={sValue} />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#777', marginTop: 3 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#fff', marginTop: 3 }}>
             <span>0</span>
             <span style={{ color: '#f77f00' }}>Classical bound 2</span>
             <span style={{ color: DARK.green }}>Tsirelson 2√2 ≈ 2.828</span>

@@ -215,7 +215,7 @@ export function TwoParticleExplorer() {
 
           {/* Statistics */}
           <div style={{ marginBottom: '0.7rem' }}>
-            <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: '0.3rem' }}>Particle statistics</div>
+            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.3rem' }}>Particle statistics</div>
             {(['distinguishable', 'bosons', 'fermions'] as Statistics[]).map(s => (
               <button key={s} onClick={() => setStat(s)} style={{
                 display: 'block', width: '100%', textAlign: 'left',
@@ -298,10 +298,10 @@ export function TwoParticleExplorer() {
           {/* Single-particle marginal */}
           {showMarginal && (
             <div style={{ borderTop: '1px solid #222', paddingTop: '0.75rem', marginBottom: '0.75rem' }}>
-              <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: 4 }}>
                 Single-particle density ρ(x) = ∫|Ψ(x,x₂)|²dx₂
                 {mEff !== nEff && (
-                  <span style={{ marginLeft: 6, color: '#555' }}>
+                  <span style={{ marginLeft: 6, color: '#fff' }}>
                     — bosons = fermions (exchange integrates to 0)
                   </span>
                 )}
@@ -318,7 +318,7 @@ export function TwoParticleExplorer() {
           {/* Diagonal density */}
           {showDiag && (
             <div style={{ borderTop: '1px solid #222', paddingTop: '0.75rem' }}>
-              <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: 4 }}>
                 Diagonal density |Ψ(x,x)|² — probability both particles at same position
               </div>
               <Plot

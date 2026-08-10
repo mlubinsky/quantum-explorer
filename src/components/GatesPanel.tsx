@@ -192,7 +192,7 @@ export function GatesPanel({ theta, phi, onStateChange }: GatesPanelProps) {
 
       {/* State readout */}
       <div style={readoutBox}>
-        <div style={{ color: '#888', fontSize: '0.75rem', marginBottom: '0.4rem', fontWeight: 600 }}>State</div>
+        <div style={{ color: '#fff', fontSize: '0.75rem', marginBottom: '0.4rem', fontWeight: 600 }}>State</div>
         <div style={{ fontFamily: 'monospace', fontSize: '0.82rem', color: '#e0e0e0', marginBottom: '0.3rem' }}>
           |ψ⟩ = ({formatComplex(qubit.aRe, qubit.aIm)})|↑⟩ + ({formatComplex(qubit.bRe, qubit.bIm)})|↓⟩
         </div>
@@ -212,7 +212,7 @@ export function GatesPanel({ theta, phi, onStateChange }: GatesPanelProps) {
 }
 
 const sectionLabel: React.CSSProperties = {
-  fontSize: '0.75rem', color: '#666', fontWeight: 600,
+  fontSize: '0.75rem', color: '#fff', fontWeight: 600,
   textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.35rem',
 }
 
@@ -241,7 +241,7 @@ const applyBtn: React.CSSProperties = {
 }
 
 const undoBtn: React.CSSProperties = {
-  padding: '0.15rem 0.5rem', background: 'transparent', color: '#888',
+  padding: '0.15rem 0.5rem', background: 'transparent', color: '#fff',
   border: '1px solid #333', borderRadius: 4, cursor: 'pointer',
   fontSize: '0.78rem',
 }

@@ -67,7 +67,7 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels, isOpen
   const P_mat = useMemo(() => buildP(wavefunctions, dx), [wavefunctions, dx])
 
   if (N < 2) return (
-    <p style={{ fontSize: '0.82rem', color: '#666' }}>Need at least 2 levels.</p>
+    <p style={{ fontSize: '0.82rem', color: '#fff' }}>Need at least 2 levels.</p>
   )
 
   const base = operator === 'H' ? H_mat : operator === 'X' ? X_mat : P_mat
@@ -148,7 +148,7 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels, isOpen
                 </select>
               </label>
               {operator === 'H' && (
-                <span style={{ color: '#555', fontStyle: 'italic' }}>Ĥ is time-independent</span>
+                <span style={{ color: '#fff', fontStyle: 'italic' }}>Ĥ is time-independent</span>
               )}
             </div>
           )}
@@ -163,14 +163,14 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels, isOpen
           />
 
           {view === 'static' && (
-            <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
+            <p style={{ margin: 0, fontSize: '0.75rem', color: '#fff', fontStyle: 'italic' }}>
               {operator === 'H' && 'H is diagonal by definition — off-diagonal elements are exactly zero.'}
               {operator === 'X' && 'Zero entries reflect parity selection rules: ⟨ψₘ|x|ψₙ⟩ = 0 when ψₘ and ψₙ have the same parity.'}
               {operator === 'P' && 'P is purely imaginary; table shows Im⟨ψₘ|p|ψₙ⟩. Antisymmetry P_mn = −P_nm follows from the operator being Hermitian.'}
             </p>
           )}
           {view === 'animated' && (
-            <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
+            <p style={{ margin: 0, fontSize: '0.75rem', color: '#fff', fontStyle: 'italic' }}>
               Colour shows Re[Oₘₙ(t)]. Magnitude |Oₘₙ| is time-invariant; diagonal elements (ωₙₙ = 0) never change.
             </p>
           )}
@@ -186,7 +186,7 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels, isOpen
                 colLabels={labels}
                 title="ωₘₙ — off-diagonal elements oscillate at these frequencies"
               />
-              <p style={{ margin: '6px 0 0', fontSize: '0.72rem', color: '#555' }}>
+              <p style={{ margin: '6px 0 0', fontSize: '0.72rem', color: '#fff' }}>
                 Period Tₘₙ = 2π / |ωₘₙ| a.u. &nbsp;·&nbsp; Diagonal is always zero.
               </p>
             </div>

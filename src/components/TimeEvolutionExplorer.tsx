@@ -345,7 +345,7 @@ export function TimeEvolutionExplorer() {
           </div>
 
           {/* One-line description for selected mode */}
-          <div style={{ fontSize: '0.72rem', color: '#666', marginBottom: '0.8rem', lineHeight: 1.4 }}>
+          <div style={{ fontSize: '0.72rem', color: '#fff', marginBottom: '0.8rem', lineHeight: 1.4 }}>
             {subMode === 'isw' && 'Superposition Σ cₙ ψₙ e⁻ⁱEₙᵗ — beating, revivals at T_rev = 4L²/π'}
             {subMode === 'ho'  && 'Coherent state |α⟩ — Gaussian oscillates at ω, shape invariant, Δx·Δp = ħ/2'}
             {subMode === 'ho-sq' && 'Squeezed state D(α)S(r)|0⟩ — Gaussian breathes at 2ω, width oscillates ±e^r'}
@@ -389,10 +389,10 @@ export function TimeEvolutionExplorer() {
                 }}>{s}×</button>
               ))}
             </div>
-            <div style={{ fontSize: '0.78rem', color: '#888', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '0.78rem', color: '#fff', fontVariantNumeric: 'tabular-nums' }}>
               t = {t.toFixed(2)} a.u.
               {subMode === 'isw' && (
-                <span style={{ color: '#555', marginLeft: 6 }}>({(t / tRev * 100).toFixed(0)}% T<sub>rev</sub>)</span>
+                <span style={{ color: '#fff', marginLeft: 6 }}>({(t / tRev * 100).toFixed(0)}% T<sub>rev</sub>)</span>
               )}
             </div>
             <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.5rem' }}>
@@ -515,7 +515,7 @@ function ISWControls({ L, setL, coeffs, setCoeff, normCoeffs, applyPreset, tRev,
       <div style={{ maxHeight: 220, overflowY: 'auto', paddingRight: 4 }}>
         {coeffs.map((c, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
-            <span style={{ fontSize: '0.72rem', color: '#888', width: 20 }}>n={i + 1}</span>
+            <span style={{ fontSize: '0.72rem', color: '#fff', width: 20 }}>n={i + 1}</span>
             <input type="range" min={-1} max={1} step={0.01} value={c}
               style={{ flex: 1, accentColor: '#4361ee' }}
               onChange={e => setCoeff(i, Number(e.target.value))} />
@@ -586,7 +586,7 @@ function HOSqueezedControls({ omega, setOmega, alpha, setAlpha, phiAlpha, setPhi
       <ParameterSlider label="Squeeze r" value={r} min={0} max={2} step={0.05}
         description={`Δx range: ${Math.exp(-r).toFixed(2)}–${Math.exp(r).toFixed(2)} × 1/√(2ω)`}
         onChange={setR} />
-      <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: '0.3rem' }}>
+      <div style={{ fontSize: '0.75rem', color: '#fff', marginBottom: '0.3rem' }}>
         Breathing period T<sub>sq</sub> = π/ω = {(Math.PI / omega).toFixed(2)} a.u.
       </div>
       <table style={{ fontSize: '0.82rem', fontVariantNumeric: 'tabular-nums', width: '100%', marginTop: '0.3rem' }}>

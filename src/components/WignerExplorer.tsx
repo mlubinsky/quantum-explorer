@@ -300,7 +300,7 @@ export function WignerExplorer() {
 
           {/* State selector */}
           <div style={{ marginBottom: '0.6rem' }}>
-            <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: '0.3rem' }}>Quantum state</div>
+            <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.3rem' }}>Quantum state</div>
             {([
               ['fock',      'Fock |n⟩'],
               ['coherent',  'Coherent |α⟩  ▶'],
@@ -373,7 +373,7 @@ export function WignerExplorer() {
           {/* Animation controls (coherent / squeezed only) */}
           {isAnimated && (
             <div style={{ borderTop: '1px solid #222', paddingTop: '0.6rem', marginTop: '0.6rem' }}>
-              <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: '0.4rem' }}>
+              <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: '0.4rem' }}>
                 HO time evolution  T = {tPeriod.toFixed(2)} a.u.
               </div>
               <div style={{ display: 'flex', gap: '0.3rem', marginBottom: '0.4rem' }}>
@@ -392,11 +392,11 @@ export function WignerExplorer() {
                   }}>{s}×</button>
                 ))}
               </div>
-              <div style={{ fontSize: '0.78rem', color: '#888', fontVariantNumeric: 'tabular-nums' }}>
+              <div style={{ fontSize: '0.78rem', color: '#fff', fontVariantNumeric: 'tabular-nums' }}>
                 t = {t.toFixed(2)}  ({(t / tPeriod * 100).toFixed(0)}% T)
               </div>
               {stateType === 'squeezed' && (
-                <div style={{ fontSize: '0.72rem', color: '#555', marginTop: '0.3rem', lineHeight: 1.4 }}>
+                <div style={{ fontSize: '0.72rem', color: '#fff', marginTop: '0.3rem', lineHeight: 1.4 }}>
                   Ellipse rotates at ω, breathes at 2ω
                 </div>
               )}
@@ -444,14 +444,14 @@ export function WignerExplorer() {
           {showMarginalsNow && (
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 280px' }}>
-                <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 2 }}>
+                <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: 2 }}>
                   x-marginal ∫W dp = |ψ(x)|²
                 </div>
                 <Plot data={xMargTraces as any} layout={margLayout('x (a.u.)', '|ψ|²') as any}
                   config={cfg} style={{ width: '100%' }} />
               </div>
               <div style={{ flex: '1 1 280px' }}>
-                <div style={{ fontSize: '0.78rem', color: '#888', marginBottom: 2 }}>
+                <div style={{ fontSize: '0.78rem', color: '#fff', marginBottom: 2 }}>
                   p-marginal ∫W dx = |φ̃(p)|²
                 </div>
                 <Plot data={pMargTraces as any} layout={margLayout('p (a.u.)', '|φ̃|²') as any}

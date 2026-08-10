@@ -259,7 +259,7 @@ export function KronigPenneyExplorer() {
           </div>
           {showDisp && (
             <>
-              <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.74rem', color: '#fff', fontStyle: 'italic', marginBottom: 4 }}>
                 Blue: allowed band |f| ≤ 1 · Red: forbidden gap |f| &gt; 1 · Red shading marks gap regions
               </div>
               <Plot data={dispTraces as never} layout={dispLayout as never}
@@ -287,7 +287,7 @@ export function KronigPenneyExplorer() {
           </div>
           {showBands && (
             <>
-              <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
+              <div style={{ fontSize: '0.74rem', color: '#fff', fontStyle: 'italic', marginBottom: 4 }}>
                 Each coloured trace is one band. Gaps appear as empty horizontal strips.
               </div>
               <Plot data={bandTraces as never} layout={bandLayout as never}
@@ -392,7 +392,7 @@ const titleStyle: React.CSSProperties = {
 }
 
 const thStyle: React.CSSProperties = {
-  padding: '4px 8px', textAlign: 'left', color: '#777',
+  padding: '4px 8px', textAlign: 'left', color: '#fff',
   fontWeight: 600, fontSize: '0.8rem',
 }
 

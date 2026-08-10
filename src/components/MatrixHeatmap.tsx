@@ -36,7 +36,7 @@ const thStyle: CSSProperties = {
   textAlign: 'center',
   background: '#1a1a1a',
   border: '1px solid #2a2a2a',
-  color: '#888',
+  color: '#fff',
 }
 
 export function MatrixHeatmap({
@@ -97,7 +97,7 @@ export function MatrixHeatmap({
           </tbody>
         </table>
       </div>
-      <p style={{ margin: '4px 0 0', fontSize: '0.7rem', color: '#555' }}>
+      <p style={{ margin: '4px 0 0', fontSize: '0.7rem', color: '#fff' }}>
         {sequential
           ? `dark = 0 · red = max (${maxAbs.toFixed(4)})`
           : `blue = negative · dark ≈ 0 · red = positive · max |value| = ${maxAbs.toFixed(4)}`}

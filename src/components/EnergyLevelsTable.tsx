@@ -24,10 +24,10 @@ export function EnergyLevelsTable({ potential, selectedN, L, omega, nLevels }: P
       <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: '0.78rem' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid #333' }}>
-            <th style={{ ...tdBase, color: '#888', textAlign: 'center' }}>n</th>
-            <th style={{ ...tdBase, color: '#888', textAlign: 'right' }}>Eₙ (a.u.)</th>
-            <th style={{ ...tdBase, color: '#888', textAlign: 'right' }}>ΔEₙ</th>
-            <th style={{ ...tdBase, color: '#888', textAlign: 'right' }}>Eₙ / E₁</th>
+            <th style={{ ...tdBase, color: '#fff', textAlign: 'center' }}>n</th>
+            <th style={{ ...tdBase, color: '#fff', textAlign: 'right' }}>Eₙ (a.u.)</th>
+            <th style={{ ...tdBase, color: '#fff', textAlign: 'right' }}>ΔEₙ</th>
+            <th style={{ ...tdBase, color: '#fff', textAlign: 'right' }}>Eₙ / E₁</th>
           </tr>
         </thead>
         <tbody>
@@ -43,10 +43,10 @@ export function EnergyLevelsTable({ potential, selectedN, L, omega, nLevels }: P
                 <td style={{ ...tdBase, color: numColor, textAlign: 'right' }}>
                   {row.energy.toFixed(5)}
                 </td>
-                <td style={{ ...tdBase, color: '#888', textAlign: 'right' }}>
+                <td style={{ ...tdBase, color: '#fff', textAlign: 'right' }}>
                   {row.delta !== undefined ? row.delta.toFixed(5) : '—'}
                 </td>
-                <td style={{ ...tdBase, color: '#888', textAlign: 'right' }}>
+                <td style={{ ...tdBase, color: '#fff', textAlign: 'right' }}>
                   {row.ratio.toFixed(3)}
                 </td>
               </tr>

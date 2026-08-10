@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Low-contrast caption/footnote text** — ~80 captions, footnotes, table headers, and
+  small labels across 16 components used `#555`/`#666`/`#777`/`#888` on the near-black
+  (`#0d0d0d`) app background, which is close to unreadable (e.g. "blue = negative · dark
+  ≈ 0 · red = positive" in `MatrixHeatmap.tsx`, the physics notes under Zeeman/Stark in
+  `HydrogenExplorer.tsx`). Bumped these to `#fff`. Left untouched: Plotly chart-internal
+  colors (`font`/`line`/`annotations` inside `layout` objects — axis labels, dashed
+  reference lines) and conditional colors that distinguish UI state (selected vs.
+  unselected tab/button, "N/A"/no-data indicators) — changing those to a flat white would
+  erase the state distinction they exist to convey
 - **Help icon pushed to far right in Stationary States collapsibles** — the
   `MomentumPlot.tsx`/`EnergyLevelsDiagram.tsx`/`MatrixPanel.tsx` collapsible headers
   used `flex: 1` on the title span, which pushed the `?` help icon to the far right edge
