@@ -106,7 +106,7 @@ function MeasurementHistory({ history, onClear }: { history: MeasurementRecord[]
         <span style={{ fontSize: '0.8rem', color: '#aaa', fontWeight: 600 }}>Measurement history</span>
         <button onClick={onClear} style={clearBtnStyle}>Clear</button>
       </div>
-      <div style={{ maxHeight: 140, overflowY: 'auto', fontSize: '0.78rem', color: '#ccc' }}>
+      <div style={{ maxHeight: 140, overflowY: 'auto', overflowX: 'hidden', fontSize: '0.78rem', color: '#ccc' }}>
         {history.map((rec, i) => (
           <div key={i} style={{ display: 'flex', gap: 6, marginBottom: 2 }}>
             <span style={{ color: '#fff', minWidth: 18 }}>{i + 1}.</span>

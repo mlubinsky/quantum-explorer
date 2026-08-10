@@ -6,6 +6,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Phantom horizontal scrollbar in Free Particle's left panel** — the controls column
+  set only `overflowY: 'auto'`, and per the CSS spec, leaving `overflow-x` unset while
+  `overflow-y` is non-`visible` makes the browser compute `overflow-x` as `auto` too
+  (an axis can't be scrollable while its sibling stays `visible`). The column's content
+  was ~2px wider than its 260px box (native `<input type="range">` thumb rounding),
+  which was enough for Chrome/Firefox to paint a visible horizontal scrollbar track at
+  the bottom — invisible on Safari, which uses auto-hiding overlay scrollbars, hence the
+  report that it only showed in Chrome/Firefox. Added `overflowX: 'hidden'` in
+  `FreeParticleExplorer.tsx` and defensively in two other `overflowY`-only scroll
+  containers (`TimeEvolutionExplorer.tsx`'s coefficient sliders, `SternGerlachPanel.tsx`'s
+  measurement history) that had the same latent risk
 - **Low-contrast caption/footnote text** — ~80 captions, footnotes, table headers, and
   small labels across 16 components used `#555`/`#666`/`#777`/`#888` on the near-black
   (`#0d0d0d`) app background, which is close to unreadable (e.g. "blue = negative · dark

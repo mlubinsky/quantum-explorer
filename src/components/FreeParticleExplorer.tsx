@@ -238,7 +238,7 @@ export function FreeParticleExplorer() {
       {/* ── Left panel: controls ─────────────────────────────────────────── */}
       <div style={{
         width: 260, flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 10,
-        overflowY: 'auto',
+        overflowY: 'auto', overflowX: 'hidden',
       }}>
         <ParameterSlider
           label="x₀ — initial position"

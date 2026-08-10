@@ -512,7 +512,7 @@ function ISWControls({ L, setL, coeffs, setCoeff, normCoeffs, applyPreset, tRev,
             style={{ ...btnStyle, fontSize: '0.67rem', padding: '0.2rem 0.4rem' }}>{name}</button>
         ))}
       </div>
-      <div style={{ maxHeight: 220, overflowY: 'auto', paddingRight: 4 }}>
+      <div style={{ maxHeight: 220, overflowY: 'auto', overflowX: 'hidden', paddingRight: 4 }}>
         {coeffs.map((c, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem' }}>
             <span style={{ fontSize: '0.72rem', color: '#fff', width: 20 }}>n={i + 1}</span>
