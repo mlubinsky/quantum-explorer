@@ -5,6 +5,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Fixed
+- **Duplicate section titles in Stationary States** — the "Momentum distribution",
+  "Energy levels diagram", and "Matrix representation" collapsible sections showed their
+  title twice: once (without a help icon) in the `<details>/<summary>` wrapper, and again
+  (with a help icon) inside `MomentumPlot.tsx`/`EnergyLevelsDiagram.tsx`/`MatrixPanel.tsx`
+  once expanded. Those three components now own their collapsible header directly (arrow +
+  title + help icon, always visible even while collapsed, matching the pattern used
+  elsewhere e.g. `BarrierExplorer.tsx`); `StationaryExplorer.tsx` just tracks the open/closed
+  state and passes it down instead of wrapping in `<details>`
+
 ### Added
 - **Missing help ("?") icons** — Stationary States' main title was missing its HelpButton
   (the `showHelp`/`HelpModal` wiring existed but was never triggered); the Matrix

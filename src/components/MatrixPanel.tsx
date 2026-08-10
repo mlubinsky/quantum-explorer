@@ -13,6 +13,8 @@ interface Props {
   gridX: number[]
   dx: number
   labels: string[]
+  isOpen: boolean
+  onToggle: () => void
 }
 
 const btn: React.CSSProperties = {
@@ -28,7 +30,7 @@ const btnActive: React.CSSProperties = { ...btn, background: '#4361ee', color: '
 const btnOp: React.CSSProperties = { ...btn, fontFamily: 'Georgia, serif', fontSize: '0.95rem', fontWeight: 700 }
 const btnOpActive: React.CSSProperties = { ...btnOp, background: '#4361ee', color: '#fff', borderColor: '#4361ee' }
 
-export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels }: Props) {
+export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels, isOpen, onToggle }: Props) {
   const N = energies.length
 
   const [showHelp, setShowHelp] = useState(false)
@@ -96,88 +98,108 @@ export function MatrixPanel({ energies, wavefunctions, gridX, dx, labels }: Prop
         </HelpModal>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onToggle}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+        style={collapseHeaderStyle}
+      >
+        <span style={{ marginRight: 6 }}>{isOpen ? '▾' : '▸'}</span>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600, flex: 1 }}>
           Matrix representation (Heisenberg picture)
         </span>
-        <HelpButton onClick={() => setShowHelp(true)} />
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={() => setShowHelp(true)} />
+        </span>
       </div>
 
-      {/* Operator + view selectors */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
-        <span style={{ fontSize: '0.8rem', color: '#aaa' }}>Operator:</span>
-        {(['H', 'X', 'P'] as Operator[]).map(op => (
-          <button key={op} onClick={() => setOperator(op)}
-            style={operator === op ? btnOpActive : btnOp}>{op}</button>
-        ))}
-        <span style={{ marginLeft: 10, fontSize: '0.8rem', color: '#aaa' }}>View:</span>
-        {(['static', 'animated'] as View[]).map(v => (
-          <button key={v} onClick={() => setView(v)}
-            style={view === v ? btnActive : btn}>
-            {v === 'static' ? 'Structure (t = 0)' : 'Time evolution'}
-          </button>
-        ))}
-      </div>
+      {isOpen && (
+        <>
+          {/* Operator + view selectors */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: '0.8rem', color: '#aaa' }}>Operator:</span>
+            {(['H', 'X', 'P'] as Operator[]).map(op => (
+              <button key={op} onClick={() => setOperator(op)}
+                style={operator === op ? btnOpActive : btnOp}>{op}</button>
+            ))}
+            <span style={{ marginLeft: 10, fontSize: '0.8rem', color: '#aaa' }}>View:</span>
+            {(['static', 'animated'] as View[]).map(v => (
+              <button key={v} onClick={() => setView(v)}
+                style={view === v ? btnActive : btn}>
+                {v === 'static' ? 'Structure (t = 0)' : 'Time evolution'}
+              </button>
+            ))}
+          </div>
 
-      {/* Animation controls */}
-      {view === 'animated' && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, fontSize: '0.8rem', color: '#ccc' }}>
-          <button onClick={() => setPlaying(p => !p)} style={{ ...btn, minWidth: '4.5em' }}>
-            {playing ? 'Pause' : 'Play'}
-          </button>
-          <button onClick={() => { setT(0); setPlaying(false) }} style={btn}>Reset</button>
-          <span>t = <strong>{t.toFixed(2)}</strong> a.u.</span>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            Speed:
-            <select value={speed} onChange={e => setSpeed(Number(e.target.value))}
-              style={{ background: '#1a1a1a', color: '#ccc', border: '1px solid #333', borderRadius: 3, padding: '1px 4px' }}>
-              {[0.25, 0.5, 1, 2, 5].map(s => <option key={s} value={s}>{s}×</option>)}
-            </select>
-          </label>
-          {operator === 'H' && (
-            <span style={{ color: '#555', fontStyle: 'italic' }}>Ĥ is time-independent</span>
+          {/* Animation controls */}
+          {view === 'animated' && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, fontSize: '0.8rem', color: '#ccc' }}>
+              <button onClick={() => setPlaying(p => !p)} style={{ ...btn, minWidth: '4.5em' }}>
+                {playing ? 'Pause' : 'Play'}
+              </button>
+              <button onClick={() => { setT(0); setPlaying(false) }} style={btn}>Reset</button>
+              <span>t = <strong>{t.toFixed(2)}</strong> a.u.</span>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                Speed:
+                <select value={speed} onChange={e => setSpeed(Number(e.target.value))}
+                  style={{ background: '#1a1a1a', color: '#ccc', border: '1px solid #333', borderRadius: 3, padding: '1px 4px' }}>
+                  {[0.25, 0.5, 1, 2, 5].map(s => <option key={s} value={s}>{s}×</option>)}
+                </select>
+              </label>
+              {operator === 'H' && (
+                <span style={{ color: '#555', fontStyle: 'italic' }}>Ĥ is time-independent</span>
+              )}
+            </div>
           )}
-        </div>
-      )}
 
-      <MatrixHeatmap
-        data={matrix}
-        rowLabels={labels}
-        colLabels={labels}
-        title={heatmapTitle[operator]}
-        sequential={operator === 'H'}
-        markDiagonal={view === 'animated'}
-      />
-
-      {view === 'static' && (
-        <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
-          {operator === 'H' && 'H is diagonal by definition — off-diagonal elements are exactly zero.'}
-          {operator === 'X' && 'Zero entries reflect parity selection rules: ⟨ψₘ|x|ψₙ⟩ = 0 when ψₘ and ψₙ have the same parity.'}
-          {operator === 'P' && 'P is purely imaginary; table shows Im⟨ψₘ|p|ψₙ⟩. Antisymmetry P_mn = −P_nm follows from the operator being Hermitian.'}
-        </p>
-      )}
-      {view === 'animated' && (
-        <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
-          Colour shows Re[Oₘₙ(t)]. Magnitude |Oₘₙ| is time-invariant; diagonal elements (ωₙₙ = 0) never change.
-        </p>
-      )}
-
-      <details>
-        <summary style={{ fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', userSelect: 'none', color: '#aaa' }}>
-          Bohr frequencies ωₘₙ = Eₘ − Eₙ (a.u.)
-        </summary>
-        <div style={{ marginTop: 10 }}>
           <MatrixHeatmap
-            data={bohrFreqs}
+            data={matrix}
             rowLabels={labels}
             colLabels={labels}
-            title="ωₘₙ — off-diagonal elements oscillate at these frequencies"
+            title={heatmapTitle[operator]}
+            sequential={operator === 'H'}
+            markDiagonal={view === 'animated'}
           />
-          <p style={{ margin: '6px 0 0', fontSize: '0.72rem', color: '#555' }}>
-            Period Tₘₙ = 2π / |ωₘₙ| a.u. &nbsp;·&nbsp; Diagonal is always zero.
-          </p>
-        </div>
-      </details>
+
+          {view === 'static' && (
+            <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
+              {operator === 'H' && 'H is diagonal by definition — off-diagonal elements are exactly zero.'}
+              {operator === 'X' && 'Zero entries reflect parity selection rules: ⟨ψₘ|x|ψₙ⟩ = 0 when ψₘ and ψₙ have the same parity.'}
+              {operator === 'P' && 'P is purely imaginary; table shows Im⟨ψₘ|p|ψₙ⟩. Antisymmetry P_mn = −P_nm follows from the operator being Hermitian.'}
+            </p>
+          )}
+          {view === 'animated' && (
+            <p style={{ margin: 0, fontSize: '0.75rem', color: '#555', fontStyle: 'italic' }}>
+              Colour shows Re[Oₘₙ(t)]. Magnitude |Oₘₙ| is time-invariant; diagonal elements (ωₙₙ = 0) never change.
+            </p>
+          )}
+
+          <details>
+            <summary style={{ fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', userSelect: 'none', color: '#aaa' }}>
+              Bohr frequencies ωₘₙ = Eₘ − Eₙ (a.u.)
+            </summary>
+            <div style={{ marginTop: 10 }}>
+              <MatrixHeatmap
+                data={bohrFreqs}
+                rowLabels={labels}
+                colLabels={labels}
+                title="ωₘₙ — off-diagonal elements oscillate at these frequencies"
+              />
+              <p style={{ margin: '6px 0 0', fontSize: '0.72rem', color: '#555' }}>
+                Period Tₘₙ = 2π / |ωₘₙ| a.u. &nbsp;·&nbsp; Diagonal is always zero.
+              </p>
+            </div>
+          </details>
+        </>
+      )}
     </div>
   )
+}
+
+const collapseHeaderStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 0,
+  width: '100%', background: 'none', border: 'none',
+  cursor: 'pointer', color: '#e0e0e0', padding: '0.25rem 0',
+  marginBottom: '0.5rem', textAlign: 'left',
 }

@@ -39,6 +39,9 @@ export function StationaryExplorer() {
   const [showPsi2, setShowPsi2] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
   const [showHelpEigen, setShowHelpEigen] = useState(false)
+  const [showMomentum, setShowMomentum] = useState(false)
+  const [showEnergyDiagram, setShowEnergyDiagram] = useState(false)
+  const [showMatrix, setShowMatrix] = useState(false)
 
 
   const energy = potential === 'isw' ? iswEnergy(nISW, L)     : hoEnergy(nHO, omega)
@@ -205,37 +208,37 @@ export function StationaryExplorer() {
             nLevels={N_LEVELS}
           />
 
-          <details style={detailsStyle}>
-            <summary style={summaryStyle}>Momentum distribution |φₙ(k)|²</summary>
-            <MomentumPlot potential={potential} n={n} L={L} omega={omega} />
-          </details>
+          <div style={sectionStyle}>
+            <MomentumPlot
+              potential={potential} n={n} L={L} omega={omega}
+              isOpen={showMomentum} onToggle={() => setShowMomentum(o => !o)}
+            />
+          </div>
 
-          <details style={detailsStyle}>
-            <summary style={summaryStyle}>Energy levels diagram</summary>
-            <EnergyLevelsDiagram potential={potential} n={n} L={L} omega={omega} />
-          </details>
+          <div style={sectionStyle}>
+            <EnergyLevelsDiagram
+              potential={potential} n={n} L={L} omega={omega}
+              isOpen={showEnergyDiagram} onToggle={() => setShowEnergyDiagram(o => !o)}
+            />
+          </div>
 
-          <details style={detailsStyle}>
-            <summary style={summaryStyle}>Matrix representation (Heisenberg picture)</summary>
+          <div style={sectionStyle}>
             <MatrixPanel
               energies={energies}
               wavefunctions={wavefunctions}
               gridX={gridX}
               dx={dx}
               labels={labels}
+              isOpen={showMatrix} onToggle={() => setShowMatrix(o => !o)}
             />
-          </details>
+          </div>
         </div>
       </div>
     </>
   )
 }
 
-const detailsStyle: React.CSSProperties = { borderTop: '1px solid #222', paddingTop: '0.75rem' }
-const summaryStyle: React.CSSProperties = {
-  cursor: 'pointer', userSelect: 'none',
-  fontSize: '0.9rem', fontWeight: 600, color: '#aaa', marginBottom: '0.75rem',
-}
+const sectionStyle: React.CSSProperties = { borderTop: '1px solid #222', paddingTop: '0.75rem' }
 
 const potBtnStyle: React.CSSProperties = {
   flex: 1,

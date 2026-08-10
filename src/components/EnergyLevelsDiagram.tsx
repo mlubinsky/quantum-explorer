@@ -15,6 +15,8 @@ interface Props {
   n: number
   L: number
   omega: number
+  isOpen: boolean
+  onToggle: () => void
 }
 
 const DARK = {
@@ -28,7 +30,7 @@ const DARK = {
   lvlDim: 'rgba(130,140,200,0.30)',
 }
 
-export function EnergyLevelsDiagram({ potential, n, L, omega }: Props) {
+export function EnergyLevelsDiagram({ potential, n, L, omega, isOpen, onToggle }: Props) {
   const [showHelp, setShowHelp] = useState(false)
 
   const { traces, layout } = useMemo(
@@ -44,21 +46,39 @@ export function EnergyLevelsDiagram({ potential, n, L, omega }: Props) {
         </HelpModal>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
-        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onToggle}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+        style={collapseHeaderStyle}
+      >
+        <span style={{ marginRight: 6 }}>{isOpen ? '▾' : '▸'}</span>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600, flex: 1 }}>
           Energy levels diagram
         </span>
-        <HelpButton onClick={() => setShowHelp(true)} />
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={() => setShowHelp(true)} />
+        </span>
       </div>
 
-      <Plot
-        data={traces as any}
-        layout={layout as any}
-        config={{ displayModeBar: false, responsive: true }}
-        style={{ width: '100%' }}
-      />
+      {isOpen && (
+        <Plot
+          data={traces as any}
+          layout={layout as any}
+          config={{ displayModeBar: false, responsive: true }}
+          style={{ width: '100%' }}
+        />
+      )}
     </>
   )
+}
+
+const collapseHeaderStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 0,
+  width: '100%', background: 'none', border: 'none',
+  cursor: 'pointer', color: '#e0e0e0', padding: '0.25rem 0',
+  marginBottom: '0.5rem', textAlign: 'left',
 }
 
 // ── helpers ────────────────────────────────────────────────────────────────

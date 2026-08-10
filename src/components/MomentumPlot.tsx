@@ -13,6 +13,8 @@ interface Props {
   n: number
   L: number
   omega: number
+  isOpen: boolean
+  onToggle: () => void
 }
 
 const N_POINTS = 500
@@ -26,7 +28,7 @@ const DARK = {
   overlay: 'rgba(255,160,60,0.55)',
 }
 
-export function MomentumPlot({ potential, n, L, omega }: Props) {
+export function MomentumPlot({ potential, n, L, omega, isOpen, onToggle }: Props) {
   const [showHelp, setShowHelp] = useState(false)
 
   const { traces, layout, sigmaP, sigmaX, heisenberg } = useMemo(
@@ -44,30 +46,50 @@ export function MomentumPlot({ potential, n, L, omega }: Props) {
         </HelpModal>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '4px' }}>
-        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={onToggle}
+        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
+        style={collapseHeaderStyle}
+      >
+        <span style={{ marginRight: 6 }}>{isOpen ? '▾' : '▸'}</span>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600, flex: 1 }}>
           Momentum distribution |φₙ(k)|²
         </span>
-        <HelpButton onClick={() => setShowHelp(true)} />
-      </div>
-
-      <Plot
-        data={traces as any}
-        layout={layout as any}
-        config={{ displayModeBar: false, responsive: true }}
-        style={{ width: '100%' }}
-      />
-
-      {/* Uncertainty readout */}
-      <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.78rem', color: '#aaa', marginTop: '4px', flexWrap: 'wrap' }}>
-        <span>σ_p = <span style={{ color: DARK.accent }}>{sigmaP.toFixed(4)}</span> a.u.</span>
-        <span>σ_x = <span style={{ color: DARK.accent }}>{sigmaX.toFixed(4)}</span> a.u.</span>
-        <span style={{ color: heisenberg < 0.5 - 1e-6 ? '#e05050' : '#5ec45e' }}>
-          σ_x · σ_p = {heisenberg.toFixed(4)} {heisenberg >= 0.5 - 1e-6 ? '≥ ½ ✓' : '< ½ (!!)'}
+        <span onClick={e => e.stopPropagation()}>
+          <HelpButton onClick={() => setShowHelp(true)} />
         </span>
       </div>
+
+      {isOpen && (
+        <>
+          <Plot
+            data={traces as any}
+            layout={layout as any}
+            config={{ displayModeBar: false, responsive: true }}
+            style={{ width: '100%' }}
+          />
+
+          {/* Uncertainty readout */}
+          <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.78rem', color: '#aaa', marginTop: '4px', flexWrap: 'wrap' }}>
+            <span>σ_p = <span style={{ color: DARK.accent }}>{sigmaP.toFixed(4)}</span> a.u.</span>
+            <span>σ_x = <span style={{ color: DARK.accent }}>{sigmaX.toFixed(4)}</span> a.u.</span>
+            <span style={{ color: heisenberg < 0.5 - 1e-6 ? '#e05050' : '#5ec45e' }}>
+              σ_x · σ_p = {heisenberg.toFixed(4)} {heisenberg >= 0.5 - 1e-6 ? '≥ ½ ✓' : '< ½ (!!)'}
+            </span>
+          </div>
+        </>
+      )}
     </>
   )
+}
+
+const collapseHeaderStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 0,
+  width: '100%', background: 'none', border: 'none',
+  cursor: 'pointer', color: '#e0e0e0', padding: '0.25rem 0',
+  marginBottom: '0.5rem', textAlign: 'left',
 }
 
 // ── helpers ────────────────────────────────────────────────────────────────
