@@ -53,8 +53,8 @@ export function MomentumPlot({ potential, n, L, omega, isOpen, onToggle }: Props
         onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
         style={collapseHeaderStyle}
       >
-        <span style={{ marginRight: 6 }}>{isOpen ? '▾' : '▸'}</span>
-        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600, flex: 1 }}>
+        <span>{isOpen ? '▾' : '▸'}</span>
+        <span style={{ fontSize: '0.82rem', color: '#aaa', fontWeight: 600 }}>
           Momentum distribution |φₙ(k)|²
         </span>
         <span onClick={e => e.stopPropagation()}>
@@ -86,7 +86,7 @@ export function MomentumPlot({ potential, n, L, omega, isOpen, onToggle }: Props
 }
 
 const collapseHeaderStyle: React.CSSProperties = {
-  display: 'flex', alignItems: 'center', gap: 0,
+  display: 'flex', alignItems: 'center', gap: '0.5rem',
   width: '100%', background: 'none', border: 'none',
   cursor: 'pointer', color: '#e0e0e0', padding: '0.25rem 0',
   marginBottom: '0.5rem', textAlign: 'left',

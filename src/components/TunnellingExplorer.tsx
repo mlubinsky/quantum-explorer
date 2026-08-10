@@ -386,7 +386,7 @@ const sectionHeaderStyle: React.CSSProperties = {
 }
 
 const sectionTitleStyle: React.CSSProperties = {
-  fontWeight: 600, fontSize: '0.9rem', flex: 1,
+  fontWeight: 600, fontSize: '0.9rem',
 }
 
 const collapseHeaderStyle: React.CSSProperties = {

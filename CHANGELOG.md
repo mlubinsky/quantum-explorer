@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Help icon pushed to far right in Stationary States collapsibles** — the
+  `MomentumPlot.tsx`/`EnergyLevelsDiagram.tsx`/`MatrixPanel.tsx` collapsible headers
+  used `flex: 1` on the title span, which pushed the `?` help icon to the far right edge
+  of the row instead of placing it immediately after the title — the opposite of the
+  "Standardized help-button placement" convention adopted earlier in this changelog.
+  Removed the `flex: 1` and switched the header's `gap` back to `0.5rem` so the icon sits
+  right after the title, matching `BarrierExplorer.tsx` and the rest of the app
 - **Nested `<button>` in collapsible section headers** — the collapsible headers in
   `BarrierExplorer.tsx`, `StepExplorer.tsx`, `DeltaExplorer.tsx`, `PoschlTellerExplorer.tsx`,
   `KronigPenneyExplorer.tsx`, `MorseExplorer.tsx`, and `HydrogenExplorer.tsx` (24 sections
