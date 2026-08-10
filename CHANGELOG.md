@@ -6,6 +6,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Nested `<button>` in collapsible section headers** — the collapsible headers in
+  `BarrierExplorer.tsx`, `StepExplorer.tsx`, `DeltaExplorer.tsx`, `PoschlTellerExplorer.tsx`,
+  `KronigPenneyExplorer.tsx`, `MorseExplorer.tsx`, and `HydrogenExplorer.tsx` (24 sections
+  total) rendered a `<HelpButton>` (itself a `<button>`) inside the collapse toggle
+  `<button>` — invalid HTML that React logged as a console error and that browsers silently
+  "fix" by hoisting the inner button out of the DOM tree, risking broken click targets.
+  Switched the outer toggle to a `<div role="button" tabIndex={0}>` with an `onKeyDown`
+  handler for Enter/Space, keeping the same visual behavior with valid markup. Found while
+  testing the Stationary States fix above; same latent bug also fixed in the unused
+  `TunnellingExplorer.tsx`
 - **Duplicate section titles in Stationary States** — the "Momentum distribution",
   "Energy levels diagram", and "Matrix representation" collapsible sections showed their
   title twice: once (without a help icon) in the `<details>/<summary>` wrapper, and again

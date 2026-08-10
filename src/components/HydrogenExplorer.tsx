@@ -651,10 +651,16 @@ export function HydrogenExplorer() {
         {/* Radial wavefunction (collapsible) */}
         <div style={sectionStyle}>
           <div style={collapseRowStyle}>
-            <button onClick={() => setShowRwf(s => !s)} style={collapseStyle}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowRwf(s => !s)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowRwf(s => !s))() } }}
+              style={collapseStyle}
+            >
               <span style={{ marginRight: 6 }}>{showRwf ? '▾' : '▸'}</span>
               <span style={sectionTitleStyle}>Radial wavefunction R<sub>nl</sub>(r)</span>
-            </button>
+            </div>
             <HelpButton onClick={() => setHelpTopic('radialWavefunction')} />
           </div>
           {showRwf && (
@@ -674,7 +680,13 @@ export function HydrogenExplorer() {
         {/* 2D orbital + angular shape (collapsible, side by side) */}
         <div style={sectionStyle}>
           <div style={collapseRowStyle}>
-            <button onClick={() => setShowOrbital(s => !s)} style={collapseStyle}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowOrbital(s => !s)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowOrbital(s => !s))() } }}
+              style={collapseStyle}
+            >
               <span style={{ marginRight: 6 }}>{!orbAndAngCollapsed ? '▾' : '▸'}</span>
               <span style={sectionTitleStyle}>
                 Orbital cross-section |ψ(x,z)|²
@@ -682,7 +694,7 @@ export function HydrogenExplorer() {
                   + angular shape |Y|²
                 </span>
               </span>
-            </button>
+            </div>
             <HelpButton onClick={() => setHelpTopic('orbital2D')} />
           </div>
           {!orbAndAngCollapsed && (
@@ -775,10 +787,16 @@ export function HydrogenExplorer() {
         {/* 3D Isosurface (collapsible) */}
         <div style={sectionStyle}>
           <div style={collapseRowStyle}>
-            <button onClick={() => setShowIso(s => !s)} style={collapseStyle}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowIso(s => !s)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowIso(s => !s))() } }}
+              style={collapseStyle}
+            >
               <span style={{ marginRight: 6 }}>{showIso ? '▾' : '▸'}</span>
               <span style={sectionTitleStyle}>3D orbital isosurface |ψ|²</span>
-            </button>
+            </div>
             <HelpButton onClick={() => setHelpTopic('isosurface')} />
           </div>
           {showIso && <OrbitalIsosurface3D n={n} l={l} m={m} Z={Z} />}
@@ -787,10 +805,16 @@ export function HydrogenExplorer() {
         {/* Grotrian (collapsible) */}
         <div style={sectionStyle}>
           <div style={collapseRowStyle}>
-            <button onClick={() => setShowGrotrian(s => !s)} style={collapseStyle}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowGrotrian(s => !s)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowGrotrian(s => !s))() } }}
+              style={collapseStyle}
+            >
               <span style={{ marginRight: 6 }}>{showGrotrian ? '▾' : '▸'}</span>
               <span style={sectionTitleStyle}>Energy level diagram (Grotrian)</span>
-            </button>
+            </div>
             <HelpButton onClick={() => setHelpTopic('grotrian')} />
           </div>
           {showGrotrian && (
@@ -969,7 +993,13 @@ function ZeemanSection({
   return (
     <div style={{ ...sectionStyle, borderBottom: 'none' }}>
       <div style={collapseRowStyle}>
-        <button onClick={onToggle} style={collapseStyle}>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onToggle}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (onToggle)() } }}
+          style={collapseStyle}
+        >
           <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
           <span style={sectionTitleStyle}>
             Normal Zeeman Effect
@@ -977,7 +1007,7 @@ function ZeemanSection({
               B (magnetic field) = {B.toFixed(3)} a.u.
             </span>}
           </span>
-        </button>
+        </div>
         <HelpButton onClick={onHelpClick} />
       </div>
 
@@ -1190,7 +1220,13 @@ function AnomalousZeemanSection({
   return (
     <div style={{ ...sectionStyle, borderBottom: 'none' }}>
       <div style={collapseRowStyle}>
-        <button onClick={onToggle} style={collapseStyle}>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onToggle}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (onToggle)() } }}
+          style={collapseStyle}
+        >
           <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
           <span style={sectionTitleStyle}>
             Anomalous Zeeman Effect
@@ -1198,7 +1234,7 @@ function AnomalousZeemanSection({
               B (magnetic field) = {B.toFixed(3)} a.u.
             </span>}
           </span>
-        </button>
+        </div>
         <HelpButton onClick={onHelpClick} />
       </div>
 
@@ -1364,7 +1400,13 @@ function StarkSection({
   return (
     <div style={{ ...sectionStyle, borderBottom: 'none' }}>
       <div style={collapseRowStyle}>
-        <button onClick={onToggle} style={collapseStyle}>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onToggle}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (onToggle)() } }}
+          style={collapseStyle}
+        >
           <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
           <span style={sectionTitleStyle}>
             Linear Stark Effect (n = 2)
@@ -1372,7 +1414,7 @@ function StarkSection({
               F (electric field) = {F.toFixed(4)} a.u.
             </span>}
           </span>
-        </button>
+        </div>
         <HelpButton onClick={onHelpClick} />
       </div>
 
@@ -1490,10 +1532,16 @@ function EmissionSpectraSection({
   return (
     <div style={{ ...sectionStyle, borderBottom: 'none' }}>
       <div style={collapseRowStyle}>
-        <button onClick={onToggle} style={collapseStyle}>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onToggle}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (onToggle)() } }}
+          style={collapseStyle}
+        >
           <span style={{ marginRight: 6 }}>{show ? '▾' : '▸'}</span>
           <span style={sectionTitleStyle}>Emission Spectra (n = 2–6)</span>
-        </button>
+        </div>
         <HelpButton onClick={onHelpClick} />
       </div>
 

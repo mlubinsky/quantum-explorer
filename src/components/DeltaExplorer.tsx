@@ -327,13 +327,19 @@ export function DeltaExplorer() {
 
         {/* Section 2: Scattering wavefunction */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPsi(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPsi(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
             <span style={titleStyle}>Scattering wavefunction |ψ(x)|²</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('deltaWavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <Plot data={psiTraces as never} layout={psiLayout as never}
               config={cfg} style={{ width: '100%' }} />
@@ -343,13 +349,19 @@ export function DeltaExplorer() {
         {/* Section 3: Bound state (attractive only) */}
         {attractive && (
           <div style={sectionStyle}>
-            <button onClick={() => setShowBound(s => !s)} style={collapseStyle}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowBound(s => !s)}
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowBound(s => !s))() } }}
+              style={collapseStyle}
+            >
               <span style={{ marginRight: 6 }}>{showBound ? '▾' : '▸'}</span>
               <span style={titleStyle}>{'Bound state |ψ_b(x)|² = α exp(−2α|x|)'}</span>
               <span onClick={e => e.stopPropagation()}>
                 <HelpButton onClick={() => setHelpTopic('deltaWavefunction')} />
               </span>
-            </button>
+            </div>
             {showBound && (
               <Plot
                 data={[{
@@ -367,7 +379,13 @@ export function DeltaExplorer() {
 
         {/* Section 4: Potential diagram */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowPot(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPot(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPot(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPot ? '▾' : '▸'}</span>
             <span style={titleStyle}>
               Potential diagram{attractive ? ' (bound-state energy level shown)' : ''}
@@ -375,7 +393,7 @@ export function DeltaExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('deltaPotential')} />
             </span>
-          </button>
+          </div>
           {showPot && (
             <Plot data={potTraces as never} layout={potLayout as never}
               config={cfg} style={{ width: '100%' }} />

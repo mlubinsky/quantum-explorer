@@ -242,7 +242,13 @@ export function KronigPenneyExplorer() {
 
         {/* Section 1: Dispersion condition */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowDisp(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowDisp(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowDisp(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showDisp ? '▾' : '▸'}</span>
             <span style={titleStyle}>
               Dispersion condition  f(E) = cos(Ka)
@@ -250,7 +256,7 @@ export function KronigPenneyExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('kpDispersion')} />
             </span>
-          </button>
+          </div>
           {showDisp && (
             <>
               <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
@@ -264,7 +270,13 @@ export function KronigPenneyExplorer() {
 
         {/* Section 2: Band structure */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowBands(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowBands(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowBands(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showBands ? '▾' : '▸'}</span>
             <span style={titleStyle}>
               Band structure  E(Ka/π) — reduced Brillouin zone
@@ -272,7 +284,7 @@ export function KronigPenneyExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('kpBandStructure')} />
             </span>
-          </button>
+          </div>
           {showBands && (
             <>
               <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
@@ -286,13 +298,19 @@ export function KronigPenneyExplorer() {
 
         {/* Section 3: Zone-boundary table */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowTable(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowTable(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowTable(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showTable ? '▾' : '▸'}</span>
             <span style={titleStyle}>Zone-boundary energies  E_n = (nπ/a)²/2</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('kpBands')} />
             </span>
-          </button>
+          </div>
           {showTable && (
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.83rem', marginTop: 4 }}>
               <thead>

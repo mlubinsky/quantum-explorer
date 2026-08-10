@@ -245,13 +245,19 @@ export function MorseExplorer() {
 
         {/* Section 1: Potential + energy levels */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPot(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPot(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPot(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPot ? '▾' : '▸'}</span>
             <span style={titleStyle}>Potential  V(x) and energy levels</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('morsePotential')} />
             </span>
-          </button>
+          </div>
           {showPot && (
             <>
               <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
@@ -265,13 +271,19 @@ export function MorseExplorer() {
 
         {/* Section 2: Wavefunction */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPsi(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPsi(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
             <span style={titleStyle}>Wavefunction  ψ_n(x) and |ψ_n|²</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('morseWavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <>
               <div style={{ fontSize: '0.74rem', color: '#666', fontStyle: 'italic', marginBottom: 4 }}>
@@ -285,13 +297,19 @@ export function MorseExplorer() {
 
         {/* Section 3: Energy level table */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowTable(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowTable(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowTable(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showTable ? '▾' : '▸'}</span>
             <span style={titleStyle}>Energy levels and anharmonicity</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('morseAnharmonicity')} />
             </span>
-          </button>
+          </div>
           {showTable && (
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.83rem', marginTop: 4 }}>
               <thead>

@@ -243,7 +243,13 @@ export function PoschlTellerExplorer() {
 
         {/* Section 2: Potential + bound state levels */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPot(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPot(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPot(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPot ? '▾' : '▸'}</span>
             <span style={titleStyle}>
               Potential V(x) = −V₀ sech²(αx) with {N} bound-state level{N !== 1 ? 's' : ''}
@@ -251,7 +257,7 @@ export function PoschlTellerExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('ptPotential')} />
             </span>
-          </button>
+          </div>
           {showPot && (
             <Plot data={potTraces as never} layout={potLayout as never}
               config={cfg} style={{ width: '100%' }} />
@@ -260,13 +266,19 @@ export function PoschlTellerExplorer() {
 
         {/* Section 3: Bound state wavefunctions */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowPsi(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPsi(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
             <span style={titleStyle}>Bound-state wavefunctions |ψⱼ(x)|²</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('ptWavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <Plot data={psiTraces as never} layout={psiLayout as never}
               config={cfg} style={{ width: '100%' }} />

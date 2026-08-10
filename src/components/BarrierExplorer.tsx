@@ -222,13 +222,19 @@ export function BarrierExplorer() {
 
         {/* Wavefunction */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPsi(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPsi(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
             <span style={sectionTitleStyle}>Scattering wavefunction |ψ(x)|²</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('wavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <Plot data={psiTraces as never} layout={psiLayout as never}
               config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />
@@ -237,13 +243,19 @@ export function BarrierExplorer() {
 
         {/* Potential */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowPotential(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPotential(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPotential(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPotential ? '▾' : '▸'}</span>
             <span style={sectionTitleStyle}>Barrier potential V(x)</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('potential')} />
             </span>
-          </button>
+          </div>
           {showPotential && (
             <Plot data={potTraces as never} layout={potLayout as never}
               config={{ displayModeBar: false, responsive: true }} style={{ width: '100%' }} />

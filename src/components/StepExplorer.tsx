@@ -255,13 +255,19 @@ export function StepExplorer() {
 
         {/* Section 2: Wavefunction */}
         <div style={sectionStyle}>
-          <button onClick={() => setShowPsi(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPsi(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
             <span style={titleStyle}>Scattering wavefunction |ψ(x)|²</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('stepWavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <Plot
               data={psiTraces as never}
@@ -274,13 +280,19 @@ export function StepExplorer() {
 
         {/* Section 3: Potential */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button onClick={() => setShowPotential(s => !s)} style={collapseStyle}>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setShowPotential(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (() => setShowPotential(s => !s))() } }}
+            style={collapseStyle}
+          >
             <span style={{ marginRight: 6 }}>{showPotential ? '▾' : '▸'}</span>
             <span style={titleStyle}>Step potential V(x)</span>
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('stepPotential')} />
             </span>
-          </button>
+          </div>
           {showPotential && (
             <Plot
               data={potTraces as never}

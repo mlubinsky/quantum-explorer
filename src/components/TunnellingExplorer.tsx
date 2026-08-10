@@ -308,8 +308,11 @@ export function TunnellingExplorer() {
 
         {/* ── Section 2: Wavefunction ── */}
         <div style={sectionStyle}>
-          <button
+          <div
+            role="button"
+            tabIndex={0}
             onClick={() => setShowPsi(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowPsi(s => !s) } }}
             style={collapseHeaderStyle}
           >
             <span style={{ marginRight: 6 }}>{showPsi ? '▾' : '▸'}</span>
@@ -317,7 +320,7 @@ export function TunnellingExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('wavefunction')} />
             </span>
-          </button>
+          </div>
           {showPsi && (
             <Plot
               data={psiTraces as never}
@@ -330,8 +333,11 @@ export function TunnellingExplorer() {
 
         {/* ── Section 3: Potential diagram ── */}
         <div style={{ ...sectionStyle, borderBottom: 'none' }}>
-          <button
+          <div
+            role="button"
+            tabIndex={0}
             onClick={() => setShowPotential(s => !s)}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowPotential(s => !s) } }}
             style={collapseHeaderStyle}
           >
             <span style={{ marginRight: 6 }}>{showPotential ? '▾' : '▸'}</span>
@@ -339,7 +345,7 @@ export function TunnellingExplorer() {
             <span onClick={e => e.stopPropagation()}>
               <HelpButton onClick={() => setHelpTopic('potential')} />
             </span>
-          </button>
+          </div>
           {showPotential && (
             <Plot
               data={potTraces as never}
