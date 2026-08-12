@@ -6,6 +6,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Fixed
+- **Bare "ISW"/"HO" abbreviations in Stationary States** — the top-of-page boundary
+  condition caption (`App.tsx`) and the info panel's "What to explore" tips
+  (`StationaryInfoPanel.tsx`) used undefined abbreviations `ISW`/`HO`, inconsistent
+  with the full names used everywhere else on the page (section headers, toggle
+  buttons). Replaced with "Infinite well"/"Harmonic osc."
 - **Phantom horizontal scrollbar in Free Particle's left panel** — the controls column
   set only `overflowY: 'auto'`, and per the CSS spec, leaving `overflow-x` unset while
   `overflow-y` is non-`visible` makes the browser compute `overflow-x` as `auto` too

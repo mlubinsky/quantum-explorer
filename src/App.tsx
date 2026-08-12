@@ -60,7 +60,7 @@ function moduleFromHash(): Module {
 const MODULE_INFO: Record<Module, { eq: string; bc: string }> = {
   'stationary': {
     eq: String.raw`\hat{H}\psi = E\psi,\quad \hat{H}=-\tfrac{1}{2}\tfrac{d^2}{dx^2}+V(x)`,
-    bc: String.raw`\text{ISW: }\psi(0)=\psi(L)=0\;\cdot\;\text{HO: }\psi\to 0\ (|x|\to\infty)`,
+    bc: String.raw`\text{Infinite well: }\psi(0)=\psi(L)=0\;\cdot\;\text{Harmonic osc.: }\psi\to 0\ (|x|\to\infty)`,
   },
   'time-evolution': {
     eq: String.raw`i\,\tfrac{\partial\psi}{\partial t}=\hat{H}\psi,\quad\hat{H}=-\tfrac{1}{2}\tfrac{\partial^2}{\partial x^2}+V(x)`,

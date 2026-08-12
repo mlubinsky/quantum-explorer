@@ -44,11 +44,11 @@ export function StationaryInfoPanel() {
       <section>
         <h4 style={{ margin: '0 0 6px' }}>What to explore</h4>
         <ul style={{ margin: 0, paddingLeft: '1.2em' }}>
-          <li>ISW: increase n and count the nodes — <InlineMath math="\psi_n" /> has exactly <InlineMath math="n-1" /> nodes.</li>
-          <li>ISW: halve L and watch all energies quadruple (<InlineMath math="E \propto 1/L^2" />).</li>
-          <li>HO: all level spacings equal <InlineMath math="\omega" /> regardless of n — unlike ISW.</li>
-          <li>HO: toggle |ψ|² and observe that probability peaks near the turning points at high n — the classical limit.</li>
-          <li>HO: increase ω and watch the wavefunctions compress (more confined) and energies rise.</li>
+          <li>Infinite well: increase n and count the nodes — <InlineMath math="\psi_n" /> has exactly <InlineMath math="n-1" /> nodes.</li>
+          <li>Infinite well: halve L and watch all energies quadruple (<InlineMath math="E \propto 1/L^2" />).</li>
+          <li>Harmonic osc.: all level spacings equal <InlineMath math="\omega" /> regardless of n — unlike the infinite well.</li>
+          <li>Harmonic osc.: toggle |ψ|² and observe that probability peaks near the turning points at high n — the classical limit.</li>
+          <li>Harmonic osc.: increase ω and watch the wavefunctions compress (more confined) and energies rise.</li>
         </ul>
       </section>
 
